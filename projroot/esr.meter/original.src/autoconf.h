@@ -1,3 +1,5 @@
+#ifndef _ESRM_AUTOCONF_INCLUDED__
+#define _ESRM_AUTOCONF_INCLUDED__
 
 /*########################################################################################
        Automatic Configuration
@@ -311,7 +313,7 @@
 // clock divider is 4, when CPU_Clock==1MHz and ADC_Clock==250kHz
 // clock divider is 128, when CPU_Clock==16MHz and ADC_Clock==125kHz
 #define F_ADC 125000
-//#define F_ADC 250000
+
 #if F_CPU/F_ADC == 2
  #define AUTO_CLOCK_DIV (1<<ADPS0) 
 #endif
@@ -644,3 +646,4 @@
  #define TP_OFFSET 0
 #endif
 
+#endif /* _ESRM_AUTOCONF_INCLUDED__ */

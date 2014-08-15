@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "config.h"
 #include "part_defs.h"
+#include "autoconf.h"
 
  .GLOBAL GetESR
  .func GetESR
