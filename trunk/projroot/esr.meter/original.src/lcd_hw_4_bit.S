@@ -12,8 +12,8 @@
 ; Global Definitions
 ;----------------------------------------------------------------------
 
-#define        preg_1                  r24
-#define        preg_2                  r22
+#define preg_1                 r24
+#define preg_2                 r22
 
 ; for ST7565 controller: Serial Clock Input (SCL)
 #define set_en_low             cbi             _SFR_IO_ADDR(HW_LCD_EN_PORT), HW_LCD_EN_PIN
@@ -26,8 +26,8 @@
 #define set_rs_output          sbi             (_SFR_IO_ADDR(HW_LCD_RS_PORT) - 1), HW_LCD_RS_PIN
 
 ; for ST7565 controller: Serial data input (SI)
-#define set_b0_low       cbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
-#define set_b0_high      sbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
+#define set_b0_low             cbi             _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
+#define set_b0_high            sbi             _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
 #define set_b0_output          sbi             (_SFR_IO_ADDR(HW_LCD_B0_PORT) - 1), HW_LCD_B0_PIN
 
 #define set_b4_low             cbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
@@ -253,7 +253,7 @@ four_bits:
 
                nop			; wait for data setup time
                set_en_low		; force data read from LCD controller
-               RCALL    wait1us
+               CALL    wait1us
 
                ; skip sending low nibble for init commands
                sbrc    preg_1, 7
@@ -278,7 +278,7 @@ four_bits:
 
                nop			; wait for data setup time
                set_en_low		; force data read from LCD controller
-               RCALL    wait1us
+               CALL    wait1us
 _lcd_hw_write_exit:
                ret
 #endif

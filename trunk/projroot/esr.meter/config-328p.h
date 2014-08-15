@@ -4,6 +4,12 @@
 #ifndef _ESR_METER_CONFIG_328P_H__
 #define _ESR_METER_CONFIG_328P_H__
 
+#ifndef F_CPU
+#define F_CPU   8000000L
+#endif
+
+#define MHZ_CPU 8
+
 #define WITH_MENU
 
 // The menu function can be easier controlled with a incremental encoder (rotary switch).
@@ -28,7 +34,7 @@
 // Select your language:
 // Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 //                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
-#define UI_LANGUAGE LANG_ENGLISH
+#define UI_LANGUAGE LANG_RUSSIAN
 
 // Can be used with a 4x20 character display for better using the additional space.
 // Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
@@ -176,7 +182,7 @@
 // but successfully measurements are allowed double of the specified number.
 //  You can specify up to 255 empty measurements (#define POWER_OFF=255).
 //#define POWER_OFF=5
-#define POWER_OFF
+#define POWER_OFF 10
 
 // Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 // BAT_CHECK should be set for battery powered tester version.
