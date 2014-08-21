@@ -51,10 +51,10 @@ int main(void) {
 	UBRR0L = (F_CPU / 16 / BAUD_RATE - 1) & 0xff;
 	UCSR0B = (1<<TXEN0);
 	UCSR0C = (1<<USBS0) | (3<<UCSZ00);	// 2 stop bits, 8-bit
-	while (!(UCSR0A & (1<<UDRE0))) {};// wait for send data port ready
+	while (!(UCSR0A & (1<<UDRE0))) {};	// wait for send data port ready
 #endif
 	tmp = (WDRF_HOME & (1 << WDRF));	// save Watch Dog Flag
-	WDRF_HOME &= ~(1 << WDRF);	 	//reset Watch Dog flag
+	WDRF_HOME &= ~(1 << WDRF);	 		//reset Watch Dog flag
 	wdt_disable();
 	// disable Watch Dog
 #ifndef INHIBIT_SLEEP_MODE
@@ -104,7 +104,7 @@ int main(void) {
 	LCDLoadCustomChar(LCD_CHAR_RESIS2);	//Custom-Character
 	lcd_fix_customchar(ResIcon2);		//load Character  ]
 
-	//if kyrillish LCD-Characterset is defined, load  Omega- and µ-Character
+	//if kyrillish LCD-Characterset is defined, load  Omega- and ï¿½-Character
 #if LCD_CHAR_OMEGA < 8
 	LCDLoadCustomChar(LCD_CHAR_OMEGA);	//load omega as Custom-Character
 	lcd_fix_customchar(CyrillicOmegaIcon);

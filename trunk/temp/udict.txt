@@ -1,0 +1,4 @@
+transistortester
+init
+prescaler
+autoconf
