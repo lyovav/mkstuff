@@ -53,7 +53,7 @@ CFLAGS += -DWITH_MENU
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
-UI_LANGUAGE = LANG_ENGLISH
+UI_LANGUAGE = LANG_RUSSIAN
 
 # Can be used with a 4x20 character display for better using the additional space.
 # Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.

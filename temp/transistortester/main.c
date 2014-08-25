@@ -77,6 +77,7 @@ int main(void) {
 	
 //  ADC_PORT = TXD_VAL;
 //  ADC_DDR = TXD_MSK;
+#if 0 // FIXME: MNi investigate this stuff
   if(tmp) { 
      // check if  Watchdog-Event 
      // this happens, if the Watchdog is not reset for 2s
@@ -91,6 +92,7 @@ int main(void) {
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
   }
+#endif /* 0 */
 #if (LCD_ST_TYPE == 0)
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
   lcd_fix_customchar(DiodeIcon1);	//load Character  >|
