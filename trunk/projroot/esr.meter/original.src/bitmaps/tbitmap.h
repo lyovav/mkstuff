@@ -12,7 +12,6 @@ struct tbitmap
    const unsigned char *data;
 };
 
-// Supported Bitmap types
 #define BITMAP_UNCOMPRESSED     1
 
 #endif /* _ESRM_TBITMAP_INCLUDED__ */

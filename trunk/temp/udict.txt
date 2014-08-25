@@ -3,3 +3,4 @@ init
 prescaler
 autoconf
 michael
+pullup

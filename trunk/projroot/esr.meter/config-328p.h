@@ -4,6 +4,8 @@
 #ifndef _ESR_METER_CONFIG_328P_H__
 #define _ESR_METER_CONFIG_328P_H__
 
+#include "langs.h"
+
 #define INHIBIT_SLEEP_MODE 1
 
 #ifndef F_CPU
@@ -33,9 +35,7 @@
 // the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 //#define CHANGE_ROTARY_DIRECTION
 
-// Select your language:
-// Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
-//                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
+// Select your language: see langs.h
 #define UI_LANGUAGE LANG_RUSSIAN
 
 // Can be used with a 4x20 character display for better using the additional space.
