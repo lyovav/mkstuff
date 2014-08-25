@@ -1,3 +1,4 @@
+#if 0
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/sleep.h>
@@ -18,7 +19,8 @@ EMPTY_INTERRUPT(ADC_vect);
 #endif
 
 //begin of transistortester program
-int main(void) {
+int main(void)
+{
 	uint8_t ii;
 	unsigned int max_time;
 #ifdef SEARCH_PARASITIC
@@ -1030,3 +1032,6 @@ int main(void) {
 #if FLASHEND > 0x1fff
 #include "GetIr.c"
 #endif
+
+#endif /* 0 */
+
