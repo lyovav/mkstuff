@@ -2,3 +2,4 @@ transistortester
 init
 prescaler
 autoconf
+michael

@@ -4,6 +4,8 @@
 #ifndef _ESR_METER_CONFIG_328P_H__
 #define _ESR_METER_CONFIG_328P_H__
 
+#define INHIBIT_SLEEP_MODE 1
+
 #ifndef F_CPU
 #define F_CPU   8000000L
 #endif
@@ -41,13 +43,13 @@
 //#define FOUR_LINE_LCD
 
 // The LCD_CYRILLIC option is necessary, if you have a display with Cyrillic character-set.
-// This lcd-display don't have a character for Ohm and for µ (micro).
+// This lcd-display don't have a character for Ohm and for ï¿½ (micro).
 // Russian language requires a LCD controller with Russian character-set and option LCD_CYRILLIC!
 //#define LCD_CYRILLIC
 
 // The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 // For this LCD type the contrast must be set with software command.
-#define LCD_DOGM
+//#define LCD_DOGM
 
 // The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 // with ST7565 controller. It is controlled with a 1-bit interface.
@@ -60,7 +62,7 @@
 
 // If LCD_ST7565 option is used: Flip the display both on horizontal and
 // vertical direction.
-#define WITH_LCD_ST7565_HV_FLIP 1
+//#define WITH_LCD_ST7565_HV_FLIP 1
 
 // If option WITH_LCD_ST7565 is present one of the following fonts should be
 // chosen.
@@ -70,7 +72,7 @@
 
 // Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 // The connection of LCD is totally different for both versions.
-#define STRIP_GRID_BOARD
+//#define STRIP_GRID_BOARD
 
 // The WITH_SELFTEST option enables self-test function (only for mega168 or mega328) including the calibration.
 // Normally the mega168 uses self-test without T1 to T7 to enable both hFE measurements.
@@ -120,7 +122,7 @@
 // is not used for serial output (WITH_UART option).
 // For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 // at pin ADC3 can be enabled separate by setting the WITH_UART option.
-#define WITH_VEXT 1
+//#define WITH_VEXT 1
 
 // The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 // Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.
@@ -131,6 +133,7 @@
 #define REF_R_KORR 3
 
 // The ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm).
+//#define ESR_ZERO 29
 #define ESR_ZERO 20
 
 // NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
@@ -148,7 +151,7 @@
 
 // The USE_EEPROM option specify where you wish to locate fix text and tables.
 // If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
-//#define USE_EEPROM
+#define USE_EEPROM
 
 // Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 // Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
@@ -182,11 +185,11 @@
 // but successfully measurements are allowed double of the specified number.
 //  You can specify up to 255 empty measurements (#define POWER_OFF=255).
 //#define POWER_OFF=5
-#define POWER_OFF 10
+//#define POWER_OFF 10
 
 // Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 // BAT_CHECK should be set for battery powered tester version.
-#define BAT_CHECK
+//#define BAT_CHECK
 
 // The BAT_OUT option enables Battery Voltage Output on LCD (if BAT_CHECK is selected).
 // If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
