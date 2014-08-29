@@ -4,3 +4,4 @@ prescaler
 autoconf
 michael
 pullup
+wd
