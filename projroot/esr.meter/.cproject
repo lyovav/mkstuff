@@ -66,7 +66,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="original.src/wait_for_key_ms.S|original.src/UfAusgabe.c|original.src/sleep_5ms.c|original.src/RvalOut.c|original.src/RefVoltage.c|original.src/i2lcd.c|original.src/CombineToLong.S|original.src/ReadADC.c|original.src/PinLayout.c|original.src/mark_as_uncalibrated.c|original.src/lcd-routines.c|original.src/GetRLmultip.c|original.src/GetESR.c|original.src/get_log.c|original.src/lcd_hw_1_bit.S|original.src/HelpCalibration.c|original.src/GetIr.c|original.src/GetESR_107.S|original.src/AutoCheck.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="original.src/function_menu.c|original.src/wait_for_key_ms.S|original.src/UfAusgabe.c|original.src/sleep_5ms.c|original.src/RvalOut.c|original.src/RefVoltage.c|original.src/i2lcd.c|original.src/CombineToLong.S|original.src/ReadADC.c|original.src/PinLayout.c|original.src/mark_as_uncalibrated.c|original.src/lcd-routines.c|original.src/GetRLmultip.c|original.src/GetESR.c|original.src/get_log.c|original.src/lcd_hw_1_bit.S|original.src/HelpCalibration.c|original.src/GetIr.c|original.src/GetESR_107.S|original.src/AutoCheck.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
