@@ -29,7 +29,8 @@ PARTNO = m328
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
-CFLAGS += -DWITH_MENU
+
+#CFLAGS += -DWITH_MENU
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD2 and PD3.
@@ -53,7 +54,7 @@ CFLAGS += -DWITH_MENU
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
-UI_LANGUAGE = LANG_RUSSIAN
+UI_LANGUAGE = LANG_ENGLISH
 
 # Can be used with a 4x20 character display for better using the additional space.
 # Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
@@ -93,7 +94,7 @@ CFLAGS += -DFONT_6X8
 
 # The WITH_SELFTEST option enables selftest function (only for mega168 or mega328) including the calibration.
 # Normally the mega168 uses selftest without T1 to T7 to enable both hFE measurements.
-CFLAGS += -DWITH_SELFTEST
+#CFLAGS += -DWITH_SELFTEST
 # You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option.
 # The T1 to T7 tests are usefull to find problems with your tester.
 #CFLAGS += -DNO_COMMON_COLLECTOR_HFE
