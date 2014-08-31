@@ -8,7 +8,7 @@ int main(void)
 
 	for (;;)
 	{
-		sleep100ms();
+		::sleep100ms();
 	}
 
 	return 0;
