@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	LiquidCrystal_I2C lcd();
+	LiquidCrystal_I2C lcd(0x38);
 
 	for (;;)
 	{
