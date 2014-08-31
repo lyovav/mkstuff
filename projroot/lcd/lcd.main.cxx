@@ -2,7 +2,6 @@
 #include <afx/sleep.h>
 #include <stdint.h>
 
-
 int main(void)
 {
 	for (;;)
@@ -12,3 +11,4 @@ int main(void)
 
 	return 0;
 }
+
