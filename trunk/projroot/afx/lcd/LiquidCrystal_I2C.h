@@ -28,6 +28,7 @@
 // ---------------------------------------------------------------------------
 #ifndef LiquidCrystal_I2C_h
 #define LiquidCrystal_I2C_h
+
 #include <inttypes.h>
 #include <Print.h>
 
