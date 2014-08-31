@@ -1,5 +1,5 @@
 #ifndef __ASSEMBLER__
- #define __ASSEMBLER__
+#define __ASSEMBLER__
 #endif
 #include <avr/io.h>
 #include <avr/common.h>
@@ -90,7 +90,7 @@ ad268:
 ;//    case LCD_CHAR_DEGREE:	// degree sign
 ;//    	uart_putc(0xf8);	// codepage 437 or 850 has degree
 ad26c:
-;    case LCD_CHAR_U:		//µ
+;    case LCD_CHAR_U:		//ï¿½
  	ldi	r24, 'u'	; 0x75	
  	rjmp	d_putc_ret		; uart_putc('u');	// better use the ASCII u , uart_putc(0xe6);	// codepage 437 or 850 has my
 ad270:

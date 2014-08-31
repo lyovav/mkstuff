@@ -62,6 +62,11 @@ int main(void)
 		return rv;
 	}
 
+	for (;;)
+	{
+		sleep(100);
+	}
+
 	return 0;
 }
 
