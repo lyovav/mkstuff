@@ -31,8 +31,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/arduino/variants/standard}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/lcd}&quot;"/>
 								</option>
-								<option id="de.innot.avreclipse.compiler.option.def.1535025014" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
+								<option id="de.innot.avreclipse.compiler.option.def.1535025014" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
+									<listOptionValue builtIn="false" value="ARDUINO_MAIN"/>
 								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.167886496" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
@@ -46,6 +47,7 @@
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1929729012" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
+									<listOptionValue builtIn="false" value="ARDUINO_MAIN"/>
 								</option>
 								<inputType id="de.innot.avreclipse.cppcompiler.input.1951128001" superClass="de.innot.avreclipse.cppcompiler.input"/>
 							</tool>
