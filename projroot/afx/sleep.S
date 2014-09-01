@@ -7,9 +7,13 @@
  *
  */
 
-#define _ASM_
+#ifndef __ASSEMBLER__
+#define __ASSEMBLER__
+#endif /* __ASSEMBLER__ */
 
 #include "sleep.h"
+
+.section .text
 
 sleep5s:			rcall	sleep1s
 sleep4s:			rcall 	sleep1s

@@ -9,7 +9,7 @@
 .extern sleep500ms
 .extern sleep1s
 
+.section .text
 
 main: /*--------------- int main(void) ---------------*/
-						RCALL	sleep1ms
-						RET
+						ret

@@ -1,7 +1,7 @@
 #ifndef _AFX_SLEEP_H__
 #define _AFX_SLEEP_H__
 
-#ifndef _ASM_
+#ifndef __ASSEMBLER__
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +49,7 @@ void sleep500ns(void);
 }
 #endif /* __cplusplus */
 
-#else
+#else /* __ASSEMBLER__ */
 	.global sleep5s
 	.global sleep4s
 	.global sleep3s
@@ -87,6 +87,6 @@ void sleep500ns(void);
 	.global sleep2us
 	.global sleep1us
 	.global sleep500ns
-#endif /* _ASM_ */
+#endif /* __ASSEMBLER__ */
 
 #endif /* _AFX_SLEEP_H__ */

@@ -28,7 +28,7 @@
 								<option id="de.innot.avreclipse.asm.option.include.paths.1508313061" name="#include paths for preprocessor(-I)" superClass="de.innot.avreclipse.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../"/>
 								</option>
-								<option id="de.innot.avreclipse.assembler.option.xflags.123428479" superClass="de.innot.avreclipse.assembler.option.xflags" valueType="stringList">
+								<option id="de.innot.avreclipse.assembler.option.xflags.123428479" name="(-Xassembler) options" superClass="de.innot.avreclipse.assembler.option.xflags" valueType="stringList">
 									<listOptionValue builtIn="false" value="../../"/>
 								</option>
 								<inputType id="de.innot.avreclipse.tool.assembler.input.872764660" superClass="de.innot.avreclipse.tool.assembler.input"/>
@@ -76,6 +76,9 @@
 							<tool id="de.innot.avreclipse.tool.avrdude.app.release.842168063" name="AVRDude" superClass="de.innot.avreclipse.tool.avrdude.app.release"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="text.doscp.cxx|tempo.cxx|lcd.main.cxx" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
