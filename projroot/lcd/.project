@@ -3,6 +3,7 @@
 	<name>i2c.lcd</name>
 	<comment></comment>
 	<projects>
+		<project>4arduino</project>
 		<project>afx</project>
 	</projects>
 	<buildSpec>

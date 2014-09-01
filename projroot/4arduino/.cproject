@@ -16,7 +16,7 @@
 					<folderInfo id="de.innot.avreclipse.configuration.lib.release.1976284255." name="/" resourcePath="">
 						<toolChain id="de.innot.avreclipse.toolchain.winavr.lib.release.7038845" name="AVR-GCC Toolchain" superClass="de.innot.avreclipse.toolchain.winavr.lib.release">
 							<option id="de.innot.avreclipse.toolchain.options.toolchain.objdump.lib.release.856263807" name="Generate Extended Listing (Source + generated Assembler)" superClass="de.innot.avreclipse.toolchain.options.toolchain.objdump.lib.release"/>
-							<option id="de.innot.avreclipse.toolchain.options.toolchain.size.lib.release.2006376344" name="Print Size" superClass="de.innot.avreclipse.toolchain.options.toolchain.size.lib.release"/>
+							<option id="de.innot.avreclipse.toolchain.options.toolchain.size.lib.release.2006376344" name="Print Size" superClass="de.innot.avreclipse.toolchain.options.toolchain.size.lib.release" value="false" valueType="boolean"/>
 							<targetPlatform id="de.innot.avreclipse.targetplatform.winavr.lib.release.1985392451" name="AVR Cross-Target" superClass="de.innot.avreclipse.targetplatform.winavr.lib.release"/>
 							<builder buildPath="${workspace_loc:/afx}/Release" id="de.innot.avreclipse.target.builder.winavr.lib.release.305494613" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="AVR GNU Make Builder" superClass="de.innot.avreclipse.target.builder.winavr.lib.release"/>
 							<tool id="de.innot.avreclipse.tool.assembler.winavr.lib.release.353863851" name="AVR Assembler" superClass="de.innot.avreclipse.tool.assembler.winavr.lib.release">
@@ -33,7 +33,6 @@
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1535025014" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
-									<listOptionValue builtIn="false" value="ARDUINO_MAIN"/>
 								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.167886496" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
@@ -47,7 +46,6 @@
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1929729012" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
-									<listOptionValue builtIn="false" value="ARDUINO_MAIN"/>
 								</option>
 								<inputType id="de.innot.avreclipse.cppcompiler.input.1951128001" superClass="de.innot.avreclipse.cppcompiler.input"/>
 							</tool>
@@ -58,6 +56,9 @@
 							<tool id="de.innot.avreclipse.tool.size.winavr.lib.release.1082041128" name="Print Size" superClass="de.innot.avreclipse.tool.size.winavr.lib.release"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="lcd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

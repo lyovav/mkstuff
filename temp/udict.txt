@@ -8,3 +8,11 @@ wd
 backlight
 arduino
 libs
+запрещаем
+используем
+выставляем
+лог
+для
+записи
+lcd
+trololo

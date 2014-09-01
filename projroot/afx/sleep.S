@@ -25,7 +25,7 @@ sleep500ms:			rcall 	sleep100ms
 sleep400ms:			rcall	sleep100ms
 sleep300ms:			rcall	sleep100ms
 sleep200ms:			rcall	sleep100ms
-sleep100ms: 		wdr
+sleep100ms: 		//wdr
 					rcall 	sleep50ms
 sleep50ms: 			rcall	sleep10ms
 sleep40ms:			rcall 	sleep10ms
