@@ -5,3 +5,6 @@ autoconf
 michael
 pullup
 wd
+backlight
+arduino
+libs
