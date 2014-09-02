@@ -1,7 +1,7 @@
 #include "sleep.h"
 #include "dwrite.h"
 
-// Testing diode on PD1 (2 pin of mcu)
+// Testing diode on PD1 (2 pin of MCU)
 
 #define _blink(t1, t2) 	\
 	do { 				\
@@ -14,7 +14,6 @@
 
 void sleep_test_init(void)
 {
-	//PRR = (1 << PRUSART0);
 	_dwritable(D, 1);
 }
 
