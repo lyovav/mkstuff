@@ -31,6 +31,7 @@
 								<option id="de.innot.avreclipse.assembler.option.xflags.123428479" name="(-Xassembler) options" superClass="de.innot.avreclipse.assembler.option.xflags" valueType="stringList">
 									<listOptionValue builtIn="false" value="../../"/>
 								</option>
+								<option id="de.innot.avreclipse.asm.option.omitfcpu.1976943713" superClass="de.innot.avreclipse.asm.option.omitfcpu" value="true" valueType="boolean"/>
 								<inputType id="de.innot.avreclipse.tool.assembler.input.872764660" superClass="de.innot.avreclipse.tool.assembler.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.compiler.winavr.app.release.1018997268" name="AVR Compiler" superClass="de.innot.avreclipse.tool.compiler.winavr.app.release">
@@ -43,6 +44,7 @@
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1646115055" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
+									<listOptionValue builtIn="false" value="F_CPU=16000000"/>
 								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.607206194" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
@@ -57,7 +59,9 @@
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1801628414" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
+									<listOptionValue builtIn="false" value="F_CPU=16000000"/>
 								</option>
+								<option id="de.innot.avreclipse.cppcompiler.option.omitfcpu.880875338" superClass="de.innot.avreclipse.cppcompiler.option.omitfcpu" value="true" valueType="boolean"/>
 								<inputType id="de.innot.avreclipse.cppcompiler.input.1558697357" superClass="de.innot.avreclipse.cppcompiler.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.linker.winavr.app.release.510168279" name="AVR C Linker" superClass="de.innot.avreclipse.tool.linker.winavr.app.release"/>

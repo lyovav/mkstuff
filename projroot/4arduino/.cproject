@@ -21,6 +21,10 @@
 							<builder buildPath="${workspace_loc:/afx}/Release" id="de.innot.avreclipse.target.builder.winavr.lib.release.305494613" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="AVR GNU Make Builder" superClass="de.innot.avreclipse.target.builder.winavr.lib.release"/>
 							<tool id="de.innot.avreclipse.tool.assembler.winavr.lib.release.353863851" name="AVR Assembler" superClass="de.innot.avreclipse.tool.assembler.winavr.lib.release">
 								<option id="de.innot.avreclipse.assembler.option.debug.level.281082179" name="Generate Debugging Info" superClass="de.innot.avreclipse.assembler.option.debug.level" value="de.innot.avreclipse.assembler.option.debug.level.none" valueType="enumerated"/>
+								<option id="de.innot.avreclipse.asm.option.omitfcpu.1746249741" name="Omit F_CPU" superClass="de.innot.avreclipse.asm.option.omitfcpu" value="true" valueType="boolean"/>
+								<option id="de.innot.avreclipse.assembler.option.xflags.957459177" name="(-Xassembler) options" superClass="de.innot.avreclipse.assembler.option.xflags" valueType="stringList">
+									<listOptionValue builtIn="false" value="F_CPU=16000000"/>
+								</option>
 								<inputType id="de.innot.avreclipse.tool.assembler.input.1204533806" superClass="de.innot.avreclipse.tool.assembler.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.compiler.winavr.lib.release.1896912668" name="AVR Compiler" superClass="de.innot.avreclipse.tool.compiler.winavr.lib.release">
@@ -33,7 +37,9 @@
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1535025014" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
+									<listOptionValue builtIn="false" value="F_CPU=16000000"/>
 								</option>
+								<option id="de.innot.avreclipse.compiler.option.omitfcpu.1027790886" name="Omit F_CPU" superClass="de.innot.avreclipse.compiler.option.omitfcpu" value="true" valueType="boolean"/>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.167886496" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.cppcompiler.lib.release.188678674" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.lib.release">
@@ -46,7 +52,9 @@
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1929729012" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
+									<listOptionValue builtIn="false" value="F_CPU=16000000"/>
 								</option>
+								<option id="de.innot.avreclipse.cppcompiler.option.omitfcpu.1861660962" name="Omit F_CPU" superClass="de.innot.avreclipse.cppcompiler.option.omitfcpu" value="true" valueType="boolean"/>
 								<inputType id="de.innot.avreclipse.cppcompiler.input.1951128001" superClass="de.innot.avreclipse.cppcompiler.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.linker.winavr.base.452038114" name="AVR C Linker" superClass="de.innot.avreclipse.tool.linker.winavr.base"/>
@@ -57,7 +65,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="lcd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="lcd-1.0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
