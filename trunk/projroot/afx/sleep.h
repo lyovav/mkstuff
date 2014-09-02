@@ -10,9 +10,6 @@
 
 		// Testing diode on PD0 (1 pin of mcu)
 
-		#define _sleep_test_PORT 	D
-		#define _sleep_test_PIN 	0
-
 		#define _blink(t1, t2) 	\
 			do { 				\
 				_dset(D, 0); 	\

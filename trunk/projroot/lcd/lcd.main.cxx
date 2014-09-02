@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <LiquidCrystal.h>
-#include <4arduino/lcd-1.0/LiquidCrystal_I2C.h>
+#include <LiquidCrystal_I2C.h>
 #include <afx/sleep.h>
 #include <afx/dwrite.h>
 
@@ -9,12 +9,12 @@ int main(void)
 {
 	init();
 
-	LiquidCrystal_I2C lcd(0x27, 16, 2);
+	LiquidCrystal_I2C lcd(0x27);
 
-	lcd.init();
-	lcd.clear();
+	lcd.begin(16, 2);
+	lcd.home();
 	lcd.setBacklight(255);
-	lcd.printstr("Trolololo...");
+	lcd.print(1024);
 
 	for (;;)
 	{
