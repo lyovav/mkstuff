@@ -19,8 +19,6 @@ void sleep_test_init(void)
 
 void sleep_test(void)
 {
-	_blink(1s, 1s);
-#if 0
 	_blink(2s, 2s);
 	_blink(1s, 1s);
 	_blink(500ms, 500ms);
@@ -38,5 +36,4 @@ void sleep_test(void)
 	_blink(3ms, 3ms);
 	_blink(2ms, 2ms);
 	_blink(1ms, 1ms);
-#endif
 }
