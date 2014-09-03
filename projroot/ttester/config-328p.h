@@ -14,7 +14,7 @@
 
 #define MHZ_CPU 8
 
-#define WITH_MENU
+// #define WITH_MENU
 
 // The menu function can be easier controlled with a incremental encoder (rotary switch).
 // Both switches of the rotary switch can be connected with 1 kOhm resistors to PD2 and PD3.

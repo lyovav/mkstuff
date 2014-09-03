@@ -1,4 +1,4 @@
-#if 0
+#if 1
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/sleep.h>
