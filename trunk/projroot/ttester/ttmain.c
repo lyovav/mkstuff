@@ -1,3 +1,4 @@
+#if 0
 //
 // 25.08.2014 MNi: Michael Nikonov's version of original main.c
 //
@@ -64,7 +65,7 @@ int main(void)
 
 	for (;;)
 	{
-		sleep(100);
+		//sleep(100);
 	}
 
 	return 0;
@@ -77,3 +78,5 @@ int main(void)
 #if FLASHEND > 0x1fff
 #  include "GetIr.c"
 #endif
+
+#endif // 0
