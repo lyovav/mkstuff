@@ -10,7 +10,7 @@
 #include <afx/dwrite.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C mScreen(0x20, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+I2C::LCD mScreen(2, 16, 0x20, 2, 1, 0, 4, 5, 6, 7, 3);
 
 namespace // make it C++ static
 {
@@ -43,12 +43,10 @@ namespace // make it C++ static
 
 static void display(int8_t mode);
 
-int main(void)
+extern "C" void Main()
 {
-	init();
-
-	mScreen.begin(16, 2);
-	mScreen.backlight();
+	mScreen.begin();
+	//mScreen.backlight();
 	mScreen.home();
 	mScreen.clear();
 
@@ -77,8 +75,6 @@ int main(void)
 
 		sleep10ms();
 	}
-
-	return 0;
 }
 
 static void display(int8_t mode)

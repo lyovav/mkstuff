@@ -74,12 +74,12 @@ typedef uint8_t fio_register;
 
 static __inline__ uint8_t __iCliRetVal(void)
 {
-	noInterrupts();
-	return(1);
+    noInterrupts();
+    return(1);
 }
 static __inline__ void __iSeiParam(const uint8_t *__s)
 {
-	interrupts();
+    interrupts();
 }
 #define ATOMIC_BLOCK(type) for(type,  __Todo = __iCliRetVal(); __Todo; __Todo = 0)
 

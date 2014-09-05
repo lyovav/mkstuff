@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+void sleepms(unsigned int us);
+
 void sleep5s(void);
 void sleep4s(void);
 void sleep3s(void);

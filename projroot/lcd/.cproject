@@ -67,8 +67,8 @@
 							<tool id="de.innot.avreclipse.tool.linker.winavr.app.release.510168279" name="AVR C Linker" superClass="de.innot.avreclipse.tool.linker.winavr.app.release"/>
 							<tool id="de.innot.avreclipse.tool.cpplinker.app.release.1060320336" name="AVR C++ Linker" superClass="de.innot.avreclipse.tool.cpplinker.app.release">
 								<option id="de.innot.avreclipse.cpplinker.option.libs.478116761" name="Libraries (-l)" superClass="de.innot.avreclipse.cpplinker.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="afx"/>
 									<listOptionValue builtIn="false" value="4arduino"/>
+									<listOptionValue builtIn="false" value="afx"/>
 								</option>
 								<option id="de.innot.avreclipse.cpplinker.option.libpath.1758803932" name="Libraries Path (-L)" superClass="de.innot.avreclipse.cpplinker.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/afx/opt}&quot;"/>
@@ -89,7 +89,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="text.doscp.cxx|tempo.cxx" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="testing.S|tempo.cxx" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

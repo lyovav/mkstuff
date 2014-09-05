@@ -3,6 +3,7 @@
 	<name>4arduino</name>
 	<comment></comment>
 	<projects>
+		<project>afx</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
