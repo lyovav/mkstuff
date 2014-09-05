@@ -32,9 +32,13 @@ class Print;
 
 class Printable
 {
-  public:
-	virtual ~Printable() = 0;
-    virtual size_t printTo(Print& p) const = 0;
+public:
+    virtual ~Printable() = 0;
+    virtual size_t printTo(Print const& p) const = 0;
+
+private:
+    Printable(Printable const&);
+    Printable& operator = (Printable const&);
 };
 
 inline Printable::~Printable() {}

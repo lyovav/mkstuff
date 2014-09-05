@@ -1,26 +1,40 @@
 #include <LiquidCrystal_I2C.h>
 #include <afx/sleep.h>
 
-LiquidCrystal_I2C mScreen(0x20, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+I2C::LCD mScreen(2, 16, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
 
-int main(void)
+extern "C" void Main()
 {
-	init();
-
-	mScreen.begin(16, 2);
-	mScreen.backlight();
-	mScreen.home();
-	mScreen.clear();
+	mScreen.begin();
+	mScreen.display();
 
 	mScreen.setCursor(0, 0);
 	mScreen.print("Trololo..lo.lo..");
 	mScreen.setCursor(0, 1);
 	mScreen.print(" v1.0  MNi 2014 ");
 
+	DDRD  = 0xff;
+	PORTD = 0;
+
 	for (;;)
 	{
-		sleep10ms();
-	}
+		uint8_t p = 0;
+		for (int i=0; i<4; i++)
+		{
+			p |= 1;
+			PORTD = p;
+			p <<= 1;
+			sleep500ms();
+		}
 
-	return 0;
+		//PORTD = 0xff;
+		//sleepms(20000);
+
+		for (int i=0; i<4; i++)
+		{
+			p >>= 1;
+			PORTD = p;
+			sleep500ms();
+		}
+	}
 }

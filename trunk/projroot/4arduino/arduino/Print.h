@@ -20,63 +20,73 @@
 #ifndef Print_h
 #define Print_h
 
-#include <inttypes.h>
-#include <stdio.h> // for size_t
-
-#include "WString.h"
 #include "Printable.h"
+#include "WString.h"
+#include <inttypes.h>
+#include <string.h>
 
-#define DEC 10
-#define HEX 16
-#define OCT 8
-#define BIN 2
+enum
+{
+  DEC = 10
+, HEX = 16
+, OCT = 8
+, BIN = 2
+};
 
 class Print
 {
-  private:
-    int write_error;
-    size_t printNumber(unsigned long, uint8_t);
-    size_t printFloat(double, uint8_t);
-  protected:
-    void setWriteError(int err = 1) { write_error = err; }
-  public:
-    Print() : write_error(0) {}
+public:
+    Print();
     virtual ~Print();
+    virtual size_t write(uint8_t) const;
+    virtual size_t write(uint8_t const* buffer, size_t size) const;
   
-    int getWriteError() { return write_error; }
-    void clearWriteError() { setWriteError(0); }
-  
-    virtual size_t write(uint8_t) = 0;
-    size_t write(const char *str) {
-      if (str == NULL) return 0;
-      return write((const uint8_t *)str, strlen(str));
-    }
-    virtual size_t write(const uint8_t *buffer, size_t size);
-    
-    size_t print(const __FlashStringHelper *);
-    size_t print(const String &);
-    size_t print(const char[]);
-    size_t print(char);
-    size_t print(unsigned char, int = DEC);
-    size_t print(int, int = DEC);
-    size_t print(unsigned int, int = DEC);
-    size_t print(long, int = DEC);
-    size_t print(unsigned long, int = DEC);
-    size_t print(double, int = 2);
-    size_t print(const Printable&);
+    int getWriteError() const;
+    void setWriteError(int err) const;
+    void clearWriteError() const;
 
-    size_t println(const __FlashStringHelper *);
-    size_t println(const String &s);
-    size_t println(const char[]);
-    size_t println(char);
-    size_t println(unsigned char, int = DEC);
-    size_t println(int, int = DEC);
-    size_t println(unsigned int, int = DEC);
-    size_t println(long, int = DEC);
-    size_t println(unsigned long, int = DEC);
-    size_t println(double, int = 2);
-    size_t println(const Printable&);
-    size_t println(void);
+    size_t write(char const* str) const;
+    size_t print(__FlashStringHelper const*) const;
+    size_t print(String const&) const;
+    size_t print(char const*) const;
+    size_t print(char) const;
+    size_t print(unsigned char, int = DEC) const;
+    size_t print(int, int = DEC) const;
+    size_t print(unsigned int, int = DEC) const;
+    size_t print(long, int = DEC) const;
+    size_t print(unsigned long, int = DEC) const;
+    size_t print(double, int = 2) const;
+    size_t print(const Printable&) const;
+
+private:
+    mutable int write_error;
+
+    size_t printNumber(unsigned long, uint8_t) const;
+    size_t printFloat(double, uint8_t) const;
 };
+
+inline Print::Print()
+    : write_error(0)
+{}
+
+inline size_t Print::write(const char *str) const
+{
+    if (str == NULL)
+        return 0;
+
+    return write((const uint8_t *)str, strlen(str));
+}
+
+inline int Print::getWriteError() const { return write_error; }
+inline void Print::setWriteError(int err) const { write_error = err; }
+inline void Print::clearWriteError() const { write_error = 0; }
+
+inline size_t Print::print(char const* str) const { return write(str); }
+inline size_t Print::print(char c) const { return write(c); }
+inline size_t Print::print(unsigned char b, int base) const { return print((unsigned long) b, base); }
+inline size_t Print::print(int n, int base) const { return print((long) n, base); }
+inline size_t Print::print(unsigned int n, int base) const { return print((unsigned long) n, base); }
+inline size_t Print::print(double n, int digits) const { return printFloat(n, digits); }
+inline size_t Print::print(Printable const& x) const { return x.printTo(*this); }
 
 #endif
