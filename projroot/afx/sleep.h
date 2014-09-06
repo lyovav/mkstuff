@@ -7,6 +7,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifdef AVR
+#  include <util/delay.h>
+#  define _sleep_usf(us) _delay_us(us)
+#  define _sleep_msf(ms) _delay_ms(ms)
+#endif /* AVR */
+
 void sleepms(unsigned int us);
 
 void sleep5s(void);

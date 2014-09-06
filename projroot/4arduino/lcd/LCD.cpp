@@ -90,7 +90,7 @@ namespace Generic
        // before sending commands. Arduino can turn on way before 4.5V so we'll wait
        // 50
        // ---------------------------------------------------------------------------
-       sleep100ms();
+       sleepms(50000);
 
        //put the LCD into 4 bit or 8 bit mode
        // -------------------------------------
