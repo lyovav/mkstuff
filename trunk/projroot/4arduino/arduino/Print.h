@@ -58,6 +58,8 @@ public:
     size_t print(double, int = 2) const;
     size_t print(const Printable&) const;
 
+    size_t printf(char const* format, ...) const;
+
 private:
     mutable int write_error;
 
