@@ -47,7 +47,7 @@ namespace Generic
     // Constructor
     LCD::LCD(uint8_t rows, uint8_t cols, backlight_pol bp, uint8_t charsize)
         : _displayfunction((rows < 2 ? LCD_1LINE : (rows == 2 ? LCD_2LINE : 0)))
-        , _displaycontrol(LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF)   // turn the display on with no cursor or blinking default
+        , _displaycontrol(LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF)
         , _displaymode(LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT)
         , _numlines(rows)
         , _cols(cols)

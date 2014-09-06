@@ -221,6 +221,7 @@ namespace I2C
     {
        init();
        Super::begin();
+       setBacklight(BACKLIGHT_ON);
     }
 }
 
