@@ -172,6 +172,7 @@ size_t Print::printFloat(double number, uint8_t digits) const
     return n;
 }
 
+#ifdef _PRINT_USES_ELIPSIS
 size_t Print::printf(char const* format, ...) const
 {
 	char buffer[1024] = {0};
@@ -184,3 +185,4 @@ size_t Print::printf(char const* format, ...) const
 
 	return (size_t)rv;
 }
+#endif /* _PRINT_USES_ELIPSIS */

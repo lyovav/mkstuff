@@ -11,7 +11,7 @@ extern "C" void Main()
 	lcd.setCursor(0, 0);
 	lcd.print("CharGen Example ");
 	lcd.setCursor(0, 1);
-	lcd.printf(" %d  MNi 2014", 100);
+	lcd.print("   MNi 2014     ");
 
 	sleep3s();
 	lcd.clear();
