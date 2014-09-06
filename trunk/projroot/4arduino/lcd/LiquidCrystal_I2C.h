@@ -110,7 +110,7 @@ namespace I2C
          @param      d6[in] LCD data 2 pin map on IO extender module
          @param      d7[in] LCD data 3 pin map on IO extender module
          */
-        LCD(uint8_t rows, uint8_t cols, uint8_t addr
+        LCD(uint8_t cols, uint8_t rows, uint8_t addr
           , uint8_t en = EN
           , uint8_t rw = RW
           , uint8_t rs = RS

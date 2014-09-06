@@ -35,7 +35,7 @@ namespace I2C
 	LCD::~LCD()
 	{}
 
-    LCD::LCD(uint8_t rows, uint8_t cols
+    LCD::LCD(uint8_t cols, uint8_t rows
            , uint8_t addr
            , uint8_t en
            , uint8_t rw
@@ -48,7 +48,7 @@ namespace I2C
            , uint8_t pol
            , uint8_t charsize
            )
-        : Super(rows, cols, (backlight_pol)pol, charsize)
+        : Super(cols, rows, (backlight_pol)pol, charsize)
         , _backlightPinMask(1 << blp)
         , _backlightStsMask(LCD_NOBACKLIGHT)
         , _i2cio(addr)
