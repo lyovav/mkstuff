@@ -45,7 +45,7 @@ namespace Generic
     {}
 
     // Constructor
-    LCD::LCD(uint8_t rows, uint8_t cols, backlight_pol bp, uint8_t charsize)
+    LCD::LCD(uint8_t cols, uint8_t rows, backlight_pol bp, uint8_t charsize)
         : _displayfunction((rows < 2 ? LCD_1LINE : (rows == 2 ? LCD_2LINE : 0)))
         , _displaycontrol(LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF)
         , _displaymode(LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT)
@@ -168,7 +168,7 @@ namespace Generic
     }
 
     // Write to CGRAM of new characters
-    void LCD::createChar(uint8_t location, uint8_t charmap[]) const
+    void LCD::createChar(uint8_t location, uint8_t const* charmap) const
     {
        location &= 0x7;
 

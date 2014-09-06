@@ -348,7 +348,7 @@ namespace Generic
         (0 to 7)
         @param      charmap[in] the bitmap array representing each row of the character.
         */
-       void createChar(uint8_t location, uint8_t charmap[]) const;
+       void createChar(uint8_t location, uint8_t const* charmap) const;
 
        /*!
         @function
@@ -438,7 +438,7 @@ namespace Generic
         @discussion LiquidCrystal class abstract constructor needed to create
         the base abstract class.
         */
-       LCD(uint8_t rows, uint8_t cols, backlight_pol bp, uint8_t dotsize = LCD_5x8DOTS);
+       LCD(uint8_t cols, uint8_t rows, backlight_pol bp, uint8_t dotsize = LCD_5x8DOTS);
 
     protected:
        // Internal LCD variables to control the LCD shared between all derived
