@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <stdarg.h>
 
 Print::~Print()
 {}
@@ -169,4 +170,17 @@ size_t Print::printFloat(double number, uint8_t digits) const
     }
 
     return n;
+}
+
+size_t Print::printf(char const* format, ...) const
+{
+	char buffer[1024] = {0};
+
+	va_list args;
+	va_start(args, format);
+	int rv = ::vsnprintf(buffer, sizeof(buffer)-1, format, args);
+	print(buffer);
+	va_end(args);
+
+	return (size_t)rv;
 }

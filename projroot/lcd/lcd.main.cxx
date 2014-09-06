@@ -1,3 +1,4 @@
+#include "ru.alphas.hxx"
 #include <LiquidCrystal_I2C.h>
 #include <afx/sleep.h>
 
@@ -10,54 +11,16 @@ extern "C" void Main()
 	lcd.setCursor(0, 0);
 	lcd.print("CharGen Example ");
 	lcd.setCursor(0, 1);
-	lcd.print(" v1.0  MNi 2014 ");
+	lcd.printf(" %d  MNi 2014", 100);
 
-	sleep2s();
+	sleep3s();
 	lcd.clear();
 
-	static const uint8_t smiley[8] = {
-	  0b00000,
-	  0b00000,
-	  0b01010,
-	  0b00000,
-	  0b00000,
-	  0b10001,
-	  0b01110,
-	  0b00000
-	};
+	init_ru_cp(lcd);
 
-	const uint8_t armsUp[8] = {
-	  0b00100,
-	  0b01010,
-	  0b00100,
-	  0b10101,
-	  0b01110,
-	  0b00100,
-	  0b00100,
-	  0b01010
-	};
+	//lcd.setCursor(0, 0);
+	//lcd.print(lstring[RU_Alpha1]);
 
-	uint8_t frownie[8] = {
-	  0b00000,
-	  0b00000,
-	  0b01010,
-	  0b00000,
-	  0b00000,
-	  0b00000,
-	  0b01110,
-	  0b10001
-	};
-
-	lcd.createChar(0, smiley);
-	lcd.createChar(1, armsUp);
-	lcd.createChar(2, frownie);
-
-	lcd.setCursor(0, 0);
-	lcd.print((char)0);
-
-	lcd.setCursor(2, 0);
-	lcd.print((char)1);
-
-	lcd.setCursor(4, 0);
-	lcd.print((char)2);
+	//lcd.setCursor(0, 1);
+	//lcd.print(lstring[RU_Alpha2]);
 }
