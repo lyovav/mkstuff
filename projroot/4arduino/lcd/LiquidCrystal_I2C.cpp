@@ -49,7 +49,7 @@ namespace I2C
            , uint8_t charsize
            )
         : Super(rows, cols, (backlight_pol)pol, charsize)
-        , _backlightPinMask(0)
+        , _backlightPinMask(1 << blp)
         , _backlightStsMask(LCD_NOBACKLIGHT)
         , _i2cio(addr)
         , _En(1 << en)
@@ -60,16 +60,8 @@ namespace I2C
        _data_pins[1] = (1 << d5);
        _data_pins[2] = (1 << d6);
        _data_pins[3] = (1 << d7);
-
-       setBacklightPin(blp, (backlight_pol)pol);
     }
 
-    // User commands - users can expand this section
-    //----------------------------------------------------------------------------
-    // Turn the (optional) backlight off/on
-
-    //
-    // setBacklightPin
     void LCD::setBacklightPin(uint8_t value, backlight_pol pol)
     {
        _backlightPinMask = (1 << value);
@@ -77,8 +69,6 @@ namespace I2C
        setBacklight(BACKLIGHT_OFF);
     }
 
-    //
-    // setBacklight
     void LCD::setBacklight(uint8_t value)
     {
        // Check if backlight is available
@@ -162,7 +152,7 @@ namespace I2C
 
     void LCD::pulseEnable(uint8_t data) const
     {
-       _i2cio.write(data | _En);   // En HIGH
+       _i2cio.write(data |  _En);  // En HIGH
        _i2cio.write(data & ~_En);  // En LOW
     }
 }
