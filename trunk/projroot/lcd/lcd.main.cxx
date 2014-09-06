@@ -14,13 +14,23 @@ extern "C" void Main()
 	lcd.print("   MNi 2014     ");
 
 	sleep3s();
-	lcd.clear();
 
-	init_ru_cp(lcd);
+	init_cp1251(lcd);
 
-	//lcd.setCursor(0, 0);
-	//lcd.print(lstring[RU_Alpha1]);
+	for (;;)
+	{
+		for (int i = 1; i >= 0; i--)
+		{
+			lcd.clear();
 
-	//lcd.setCursor(0, 1);
-	//lcd.print(lstring[RU_Alpha2]);
+			lcd.setCursor(0, 0);
+			lcd.print(cp1251_to_lcd(lstring[i * 2]));
+
+			lcd.setCursor(0, 1);
+			lcd.print(cp1251_to_lcd(lstring[i * 2 + 1]));
+
+			return ;
+			sleep3s();
+		}
+	}
 }
