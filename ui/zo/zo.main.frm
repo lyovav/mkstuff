@@ -1,18 +1,23 @@
 VERSION 5.00
 Begin VB.Form frmMain 
+   BackColor       =   &H00FFFFFF&
+   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Michael Nikonov's: The Ohm Rulez"
-   ClientHeight    =   7635
-   ClientLeft      =   120
-   ClientTop       =   450
-   ClientWidth     =   7170
+   ClientHeight    =   7680
+   ClientLeft      =   45
+   ClientTop       =   375
+   ClientWidth     =   7230
    LinkTopic       =   "Michael Nikonov's: The Ohm Rulez"
-   ScaleHeight     =   7635
-   ScaleWidth      =   7170
+   MaxButton       =   0   'False
+   Picture         =   "zo.main.frx":0000
+   ScaleHeight     =   7680
+   ScaleWidth      =   7230
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin VB.TextBox ebR 
-      Alignment       =   1  'Right Justify
+      Alignment       =   2  'Center
       Appearance      =   0  'Flat
-      BackColor       =   &H00C0FFFF&
+      BackColor       =   &H00F0FFFF&
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   18
@@ -32,7 +37,7 @@ Begin VB.Form frmMain
    Begin VB.TextBox ebU 
       Alignment       =   2  'Center
       Appearance      =   0  'Flat
-      BackColor       =   &H00C0FFC0&
+      BackColor       =   &H00F0FFF0&
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   18
@@ -50,8 +55,9 @@ Begin VB.Form frmMain
       Width           =   2655
    End
    Begin VB.TextBox ebI 
+      Alignment       =   2  'Center
       Appearance      =   0  'Flat
-      BackColor       =   &H00FFE0FF&
+      BackColor       =   &H00FFF0FF&
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   18
@@ -71,7 +77,7 @@ Begin VB.Form frmMain
    Begin VB.Label lbBottom 
       Alignment       =   2  'Center
       Appearance      =   0  'Flat
-      BackColor       =   &H00F4F4F4&
+      BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
          Name            =   "Courier New"
@@ -92,6 +98,7 @@ Begin VB.Form frmMain
    End
    Begin VB.Label lbTop 
       Alignment       =   2  'Center
+      BackColor       =   &H00FFFFFF&
       Caption         =   "P = IU"
       BeginProperty Font 
          Name            =   "Courier New"
@@ -146,6 +153,7 @@ Begin VB.Form frmMain
    End
    Begin VB.Label lbU 
       Alignment       =   2  'Center
+      BackColor       =   &H00FFFFFF&
       Caption         =   "U"
       BeginProperty Font 
          Name            =   "Courier New"
@@ -156,15 +164,16 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   855
+      Height          =   735
       Index           =   0
       Left            =   3000
       TabIndex        =   6
-      Top             =   2040
+      Top             =   2160
       Width           =   1215
    End
    Begin VB.Label lbI 
       Alignment       =   2  'Center
+      BackColor       =   &H00FFFFFF&
       Caption         =   "I"
       BeginProperty Font 
          Name            =   "Courier New"
@@ -175,7 +184,7 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   855
+      Height          =   735
       Index           =   1
       Left            =   1920
       TabIndex        =   7
@@ -184,6 +193,7 @@ Begin VB.Form frmMain
    End
    Begin VB.Label lbR 
       Alignment       =   2  'Center
+      BackColor       =   &H00FFFFFF&
       Caption         =   "R"
       BeginProperty Font 
          Name            =   "Courier New"
@@ -194,7 +204,7 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   855
+      Height          =   735
       Index           =   0
       Left            =   4080
       TabIndex        =   3
@@ -246,14 +256,17 @@ Private Sub ebI_GotFocus()
 End Sub
 
 Private Sub ebR_KeyUp(KeyCode As Integer, Shift As Integer)
+    checkEscKey KeyCode
     updateValues True, False, False
 End Sub
 
 Private Sub ebU_KeyUp(KeyCode As Integer, Shift As Integer)
+    checkEscKey KeyCode
     updateValues False, True, False
 End Sub
 
 Private Sub ebI_KeyUp(KeyCode As Integer, Shift As Integer)
+    checkEscKey KeyCode
     updateValues False, False, True
 End Sub
 
@@ -285,4 +298,10 @@ Private Sub updateValues(R_Changed As Boolean, U_Changed As Boolean, I_Changed A
     End If
     
     lbTop(1).Caption = "P = " + Format(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)), "0.00")
+End Sub
+
+Private Sub checkEscKey(vk As Integer)
+    If vk = &H1B Then
+        'Close
+    End If
 End Sub
