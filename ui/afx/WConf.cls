@@ -14,20 +14,22 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Public appName As String
+Private appName As String
 
-Private Const scConfig As String = "config"
+Private Const scConfig As String = "Common"
 Private Const scLeft As String = "left"
 Private Const scTop As String = "top"
 Private Const scWidth As String = "width"
 Private Const scHeight As String = "height"
 
 Private Sub Class_Initialize()
-    appName = "[WCD] Unknown App"
+    appName = ""
 End Sub
 
 Public Sub onFormLoad(ByRef frm As Form)
     On Error Resume Next
+    
+    Let appName = frm.LinkTopic
 
     Dim cx As Integer
     Dim cy As Integer
@@ -53,3 +55,12 @@ Public Sub onFormUnload(ByRef frm As Form)
     SaveSetting appName, scConfig, scWidth, frm.Width
     SaveSetting appName, scConfig, scHeight, frm.Height
 End Sub
+
+Public Sub LoadTextBox(ByRef tb As TextBox, Optional deft As String = "")
+    tb.Text = GetSetting(appName, scConfig, tb.Name, deft)
+End Sub
+
+Public Sub SaveTextBox(ByRef tb As TextBox)
+    SaveSetting appName, scConfig, tb.Name, tb.Text
+End Sub
+
