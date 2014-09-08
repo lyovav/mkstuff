@@ -290,14 +290,14 @@ Private Sub updateValues(R_Changed As Boolean, U_Changed As Boolean, I_Changed A
     On Error Resume Next
     
     If R_Changed Or U_Changed Then
-        ebI.Text = Format(calc_I(CDbl(ebU.Text), CDbl(ebR.Text)), "0.000")
+        ebI.Text = Format(calc_I(CDbl(ebU.Text), CDbl(ebR.Text)), "0.00000")
     End If
     
     If I_Changed Then
-        ebU.Text = Format(calc_U(CDbl(ebI.Text), CDbl(ebR.Text)), "0.000")
+        ebU.Text = Format(calc_U(CDbl(ebI.Text), CDbl(ebR.Text)), "0.00000")
     End If
     
-    lbTop(1).Caption = "P = " + Format(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)), "0.00")
+    lbTop(1).Caption = "P = " + Format(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)), "0.0000")
 End Sub
 
 Private Sub checkEscKey(vk As Integer)
