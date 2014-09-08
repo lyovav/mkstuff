@@ -5,6 +5,7 @@ Class=WConf; ..\afx\WConf.cls
 Module=WinAPI; ..\afx\WinAPI.bas
 IconForm="frmMain"
 Startup="frmMain"
+ExeName32="zo.exe"
 Command32=""
 Name="ZO"
 HelpContextID="0"
