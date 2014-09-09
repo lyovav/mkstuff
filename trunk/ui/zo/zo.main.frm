@@ -286,10 +286,6 @@ Private Sub Form_Load()
     Conf.LoadTextBox ebR, "0"
     Conf.LoadTextBox ebU, "0"
     
-    InitEditBox ebR
-    InitEditBox ebU
-    InitEditBox ebI
-    
     constI.Enabled = False
     constU.Enabled = False
     constR.Enabled = False
@@ -297,17 +293,26 @@ Private Sub Form_Load()
     constR.value = 1
     
     updateValues True, True, False
+    
+    InitEditBox ebR
+    InitEditBox ebU
+    InitEditBox ebI
+    
+    LoadGallery "gallery"
+
     Exit Sub
 
 Fail:
-    MsgBox "Error (" + CStr(Err.Number) + "): " + Err.Description + vbCrLf _
-        + "Source: " + Err.Source _
-        , vbCritical, Me.Caption
+    Err.Description = Err.Source + "(" + str(Err.Number) + "): " + Err.Description
+    Debug.Print "!!! > " + Err.Description
+    MsgBox Err.Description, vbCritical, Me.Caption
+    Resume Next
+    ' Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
 End Sub
 
 Private Sub InitEditBox(eb As TextBox)
     ' FIXME: MNi - it didn't working - it is not static or edit control - it's a ThunderTextBox!
-    'SetWindowLongA eb.Container, GWL_STYLE, GetWindowLongA(eb.Container, GWL_STYLE) + SS_CENTERIMAGE
+    ' SetWindowLongA eb.Container, GWL_STYLE, GetWindowLongA(eb.Container, GWL_STYLE) + SS_CENTERIMAGE
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -335,17 +340,14 @@ Private Sub ebI_GotFocus()
 End Sub
 
 Private Sub ebR_KeyUp(KeyCode As Integer, Shift As Integer)
-    checkEscKey KeyCode
     updateValues True, False, False
 End Sub
 
 Private Sub ebU_KeyUp(KeyCode As Integer, Shift As Integer)
-    checkEscKey KeyCode
     updateValues False, True, False
 End Sub
 
 Private Sub ebI_KeyUp(KeyCode As Integer, Shift As Integer)
-    checkEscKey KeyCode
     updateValues False, False, True
 End Sub
 
@@ -380,8 +382,37 @@ Private Sub updateValues(R_Changed As Boolean, U_Changed As Boolean, I_Changed A
     lbTop(1).Caption = "P = " + CStr(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)))
 End Sub
 
-Private Sub checkEscKey(vk As Integer)
-    If vk = &H1B Then
-        'Close
+Private Sub LoadGallery(path As String)
+    On Error GoTo ErrIn_LoadGallery
+    Dim findHandle As Long
+    Dim findData As WIN32_FIND_DATAA
+    
+    findHandle = FindFirstFileA(path + "\\*.*", findData)
+    
+    If findHandle <> INVALID_HANDLE_VALUE Then
+        Dim findNext As Long
+        Dim filename As String
+       
+        
+        findNext = True
+        Do While findNext
+            filename = StripNulls(findData.cFileName)
+        
+            If filename <> "." And filename <> ".." Then ' skip current and upper dir
+                ProcessGalleryEntry path, filename, findData
+            End If
+            findNext = FindNextFileA(findHandle, findData)
+        Loop
+        
+        FindClose findHandle
     End If
+    
+    Exit Sub
+ErrIn_LoadGallery:
+    FindClose findHandle
+    Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
+End Sub
+
+Private Sub ProcessGalleryEntry(path As String, filename As String, ByRef findData As WIN32_FIND_DATAA)
+    Debug.Print "PENTRY: " + str(findData.dwFileAttributes) + " `" + path + "\" + filename + "`"
 End Sub
