@@ -14,13 +14,70 @@ Begin VB.Form frmMain
    ScaleWidth      =   7230
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
+   Begin VB.CheckBox constI 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "const"
+      BeginProperty Font 
+         Name            =   "Patopian 1986"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   1560
+      TabIndex        =   10
+      TabStop         =   0   'False
+      Top             =   4680
+      Width           =   1215
+   End
+   Begin VB.CheckBox constU 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "const"
+      BeginProperty Font 
+         Name            =   "Patopian 1986"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   3000
+      TabIndex        =   9
+      TabStop         =   0   'False
+      Top             =   2760
+      Width           =   1215
+   End
+   Begin VB.CheckBox constR 
+      BackColor       =   &H00FFFFFF&
+      Caption         =   "const"
+      BeginProperty Font 
+         Name            =   "Patopian 1986"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   4440
+      TabIndex        =   8
+      TabStop         =   0   'False
+      Top             =   4680
+      Width           =   1215
+   End
    Begin VB.TextBox ebR 
       Alignment       =   2  'Center
       Appearance      =   0  'Flat
       BackColor       =   &H00F0FFFF&
       BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   18
+         Name            =   "Patopian 1986"
+         Size            =   20.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -39,8 +96,8 @@ Begin VB.Form frmMain
       Appearance      =   0  'Flat
       BackColor       =   &H00F0FFF0&
       BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   18
+         Name            =   "Patopian 1986"
+         Size            =   20.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -59,8 +116,8 @@ Begin VB.Form frmMain
       Appearance      =   0  'Flat
       BackColor       =   &H00FFF0FF&
       BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   18
+         Name            =   "Patopian 1986"
+         Size            =   20.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -101,10 +158,10 @@ Begin VB.Form frmMain
       BackColor       =   &H00FFFFFF&
       Caption         =   "P = IU"
       BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   18
+         Name            =   "Patopian 1986"
+         Size            =   20.25
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -164,11 +221,11 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   735
+      Height          =   615
       Index           =   0
       Left            =   3000
       TabIndex        =   6
-      Top             =   2160
+      Top             =   2040
       Width           =   1215
    End
    Begin VB.Label lbI 
@@ -184,7 +241,7 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   735
+      Height          =   615
       Index           =   1
       Left            =   1920
       TabIndex        =   7
@@ -204,7 +261,7 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   735
+      Height          =   615
       Index           =   0
       Left            =   4080
       TabIndex        =   3
@@ -223,12 +280,34 @@ DefInt A-Z
 Private Conf As New WConf
 
 Private Sub Form_Load()
+    On Error GoTo Fail
     Conf.onFormLoad Me
     
     Conf.LoadTextBox ebR, "0"
     Conf.LoadTextBox ebU, "0"
     
+    InitEditBox ebR
+    InitEditBox ebU
+    InitEditBox ebI
+    
+    constI.Enabled = False
+    constU.Enabled = False
+    constR.Enabled = False
+
+    constR.value = 1
+    
     updateValues True, True, False
+    Exit Sub
+
+Fail:
+    MsgBox "Error (" + CStr(Err.Number) + "): " + Err.Description + vbCrLf _
+        + "Source: " + Err.Source _
+        , vbCritical, Me.Caption
+End Sub
+
+Private Sub InitEditBox(eb As TextBox)
+    ' FIXME: MNi - it didn't working - it is not static or edit control - it's a ThunderTextBox!
+    'SetWindowLongA eb.Container, GWL_STYLE, GetWindowLongA(eb.Container, GWL_STYLE) + SS_CENTERIMAGE
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -271,6 +350,7 @@ Private Sub ebI_KeyUp(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Function calc_I(ByVal U As Double, ByVal R As Double) As Double
+    If R = 0 Then R = 1
     calc_I = U / R
 End Function
 
@@ -290,14 +370,14 @@ Private Sub updateValues(R_Changed As Boolean, U_Changed As Boolean, I_Changed A
     On Error Resume Next
     
     If R_Changed Or U_Changed Then
-        ebI.Text = Format(calc_I(CDbl(ebU.Text), CDbl(ebR.Text)), "0.00000")
+        ebI.Text = Format(calc_I(CDbl(ebU.Text), CDbl(ebR.Text)), "0.0000")
     End If
     
     If I_Changed Then
-        ebU.Text = Format(calc_U(CDbl(ebI.Text), CDbl(ebR.Text)), "0.00000")
+        ebU.Text = Format(calc_U(CDbl(ebI.Text), CDbl(ebR.Text)), "0.0000")
     End If
     
-    lbTop(1).Caption = "P = " + Format(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)), "0.0000")
+    lbTop(1).Caption = "P = " + CStr(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)))
 End Sub
 
 Private Sub checkEscKey(vk As Integer)
