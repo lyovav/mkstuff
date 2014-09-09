@@ -93,7 +93,7 @@ Public Sub FreeGDIPlus(Token As Long)
 End Sub
 
 ' Loads the picture (optionally resized)
-Public Function LoadPic(PicFile As String, Optional Width As Long = -1, Optional Height As Long = -1, Optional ByVal BackColor As Long = vbWhite, Optional RetainRatio As Boolean = False) As IPicture
+Public Function LoadPix(PicFile As String, Optional Width As Long = -1, Optional Height As Long = -1, Optional ByVal BackColor As Long = vbWhite, Optional RetainRatio As Boolean = False) As IPicture
     Dim hDC     As Long
     Dim hBitmap As Long
     Dim Img     As Long
@@ -121,7 +121,7 @@ Public Function LoadPic(PicFile As String, Optional Width As Long = -1, Optional
     GetBitmap hDC, hBitmap
 
     ' Create the picture
-    Set LoadPictureGDIPlus = CreatePicture(hBitmap)
+    Set LoadPix = CreatePicture(hBitmap)
 End Function
 
 ' Initialises the hDC to draw

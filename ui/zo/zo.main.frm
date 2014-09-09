@@ -14,6 +14,28 @@ Begin VB.Form frmMain
    ScaleWidth      =   7230
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
+   Begin VB.PictureBox pbGallery 
+      Appearance      =   0  'Flat
+      BackColor       =   &H80000005&
+      ForeColor       =   &H80000008&
+      Height          =   1815
+      Left            =   120
+      ScaleHeight     =   1785
+      ScaleWidth      =   6945
+      TabIndex        =   11
+      Top             =   5760
+      Width           =   6975
+   End
+   Begin VB.PictureBox tempPicBox 
+      Height          =   495
+      Left            =   240
+      ScaleHeight     =   435
+      ScaleWidth      =   435
+      TabIndex        =   10
+      Top             =   4080
+      Visible         =   0   'False
+      Width           =   495
+   End
    Begin VB.CheckBox constI 
       BackColor       =   &H00FFFFFF&
       Caption         =   "const"
@@ -28,7 +50,7 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   255
       Left            =   1560
-      TabIndex        =   10
+      TabIndex        =   9
       TabStop         =   0   'False
       Top             =   4680
       Width           =   1215
@@ -47,7 +69,7 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   255
       Left            =   3000
-      TabIndex        =   9
+      TabIndex        =   8
       TabStop         =   0   'False
       Top             =   2760
       Width           =   1215
@@ -66,7 +88,7 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   255
       Left            =   4440
-      TabIndex        =   8
+      TabIndex        =   7
       TabStop         =   0   'False
       Top             =   4680
       Width           =   1215
@@ -130,28 +152,6 @@ Begin VB.Form frmMain
       Text            =   "0"
       Top             =   5010
       Width           =   2655
-   End
-   Begin VB.Label lbBottom 
-      Alignment       =   2  'Center
-      Appearance      =   0  'Flat
-      BackColor       =   &H00FFFFFF&
-      BorderStyle     =   1  'Fixed Single
-      BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   36
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H80000008&
-      Height          =   1695
-      Index           =   0
-      Left            =   120
-      TabIndex        =   5
-      Top             =   5880
-      Width           =   6975
    End
    Begin VB.Label lbTop 
       Alignment       =   2  'Center
@@ -224,7 +224,7 @@ Begin VB.Form frmMain
       Height          =   615
       Index           =   0
       Left            =   3000
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   2040
       Width           =   1215
    End
@@ -244,7 +244,7 @@ Begin VB.Form frmMain
       Height          =   615
       Index           =   1
       Left            =   1920
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   3840
       Width           =   1215
    End
@@ -302,7 +302,7 @@ Private Sub Form_Load()
     InitEditBox ebU
     InitEditBox ebI
 
-    StartGallery False
+    StartGallery False, tempPicBox
     Exit Sub
 
 Fail:
