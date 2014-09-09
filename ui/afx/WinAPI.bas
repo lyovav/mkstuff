@@ -135,12 +135,15 @@ Public Declare Function GetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal i
 Public Declare Function SetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
 Public Declare Function GetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
 
-Public Declare Function FindFirstFileA Lib "kernel32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
-Public Declare Function FindNextFileA Lib "kernel32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
-Public Declare Function GetFileAttributesA Lib "kernel32" (ByVal lpFileName As String) As Long
-Public Declare Function FindClose Lib "kernel32" (ByVal hFindFile As Long) As Long
-Public Declare Function FileTimeToLocalFileTime Lib "kernel32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
-Public Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
+Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
+Public Declare Function GetFileAttributesA Lib "KERNEL32" (ByVal lpFileName As String) As Long
+Public Declare Function FindClose Lib "KERNEL32" (ByVal hFindFile As Long) As Long
+Public Declare Function FileTimeToLocalFileTime Lib "KERNEL32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
+Public Declare Function FileTimeToSystemTime Lib "KERNEL32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+
+Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
+Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer
@@ -151,3 +154,6 @@ Public Function StripNulls(str As String) As String
     StripNulls = str
 End Function
 
+Public Function ProcPtr(ByVal nAddress As Long) As Long
+    ProcPtr = nAddress
+End Function

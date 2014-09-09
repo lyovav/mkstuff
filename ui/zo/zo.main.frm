@@ -278,9 +278,13 @@ Option Explicit
 DefInt A-Z
 
 Private Conf As New WConf
+Private gdipToken As Long
 
 Private Sub Form_Load()
     On Error GoTo Fail
+    
+    gdipToken = InitGDIPlus
+    
     Conf.onFormLoad Me
     
     Conf.LoadTextBox ebR, "0"
@@ -297,9 +301,8 @@ Private Sub Form_Load()
     InitEditBox ebR
     InitEditBox ebU
     InitEditBox ebI
-    
-    LoadGallery "gallery"
 
+    StartGallery False
     Exit Sub
 
 Fail:
@@ -320,6 +323,8 @@ Private Sub Form_Unload(Cancel As Integer)
     
     Conf.SaveTextBox ebR
     Conf.SaveTextBox ebU
+    
+    FreeGDIPlus gdipToken
 End Sub
 
 Private Sub selText(ByRef tb As TextBox)
@@ -382,37 +387,3 @@ Private Sub updateValues(R_Changed As Boolean, U_Changed As Boolean, I_Changed A
     lbTop(1).Caption = "P = " + CStr(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)))
 End Sub
 
-Private Sub LoadGallery(path As String)
-    On Error GoTo ErrIn_LoadGallery
-    Dim findHandle As Long
-    Dim findData As WIN32_FIND_DATAA
-    
-    findHandle = FindFirstFileA(path + "\\*.*", findData)
-    
-    If findHandle <> INVALID_HANDLE_VALUE Then
-        Dim findNext As Long
-        Dim filename As String
-       
-        
-        findNext = True
-        Do While findNext
-            filename = StripNulls(findData.cFileName)
-        
-            If filename <> "." And filename <> ".." Then ' skip current and upper dir
-                ProcessGalleryEntry path, filename, findData
-            End If
-            findNext = FindNextFileA(findHandle, findData)
-        Loop
-        
-        FindClose findHandle
-    End If
-    
-    Exit Sub
-ErrIn_LoadGallery:
-    FindClose findHandle
-    Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
-End Sub
-
-Private Sub ProcessGalleryEntry(path As String, filename As String, ByRef findData As WIN32_FIND_DATAA)
-    Debug.Print "PENTRY: " + str(findData.dwFileAttributes) + " `" + path + "\" + filename + "`"
-End Sub
