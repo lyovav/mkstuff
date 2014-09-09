@@ -87,6 +87,46 @@ Public Const SS_PATHELLIPSIS        As Long = &H8000
 Public Const SS_WORDELLIPSIS        As Long = &HC000
 Public Const SS_ELLIPSISMASK        As Long = &HC000
 
+Public Const MAX_PATH = 260
+Public Const MAXDWORD = &HFFFF
+Public Const INVALID_HANDLE_VALUE = -1
+Public Const FILE_ATTRIBUTE_ARCHIVE = &H20
+Public Const FILE_ATTRIBUTE_DIRECTORY = &H10
+Public Const FILE_ATTRIBUTE_HIDDEN = &H2
+Public Const FILE_ATTRIBUTE_NORMAL = &H80
+Public Const FILE_ATTRIBUTE_READONLY = &H1
+Public Const FILE_ATTRIBUTE_SYSTEM = &H4
+Public Const FILE_ATTRIBUTE_TEMPORARY = &H100
+
+Type FILETIME
+     dwLowDateTime As Long
+     dwHighDateTime As Long
+End Type
+
+Type SYSTEMTIME
+     wYear As Integer
+     wMonth As Integer
+     wDayOfWeek As Integer
+     wDay As Integer
+     wHour As Integer
+     wMinute As Integer
+     wSecond As Integer
+     wMilliseconds As Integer
+End Type
+
+Public Type WIN32_FIND_DATAA
+    dwFileAttributes As Long
+    ftCreationTime As FILETIME
+    ftLastAccessTime As FILETIME
+    ftLastWriteTime As FILETIME
+    nFileSizeHigh As Long
+    nFileSizeLow As Long
+    dwReserved0 As Long
+    dwReserved1 As Long
+    cFileName As String * MAX_PATH
+    cAlternateFileName As String * 14
+End Type
+
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
 Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
 Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
@@ -94,4 +134,20 @@ Public Declare Function SetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal i
 Public Declare Function GetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
 Public Declare Function SetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
 Public Declare Function GetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
+
+Public Declare Function FindFirstFileA Lib "kernel32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
+Public Declare Function FindNextFileA Lib "kernel32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
+Public Declare Function GetFileAttributesA Lib "kernel32" (ByVal lpFileName As String) As Long
+Public Declare Function FindClose Lib "kernel32" (ByVal hFindFile As Long) As Long
+Public Declare Function FileTimeToLocalFileTime Lib "kernel32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
+Public Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+
+Public Function StripNulls(str As String) As String
+    Dim zp As Integer
+    zp = InStr(str, Chr(0))
+    If (zp > 0) Then
+        str = Left(str, zp - 1)
+    End If
+    StripNulls = str
+End Function
 
