@@ -3,38 +3,30 @@ Begin VB.Form frmMain
    BackColor       =   &H00FFFFFF&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Michael Nikonov's: The Ohm Rulez"
-   ClientHeight    =   7680
+   ClientHeight    =   9750
    ClientLeft      =   45
    ClientTop       =   375
-   ClientWidth     =   7230
+   ClientWidth     =   7215
    LinkTopic       =   "Michael Nikonov's: The Ohm Rulez"
    MaxButton       =   0   'False
    Picture         =   "zo.main.frx":0000
-   ScaleHeight     =   7680
-   ScaleWidth      =   7230
+   ScaleHeight     =   9750
+   ScaleWidth      =   7215
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin VB.PictureBox pbGallery 
       Appearance      =   0  'Flat
+      AutoRedraw      =   -1  'True
       BackColor       =   &H80000005&
       ForeColor       =   &H80000008&
-      Height          =   1815
+      Height          =   3855
       Left            =   120
-      ScaleHeight     =   1785
+      ScaleHeight     =   3825
       ScaleWidth      =   6945
-      TabIndex        =   11
+      TabIndex        =   10
+      TabStop         =   0   'False
       Top             =   5760
       Width           =   6975
-   End
-   Begin VB.PictureBox tempPicBox 
-      Height          =   495
-      Left            =   240
-      ScaleHeight     =   435
-      ScaleWidth      =   435
-      TabIndex        =   10
-      Top             =   4080
-      Visible         =   0   'False
-      Width           =   495
    End
    Begin VB.CheckBox constI 
       BackColor       =   &H00FFFFFF&
@@ -213,7 +205,7 @@ Begin VB.Form frmMain
       BackColor       =   &H00FFFFFF&
       Caption         =   "U"
       BeginProperty Font 
-         Name            =   "Courier New"
+         Name            =   "Patopian 1986"
          Size            =   36
          Charset         =   0
          Weight          =   700
@@ -233,7 +225,7 @@ Begin VB.Form frmMain
       BackColor       =   &H00FFFFFF&
       Caption         =   "I"
       BeginProperty Font 
-         Name            =   "Courier New"
+         Name            =   "Patopian 1986"
          Size            =   36
          Charset         =   0
          Weight          =   700
@@ -253,7 +245,7 @@ Begin VB.Form frmMain
       BackColor       =   &H00FFFFFF&
       Caption         =   "R"
       BeginProperty Font 
-         Name            =   "Courier New"
+         Name            =   "Patopian 1986"
          Size            =   36
          Charset         =   0
          Weight          =   700
@@ -285,7 +277,7 @@ Private Sub Form_Load()
     
     gdipToken = InitGDIPlus
     
-    Conf.onFormLoad Me
+    Conf.OnFormLoad Me, "2.0.1"
     
     Conf.LoadTextBox ebR, "0"
     Conf.LoadTextBox ebU, "0"
@@ -301,8 +293,10 @@ Private Sub Form_Load()
     InitEditBox ebR
     InitEditBox ebU
     InitEditBox ebI
+    
+    Randomize
 
-    StartGallery False, tempPicBox
+    Gallery.Fetch Gallery.FetchInSameThread 'FetchInSeparatedThread
     Exit Sub
 
 Fail:
@@ -316,6 +310,17 @@ End Sub
 Private Sub InitEditBox(eb As TextBox)
     ' FIXME: MNi - it didn't working - it is not static or edit control - it's a ThunderTextBox!
     ' SetWindowLongA eb.Container, GWL_STYLE, GetWindowLongA(eb.Container, GWL_STYLE) + SS_CENTERIMAGE
+End Sub
+
+Private Sub pbGallery_Click()
+    On Error GoTo ErrpUpdateGalleryPic
+    
+    If Gallery.IsReady() = True Then
+        Set pbGallery.Picture = Gallery.Pictures(Gallery.GetRndIndex())
+    End If
+    
+    Exit Sub
+ErrpUpdateGalleryPic:
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
