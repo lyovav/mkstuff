@@ -5,6 +5,7 @@ Class=WConf; ..\afx\WConf.cls
 Module=WinAPI; ..\afx\WinAPI.bas
 Module=Gallery; gallery.bas
 Module=Pictures; ..\afx\Pictures.bas
+Class=CDouble; ..\afx\CDouble.cls
 IconForm="frmMain"
 Startup="frmMain"
 ExeName32="zo-2.0.1.exe"
