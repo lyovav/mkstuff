@@ -128,12 +128,14 @@ Public Type WIN32_FIND_DATAA
 End Type
 
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
-Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
-Public Declare Function GetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
-Public Declare Function SetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
-Public Declare Function GetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
+Public Declare Function SendMessageA Lib "USER32" (ByVal hwnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SendMessageW Lib "USER32" (ByVal hwnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SetWindowLongA Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer, ByVal value As Long) As Long
+Public Declare Function GetWindowLongA Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer) As Long
+Public Declare Function SetWindowLongW Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer, ByVal value As Long) As Long
+Public Declare Function GetWindowLongW Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer) As Long
+Public Declare Function SetTimer Lib "USER32" (ByVal hwnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
+Public Declare Function KillTimer Lib "USER32" (ByVal hwnd As Long, ByVal nIDEvent As Long) As Long
 
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
@@ -142,14 +144,85 @@ Public Declare Function FindClose Lib "KERNEL32" (ByVal hFindFile As Long) As Lo
 Public Declare Function FileTimeToLocalFileTime Lib "KERNEL32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
 Public Declare Function FileTimeToSystemTime Lib "KERNEL32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
 
-Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
-Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
+Public Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
+Public Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
+
+' GDI Functions
+Public Const SRCCOPY             As Long = &HCC0020   ' dest = source
+Public Const SRCPAINT            As Long = &HEE0086   ' dest = source OR dest
+Public Const SRCAND              As Long = &H8800C6   ' dest = source AND dest
+Public Const SRCINVERT           As Long = &H660046   ' dest = source XOR dest
+Public Const SRCERASE            As Long = &H440328   ' dest = source AND (NOT dest)
+Public Const NOTSRCCOPY          As Long = &H330008   ' dest = (NOT source)
+Public Const NOTSRCERASE         As Long = &H1100A6   ' dest = (NOT src) AND (NOT dest)
+Public Const MERGECOPY           As Long = &HC000CA   ' dest = (source AND pattern)
+Public Const MERGEPAINT          As Long = &HBB0226   ' dest = (NOT source) OR dest
+Public Const PATCOPY             As Long = &HF00021   ' dest = pattern
+Public Const PATPAINT            As Long = &HFB0A09   ' dest = DPSnoo
+Public Const PATINVERT           As Long = &H5A0049   ' dest = pattern XOR dest
+Public Const DSTINVERT           As Long = &H550009   ' dest = (NOT dest)
+Public Const BLACKNESS           As Long = &H42       ' dest = BLACK
+Public Const WHITENESS           As Long = &HFF0062   ' dest = WHITE
+Public Const NOMIRRORBITMAP      As Long = &H80000000 ' Do not Mirror the bitmap in this call
+Public Const CAPTUREBLT          As Long = &H40000000 ' Include layered windows
+
+Public Const PICTYPE_UNINITIALIZED As Integer = -1
+Public Const PICTYPE_NONE          As Integer = 0
+Public Const PICTYPE_BITMAP        As Integer = 1
+Public Const PICTYPE_METAFILE      As Integer = 2
+Public Const PICTYPE_ICON          As Integer = 3
+Public Const PICTYPE_ENHMETAFILE   As Integer = 4
+
+Public Const WHITE_BRUSH         As Integer = 0
+Public Const LTGRAY_BRUSH        As Integer = 1
+Public Const GRAY_BRUSH          As Integer = 2
+Public Const DKGRAY_BRUSH        As Integer = 3
+Public Const BLACK_BRUSH         As Integer = 4
+Public Const NULL_BRUSH          As Integer = 5
+Public Const HOLLOW_BRUSH        As Integer = NULL_BRUSH
+Public Const WHITE_PEN           As Integer = 6
+Public Const BLACK_PEN           As Integer = 7
+Public Const NULL_PEN            As Integer = 8
+Public Const OEM_FIXED_FONT      As Integer = 10
+Public Const ANSI_FIXED_FONT     As Integer = 11
+Public Const ANSI_VAR_FONT       As Integer = 12
+Public Const SYSTEM_FONT         As Integer = 13
+Public Const DEVICE_DEFAULT_FONT As Integer = 14
+Public Const DEFAULT_PALETTE     As Integer = 15
+Public Const SYSTEM_FIXED_FONT   As Integer = 16
+
+Public Type GUID
+   Data1    As Long
+   Data2    As Integer
+   Data3    As Integer
+   Data4(7) As Byte
+End Type
+
+Public Type PICTDESC
+   size     As Long
+   Type     As Long
+   hBmp     As Long
+   hPal     As Long
+   Reserved As Long
+End Type
+
+Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long
+Public Declare Function CreateCompatibleDC Lib "GDI32" (ByVal hDC As Long) As Long
+Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (PicDesc As PICTDESC, RefIID As GUID, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
+Public Declare Function CreateCompatibleBitmap Lib "GDI32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Public Declare Function GetDeviceCaps Lib "GDI32" (ByVal hDC As Long, ByVal nIndex As Long) As Long
+Public Declare Function PatBlt Lib "GDI32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal dwRop As Long) As Long
+Public Declare Function CreateBitmap Lib "GDI32" (ByVal nWidth As Long, ByVal nHeight As Long, ByVal nPlanes As Long, ByVal nBitCount As Long, lpBits As Any) As Long
+Public Declare Function SelectObject Lib "GDI32" (ByVal hDC As Long, ByVal hObject As Long) As Long
+Public Declare Function CreateSolidBrush Lib "GDI32" (ByVal crColor As Long) As Long
+Public Declare Function DeleteObject Lib "GDI32" (ByVal hObject As Long) As Long
+Public Declare Function DeleteDC Lib "GDI32" (ByVal hDC As Long) As Long
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer
     zp = InStr(str, Chr(0))
     If (zp > 0) Then
-        str = Left(str, zp - 1)
+        str = left(str, zp - 1)
     End If
     StripNulls = str
 End Function

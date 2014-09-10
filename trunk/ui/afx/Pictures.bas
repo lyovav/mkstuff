@@ -1,21 +1,6 @@
 Attribute VB_Name = "Pictures"
 Option Explicit
 
-Private Type GUID
-   Data1    As Long
-   Data2    As Integer
-   Data3    As Integer
-   Data4(7) As Byte
-End Type
-
-Private Type PICTDESC
-   size     As Long
-   Type     As Long
-   hBmp     As Long
-   hPal     As Long
-   Reserved As Long
-End Type
-
 Private Type GdiplusStartupInput
     GdiplusVersion           As Long
     DebugEventCallback       As Long
@@ -39,18 +24,6 @@ Private Type wmfPlaceableFileHeader
     CheckSum    As Integer
 End Type
 
-' GDI Functions
-Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDC As Long) As Long
-Private Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (PicDesc As PICTDESC, RefIID As GUID, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
-Private Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
-Private Declare Function GetDeviceCaps Lib "gdi32" (ByVal hDC As Long, ByVal nIndex As Long) As Long
-Private Declare Function PatBlt Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal dwRop As Long) As Long
-Private Declare Function CreateBitmap Lib "gdi32" (ByVal nWidth As Long, ByVal nHeight As Long, ByVal nPlanes As Long, ByVal nBitCount As Long, lpBits As Any) As Long
-Private Declare Function SelectObject Lib "gdi32" (ByVal hDC As Long, ByVal hObject As Long) As Long
-Private Declare Function CreateSolidBrush Lib "gdi32" (ByVal crColor As Long) As Long
-Private Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
-Private Declare Function DeleteDC Lib "gdi32" (ByVal hDC As Long) As Long
-
 ' GDI+ functions
 Private Declare Function GdipLoadImageFromFile Lib "gdiplus.dll" (ByVal FileName As Long, GpImage As Long) As Long
 Private Declare Function GdiplusStartup Lib "gdiplus.dll" (Token As Long, gdipInput As GdiplusStartupInput, GdiplusStartupOutput As Long) As Long
@@ -71,8 +44,6 @@ Private Declare Sub GdiplusShutdown Lib "gdiplus.dll" (ByVal Token As Long)
 ' GDI and GDI+ constants
 Private Const PLANES = 14            '  Number of planes
 Private Const BITSPIXEL = 12         '  Number of bits per pixel
-Private Const PATCOPY = &HF00021     ' (DWORD) dest = pattern
-Private Const PICTYPE_BITMAP = 1     ' Bitmap type
 Private Const InterpolationModeHighQualityBicubic = 7
 Private Const GDIP_WMF_PLACEABLEKEY = &H9AC6CDD7
 Private Const UnitPixel = 2
@@ -185,7 +156,7 @@ End Sub
 ' Creates a Picture Object from a handle to a bitmap
 Private Function CreatePicture(hBitmap As Long) As IPicture
     Dim IID_IDispatch As GUID
-    Dim Pic           As PICTDESC
+    Dim pic           As PICTDESC
     Dim IPic          As IPicture
     
     ' Fill in OLE IDispatch Interface ID
@@ -194,12 +165,12 @@ Private Function CreatePicture(hBitmap As Long) As IPicture
     IID_IDispatch.Data4(7) = &H46
         
     ' Fill Pic with necessary parts
-    Pic.size = Len(Pic)        ' Length of structure
-    Pic.Type = PICTYPE_BITMAP  ' Type of Picture (bitmap)
-    Pic.hBmp = hBitmap         ' Handle to bitmap
+    pic.size = Len(pic)        ' Length of structure
+    pic.Type = PICTYPE_BITMAP  ' Type of Picture (bitmap)
+    pic.hBmp = hBitmap         ' Handle to bitmap
 
     ' Create the picture
-    OleCreatePictureIndirect Pic, IID_IDispatch, True, IPic
+    OleCreatePictureIndirect pic, IID_IDispatch, True, IPic
     Set CreatePicture = IPic
 End Function
 

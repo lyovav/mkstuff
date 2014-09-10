@@ -57,10 +57,18 @@ Public Sub onFormUnload(ByRef frm As Form)
 End Sub
 
 Public Sub LoadTextBox(ByRef tb As TextBox, Optional deft As String = "")
-    tb.Text = GetSetting(appName, scConfig, tb.Name, deft)
+    tb.Text = GetSetting(appName, scConfig, tb.name, deft)
 End Sub
 
 Public Sub SaveTextBox(ByRef tb As TextBox)
-    SaveSetting appName, scConfig, tb.Name, tb.Text
+    SaveSetting appName, scConfig, tb.name, tb.Text
+End Sub
+
+Public Function GetString(name As String, Optional deft As String = "") As String
+    GetString = GetSetting(appName, scConfig, name, deft)
+End Function
+
+Public Sub SaveString(name As String, value As String)
+    SaveSetting appName, scConfig, name, value
 End Sub
 
