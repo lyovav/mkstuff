@@ -3,25 +3,25 @@ Begin VB.Form frmMain
    BackColor       =   &H00FFFFFF&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Michael Nikonov's: The Ohm Rulez"
-   ClientHeight    =   9750
+   ClientHeight    =   9165
    ClientLeft      =   45
    ClientTop       =   375
    ClientWidth     =   7215
    LinkTopic       =   "Michael Nikonov's: The Ohm Rulez"
    MaxButton       =   0   'False
    Picture         =   "zo.main.frx":0000
-   ScaleHeight     =   9750
+   ScaleHeight     =   9165
    ScaleWidth      =   7215
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin VB.PictureBox pbGallery 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
-      BackColor       =   &H80000005&
+      BackColor       =   &H00FFFFFF&
       ForeColor       =   &H80000008&
-      Height          =   3855
+      Height          =   3255
       Left            =   120
-      ScaleHeight     =   3825
+      ScaleHeight     =   3225
       ScaleWidth      =   6945
       TabIndex        =   10
       TabStop         =   0   'False
@@ -271,9 +271,13 @@ DefInt A-Z
 
 Private Conf As New WConf
 Private gdipToken As Long
+Private galleryPath As String
+Private Const scGalleryPath As String = "GalleryPath"
+Private Const scGalleryTimeout As String = "SlideShowTimeout"
 
 Private Sub Form_Load()
     On Error GoTo Fail
+    Randomize
     
     gdipToken = InitGDIPlus
     
@@ -290,15 +294,11 @@ Private Sub Form_Load()
     
     updateValues True, True, False
     
-    InitEditBox ebR
-    InitEditBox ebU
-    InitEditBox ebI
+    Gallery.Path = Conf.GetString(scGalleryPath, "gallery")
+    Gallery.SlideShowTimeout = Conf.GetString(scGalleryTimeout, "1500")
     
-    Randomize
-
-    Gallery.Fetch Gallery.FetchInSameThread 'FetchInSeparatedThread
+    Gallery.Fetch pbGallery, Gallery.FetchInSameThread ' FetchInSeparatedThread
     Exit Sub
-
 Fail:
     Err.Description = Err.Source + "(" + str(Err.Number) + "): " + Err.Description
     Debug.Print "!!! > " + Err.Description
@@ -307,29 +307,20 @@ Fail:
     ' Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
 End Sub
 
-Private Sub InitEditBox(eb As TextBox)
-    ' FIXME: MNi - it didn't working - it is not static or edit control - it's a ThunderTextBox!
-    ' SetWindowLongA eb.Container, GWL_STYLE, GetWindowLongA(eb.Container, GWL_STYLE) + SS_CENTERIMAGE
-End Sub
-
-Private Sub pbGallery_Click()
-    On Error GoTo ErrpUpdateGalleryPic
-    
-    If Gallery.IsReady() = True Then
-        Set pbGallery.Picture = Gallery.Pictures(Gallery.GetRndIndex())
-    End If
-    
-    Exit Sub
-ErrpUpdateGalleryPic:
-End Sub
-
 Private Sub Form_Unload(Cancel As Integer)
     Conf.onFormUnload Me
     
     Conf.SaveTextBox ebR
     Conf.SaveTextBox ebU
     
+    Conf.SaveString scGalleryPath, Gallery.Path
+    Conf.SaveString scGalleryTimeout, Gallery.SlideShowTimeout
+    
     FreeGDIPlus gdipToken
+End Sub
+
+Private Sub pbGallery_Click()
+    Gallery.ChangePic Gallery.GetRndIndex()
 End Sub
 
 Private Sub selText(ByRef tb As TextBox)
