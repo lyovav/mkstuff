@@ -270,6 +270,7 @@ Option Explicit
 DefInt A-Z
 
 Private Conf As New WConf
+Private Dbl As New CDouble
 Private gdipToken As Long
 Private galleryPath As String
 Private Const scGalleryPath As String = "GalleryPath"
@@ -277,11 +278,11 @@ Private Const scGalleryTimeout As String = "SlideShowTimeout"
 
 Private Sub Form_Load()
     On Error GoTo Fail
+    Dbl.Init
     Randomize
-    
     gdipToken = InitGDIPlus
     
-    Conf.OnFormLoad Me, "2.0.1"
+    Conf.OnFormLoad Me, "2.0.2"
     
     Conf.LoadTextBox ebR, "0"
     Conf.LoadTextBox ebU, "0"
@@ -373,13 +374,13 @@ Private Sub updateValues(R_Changed As Boolean, U_Changed As Boolean, I_Changed A
     On Error Resume Next
     
     If R_Changed Or U_Changed Then
-        ebI.Text = Format(calc_I(CDbl(ebU.Text), CDbl(ebR.Text)), "0.0000")
+        ebI.Text = Format(calc_I(Dbl.FromString(ebU.Text), Dbl.FromString(ebR.Text)), "0.0000")
     End If
     
     If I_Changed Then
-        ebU.Text = Format(calc_U(CDbl(ebI.Text), CDbl(ebR.Text)), "0.0000")
+        ebU.Text = Format(calc_U(Dbl.FromString(ebI.Text), Dbl.FromString(ebR.Text)), "0.0000")
     End If
     
-    lbTop(1).Caption = "P = " + CStr(calc_P(CDbl(ebI.Text), CDbl(ebU.Text)))
+    lbTop(1).Caption = "P = " + CStr(calc_P(Dbl.FromString(ebI.Text), Dbl.FromString(ebU.Text)))
 End Sub
 
