@@ -26,10 +26,10 @@ Private Sub Class_Initialize()
     appName = ""
 End Sub
 
-Public Sub onFormLoad(ByRef frm As Form)
+Public Sub OnFormLoad(ByRef frm As Form, Optional strVersion As String = "1.0.0")
     On Error Resume Next
     
-    Let appName = frm.LinkTopic
+    Let appName = frm.LinkTopic + " " + strVersion
 
     Dim cx As Integer
     Dim cy As Integer
@@ -41,8 +41,8 @@ Public Sub onFormLoad(ByRef frm As Form)
     x = ((GetSystemMetrics(SM_CXSCREEN) * Screen.TwipsPerPixelX) - cx) / 2
     y = ((GetSystemMetrics(SM_CYFULLSCREEN) * Screen.TwipsPerPixelY) - cy) / 2
     
-    frm.Left = GetSetting(appName, scConfig, scLeft, x)
-    frm.Top = GetSetting(appName, scConfig, scTop, y)
+    frm.left = GetSetting(appName, scConfig, scLeft, x)
+    frm.top = GetSetting(appName, scConfig, scTop, y)
     frm.Width = GetSetting(appName, scConfig, scWidth, frm.Width)
     frm.Height = GetSetting(appName, scConfig, scHeight, frm.Height)
 End Sub
@@ -50,8 +50,8 @@ End Sub
 Public Sub onFormUnload(ByRef frm As Form)
     On Error Resume Next
 
-    SaveSetting appName, scConfig, scLeft, frm.Left
-    SaveSetting appName, scConfig, scTop, frm.Top
+    SaveSetting appName, scConfig, scLeft, frm.left
+    SaveSetting appName, scConfig, scTop, frm.top
     SaveSetting appName, scConfig, scWidth, frm.Width
     SaveSetting appName, scConfig, scHeight, frm.Height
 End Sub
