@@ -14,6 +14,27 @@ Public Type APOINT
     y As Long
 End Type
 
+Global Const DT_TOP = &H0
+Global Const DT_LEFT = &H0
+Global Const DT_CENTER = &H1
+Global Const DT_RIGHT = &H2
+Global Const DT_VCENTER = &H4
+Global Const DT_BOTTOM = &H8
+Global Const DT_WORDBREAK = &H10
+Global Const DT_SINGLELINE = &H20
+Global Const DT_EXPANDTABS = &H40
+Global Const DT_TABSTOP = &H80
+Global Const DT_NOCLIP = &H100
+Global Const DT_EXTERNALLEADING = &H200
+Global Const DT_CALCRECT = &H400
+Global Const DT_NOPREFIX = &H800
+Global Const DT_INTERNAL = &H1000
+Global Const DT_EDITCONTROL = &H2000
+Global Const DT_PATH_ELLIPSIS = &H4000
+Global Const DT_END_ELLIPSIS = &H8000
+Global Const DT_MODIFYSTRING = &H10000
+Global Const DT_RTLREADING = &H20000
+Global Const DT_WORD_ELLIPSIS = &H40000
 
 Public Const SM_CXSCREEN            As Integer = 0
 Public Const SM_CYSCREEN            As Integer = 1
@@ -111,12 +132,12 @@ Public Const FILE_ATTRIBUTE_READONLY = &H1
 Public Const FILE_ATTRIBUTE_SYSTEM = &H4
 Public Const FILE_ATTRIBUTE_TEMPORARY = &H100
 
-Type FILETIME
+Public Type FILETIME
      dwLowDateTime As Long
      dwHighDateTime As Long
 End Type
 
-Type SYSTEMTIME
+Public Type SYSTEMTIME
      wYear As Integer
      wMonth As Integer
      wDayOfWeek As Integer
@@ -153,16 +174,19 @@ Public Declare Function GetParent Lib "USER32" (ByVal hWnd As Long) As Long
 Public Declare Function GetDesktopWindow Lib "USER32" () As Long
 Public Declare Function GetClientRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT) As Long
 Public Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT, ByVal bErase As Integer) As Long
+Public Declare Function DrawTextA Lib "USER32" (ByVal hdc As Long, ByVal lpStr As String, ByVal nCount As Long, ByRef lpRect As RECT, ByVal wFormat As Long) As Long
+Public Declare Function OffsetRect Lib "USER32" (ByRef lpRect As RECT, ByVal x As Long, ByVal y As Long) As Long
 
+' KERNEL32
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function GetFileAttributesA Lib "KERNEL32" (ByVal lpFileName As String) As Long
 Public Declare Function FindClose Lib "KERNEL32" (ByVal hFindFile As Long) As Long
 Public Declare Function FileTimeToLocalFileTime Lib "KERNEL32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
 Public Declare Function FileTimeToSystemTime Lib "KERNEL32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
-
 Public Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
 Public Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
+Public Declare Function MulDiv Lib "KERNEL32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
 
 ' GDI Functions
 Public Const SRCCOPY             As Long = &HCC0020   ' dest = source
@@ -221,6 +245,9 @@ Public Const ETO_REVERSE_INDEX_MAP As Long = &H10000
 Public Const PLANES               As Long = 14
 Public Const BITSPIXEL            As Long = 12
 
+Public Const OPAQUE = 2
+Public Const TRANSPARENT = 1
+
 Public Type GUID
    Data1    As Long
    Data2    As Integer
@@ -236,27 +263,53 @@ Public Type PICTDESC
    Reserved As Long
 End Type
 
+Public Const LF_FACESIZE = 32
+Public Const FW_NORMAL = 400
+Public Const FW_BOLD = 700
+Public Const FF_DONTCARE = 0
+Public Const DEFAULT_QUALITY = 0
+Public Const DEFAULT_PITCH = 0
+Public Const DEFAULT_CHARSET = 1
+Public Const LOGPIXELSY = 90
+
+Public Type LOGFONT
+    lfHeight As Long
+    lfWidth As Long
+    lfEscapement As Long
+    lfOrientation As Long
+    lfWeight As Long
+    lfItalic As Byte
+    lfUnderline As Byte
+    lfStrikeOut As Byte
+    lfCharSet As Byte
+    lfOutPrecision As Byte
+    lfClipPrecision As Byte
+    lfQuality As Byte
+    lfPitchAndFamily As Byte
+    lfFaceName(0 To LF_FACESIZE) As Byte
+End Type
+
 Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long
-Public Declare Function CreateCompatibleDC Lib "GDI32" (ByVal hDC As Long) As Long
+Public Declare Function CreateCompatibleDC Lib "GDI32" (ByVal hdc As Long) As Long
 Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (PicDesc As PICTDESC, RefIID As GUID, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
-Public Declare Function CreateCompatibleBitmap Lib "GDI32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
-Public Declare Function GetDeviceCaps Lib "GDI32" (ByVal hDC As Long, ByVal nIndex As Long) As Long
-Public Declare Function PatBlt Lib "GDI32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal dwRop As Long) As Long
-Public Declare Function BitBlt Lib "GDI32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal sx As Long, ByVal sy As Long, ByVal dwRop As Long) As Long
+Public Declare Function CreateCompatibleBitmap Lib "GDI32" (ByVal hdc As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Public Declare Function GetDeviceCaps Lib "GDI32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
+Public Declare Function PatBlt Lib "GDI32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal dwRop As Long) As Long
+Public Declare Function BitBlt Lib "GDI32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal sx As Long, ByVal sy As Long, ByVal dwRop As Long) As Long
 Public Declare Function CreateBitmap Lib "GDI32" (ByVal nWidth As Long, ByVal nHeight As Long, ByVal nPlanes As Long, ByVal nBitCount As Long, lpBits As Any) As Long
-Public Declare Function SelectObject Lib "GDI32" (ByVal hDC As Long, ByVal hObject As Long) As Long
+Public Declare Function SelectObject Lib "GDI32" (ByVal hdc As Long, ByVal hObject As Long) As Long
 Public Declare Function CreateSolidBrush Lib "GDI32" (ByVal crColor As Long) As Long
 Public Declare Function DeleteObject Lib "GDI32" (ByVal hObject As Long) As Long
-Public Declare Function DeleteDC Lib "GDI32" (ByVal hDC As Long) As Long
-Public Declare Function ExtTextOutA Lib "GDI32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal wOptions As Long, ByRef lpRect As RECT, ByVal lpString As String, ByVal nCount As Long, lpDx As Long) As Long
-Public Declare Function SetBkColor Lib "GDI32" (ByVal hDC As Long, ByVal color As Long) As Long
+Public Declare Function DeleteDC Lib "GDI32" (ByVal hdc As Long) As Long
+Public Declare Function ExtTextOutA Lib "GDI32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal wOptions As Long, ByRef lpRect As RECT, ByVal lpString As String, ByVal nCount As Long, lpDx As Long) As Long
+Public Declare Function SetBkColor Lib "GDI32" (ByVal hdc As Long, ByVal color As Long) As Long
 Public Declare Function GetDC Lib "GDI32" (ByVal hWnd As Long) As Long
-Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hDC As Long) As Integer
+Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hdc As Long) As Integer
 Public Declare Function GetWindowDC Lib "GDI32" (ByVal hWnd As Long) As Long
-Public Declare Function MoveToEx Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Integer
-Public Declare Function LineTo Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer) As Integer
-
-
+Public Declare Function MoveToEx Lib "GDI32" (ByVal hdc As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Integer
+Public Declare Function LineTo Lib "GDI32" (ByVal hdc As Long, ByVal x As Integer, ByVal y As Integer) As Integer
+Public Declare Function SetBkMode Lib "GDI32" (ByVal hdc As Long, ByVal nBkMode As Long) As Long
+Public Declare Function CreateFontIndirectA Lib "GDI32" (ByRef lpLogFont As LOGFONT) As Long
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer
@@ -271,16 +324,55 @@ Public Function ProcPtr(ByVal nAddress As Long) As Long
     ProcPtr = nAddress
 End Function
 
-Public Sub FillSolidRect(ByVal hDC As Long, ByRef lpRect As RECT, ByVal clr As Long)
+Public Sub FillSolidRect(ByVal hdc As Long, ByRef lpRect As RECT, ByVal clr As Long)
     Dim lastColor As Long
-    lastColor = SetBkColor(hDC, clr)
-    ExtTextOutA hDC, 0, 0, ETO_OPAQUE, lpRect, 0, 0, 0
-    SetBkColor hDC, lastColor
+    lastColor = SetBkColor(hdc, clr)
+    ExtTextOutA hdc, 0, 0, ETO_OPAQUE, lpRect, 0, 0, 0
+    SetBkColor hdc, lastColor
 End Sub
 
-Public Sub ALine(ByVal hDC As Long, ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer)
+Public Sub ALine(ByVal hdc As Long, ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer)
     Dim pt As APOINT
-    
-    MoveToEx hDC, x1, y1, pt
-    LineTo hDC, x2, y2
+    MoveToEx hdc, x1, y1, pt
+    LineTo hdc, x2, y2
 End Sub
+
+Public Sub ARect(ByVal hdc As Long, ByRef rc As RECT)
+    Dim pt As APOINT
+    MoveToEx hdc, rc.Left, rc.Top, pt
+    LineTo hdc, rc.Left + rc.Right, rc.Top
+    LineTo hdc, rc.Left + rc.Right, rc.Top + rc.Bottom
+    LineTo hdc, rc.Left, rc.Top + rc.Bottom
+    LineTo hdc, rc.Left, rc.Top
+End Sub
+
+Public Sub OLEFont2LOGFONT(fnt As StdFont, ByVal hdc As Long, ByRef lfont As LOGFONT)
+    Dim i As Integer
+
+    With lfont
+        For i = 1 To Len(fnt.name)
+            .lfFaceName(i - 1) = Asc(Mid(fnt.name, i, 1))
+        Next i
+        .lfHeight = -MulDiv((fnt.size), (GetDeviceCaps(hdc, LOGPIXELSY)), 72)
+        .lfItalic = fnt.Italic
+        If (fnt.Bold) Then
+          .lfWeight = FW_BOLD
+        Else
+          .lfWeight = FW_NORMAL
+        End If
+        .lfUnderline = fnt.Underline
+        .lfStrikeOut = fnt.Strikethrough
+        .lfCharSet = fnt.Charset
+    End With
+End Sub
+
+Public Function OLEFont2HFONT(fnt As StdFont, ByVal hdc As Long) As Long
+    Dim lfont As LOGFONT
+    Dim rv As Long
+    
+    OLEFont2LOGFONT fnt, hdc, lfont
+    rv = CreateFontIndirectA(lfont)
+    
+    OLEFont2HFONT = rv
+End Function
+
