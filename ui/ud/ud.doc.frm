@@ -2,12 +2,21 @@ VERSION 5.00
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
-   BackColor       =   &H00400040&
+   BackColor       =   &H0000FFFF&
    Caption         =   "..."
    ClientHeight    =   6585
    ClientLeft      =   120
    ClientTop       =   450
    ClientWidth     =   9630
+   BeginProperty Font 
+      Name            =   "Terminus"
+      Size            =   16.5
+      Charset         =   0
+      Weight          =   700
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    Icon            =   "ud.doc.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
@@ -24,27 +33,35 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
+Private Const cxMinSize = 256
+Private Const cyMinSize = 256
+
 Private backBmp As Long
 Private backDc As Long
-Private scheme As New CScheme
+Private hFont As Long
+
+Public Scheme As New CScheme
 
 Private Sub Form_Load()
     On Error Resume Next
     Me.ScaleMode = vbPixels
     Me.AutoRedraw = False
+    hFont = 0
 End Sub
 
 Private Sub Form_Paint()
     OnPaint
-    BitBlt Me.hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+    BitBlt Me.hdc, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
 End Sub
 
 Private Sub Form_Resize()
-    CreateDBuffer
+    CreateDBuffer Me.ScaleWidth, Me.ScaleHeight
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     DeleteDBuffer
+    
+    If hFont = 0 Then DeleteObject hFont
 End Sub
 
 Private Sub DeleteDBuffer()
@@ -53,75 +70,43 @@ Private Sub DeleteDBuffer()
     DeleteObject SelectObject(backDc, backBmp)
     DeleteDC backDc
     
-    ' Debug.Print "BKBUFFER: del &H" + Hex(backDc) + " &H" + Hex(backBmp)
+    'Debug.Print "BKBUFFER: del &H" + Hex(backDc) + " &H" + Hex(backBmp)
 End Sub
 
-Private Sub CreateDBuffer()
+Private Sub CreateDBuffer(cx As Integer, cy As Integer)
     On Error Resume Next
     
     Dim bmp As Long
     Dim dc As Long
+    
+    If cx < cxMinSize Then cx = cxMinSize
+    If cy < cyMinSize Then cy = cyMinSize
    
     dc = CreateCompatibleDC(ByVal 0&)
-    bmp = CreateBitmap(Me.ScaleWidth, Me.ScaleHeight, GetDeviceCaps(dc, PLANES), GetDeviceCaps(dc, BITSPIXEL), ByVal 0&)
+    bmp = CreateBitmap(cx, cy, GetDeviceCaps(dc, PLANES), GetDeviceCaps(dc, BITSPIXEL), ByVal 0&)
     bmp = SelectObject(dc, bmp)
+    
+    If hFont = 0 Then hFont = OLEFont2HFONT(Me.Font, dc)
+    SelectObject dc, hFont
     
     DeleteDBuffer
 
     backBmp = bmp
     backDc = dc
         
-    ' Debug.Print "BKBUFFER: new " + CStr(Me.ScaleWidth) + " x " + CStr(Me.ScaleHeight)
+    'Debug.Print "BKBUFFER: new " + CStr(cx) + " x " + CStr(cy)
     Form_Paint
 End Sub
 
-Private Sub DrawRule(ByRef rc As RECT, which As Integer)
-
-End Sub
-
-Private Sub DrawGrid(ByRef rc As RECT)
-    Dim x1 As Long, x2 As Long
-    Dim y1 As Long, y2 As Long
-    Dim sx As Long, sy As Long
-    
-    sx = 80
-    sy = 80
-    
-    x2 = (rc.Right - sx) / 2
-    x1 = (rc.Right + sx) / 2
-    y2 = (rc.Bottom - sy) / 2
-    y1 = (rc.Bottom + sy) / 2
-    
-    Dim pt As APOINT
-    Dim i As Long
-    
-    For i = 0 To 9
-        ALine backDc, x1, 0, x1, rc.Bottom
-        ALine backDc, x2, 0, x2, rc.Bottom
-        
-        x1 = x1 + sx
-        x2 = x2 - sx
-        
-        ALine backDc, 0, y1, rc.Right, y1
-        ALine backDc, 0, y2, rc.Right, y2
-        
-        y1 = y1 + sy
-        y2 = y2 - sy
-    Next i
-End Sub
-
-Private Sub OnPaint()
+Public Sub OnPaint()
     On Error GoTo PaintErr
-    Dim rc As RECT
     
+    Dim rc As RECT
     GetClientRect Me.hWnd, rc
+    
     FillSolidRect backDc, rc, DocBgColor
     
-    DrawGrid rc
-    DrawRule rc, vbHorizontal
-    DrawRule rc, vbVertical
-    
-    ' InvalidateRect Me.hWnd, rc, 0
+    Scheme.Draw backDc, 0, 0, rc.Right, rc.Bottom
     Exit Sub
     
 PaintErr:

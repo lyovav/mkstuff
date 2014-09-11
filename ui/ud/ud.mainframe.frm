@@ -2,10 +2,10 @@ VERSION 5.00
 Begin VB.MDIForm Mainframe 
    Appearance      =   0  'Flat
    BackColor       =   &H00E0E0E0&
-   Caption         =   "Michael Nikonov's Understanding Digital Electronics"
+   Caption         =   "Michael Nikonov's: Understanding Digital Electronics"
    ClientHeight    =   6660
    ClientLeft      =   225
-   ClientTop       =   855
+   ClientTop       =   870
    ClientWidth     =   11220
    Icon            =   "ud.mainframe.frx":0000
    LinkTopic       =   "Michael Nikonov's Understanding Digital Electronics"
