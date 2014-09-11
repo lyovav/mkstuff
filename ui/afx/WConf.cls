@@ -47,7 +47,7 @@ Public Sub OnFormLoad(ByRef frm As Form, Optional strVersion As String = "1.0.0"
     frm.Height = GetSetting(appName, scConfig, scHeight, frm.Height)
 End Sub
 
-Public Sub onFormUnload(ByRef frm As Form)
+Public Sub OnFormUnload(ByRef frm As Form)
     On Error Resume Next
 
     SaveSetting appName, scConfig, scLeft, frm.left

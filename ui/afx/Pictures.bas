@@ -1,5 +1,6 @@
 Attribute VB_Name = "Pictures"
 Option Explicit
+DefInt A-Z
 
 Private Type GdiplusStartupInput
     GdiplusVersion           As Long

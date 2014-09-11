@@ -309,7 +309,7 @@ Fail:
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    Conf.onFormUnload Me
+    Conf.OnFormUnload Me
     
     Conf.SaveTextBox ebR
     Conf.SaveTextBox ebU
