@@ -47,6 +47,7 @@ Private Sub mnuNew_Click()
 End Sub
 
 Private Sub mnuCloseDocWin_Click()
+    On Error Resume Next
     Unload ActiveForm
 End Sub
 
