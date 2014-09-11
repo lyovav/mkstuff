@@ -1,6 +1,10 @@
 Attribute VB_Name = "UdMain"
 Option Explicit
+DefInt A-Z
 
-Sub Main()
+Private Sub Main()
+    Debug.Print "APPENTRY: Mainframe `" + Mainframe.LinkTopic + "` started"
+    Debug.Print "APPENTRY: Command line - `" + Command$ + "`"
     
+    Mainframe.Show
 End Sub

@@ -1,13 +1,21 @@
 VERSION 5.00
 Begin VB.MDIForm Mainframe 
-   BackColor       =   &H00404040&
+   BackColor       =   &H00E0E0E0&
    Caption         =   "Michael Nikonov's Understanding Digital Electronics"
    ClientHeight    =   8775
-   ClientLeft      =   120
-   ClientTop       =   450
+   ClientLeft      =   225
+   ClientTop       =   855
    ClientWidth     =   14820
+   Icon            =   "ud.mainframe.frx":0000
    LinkTopic       =   "Michael Nikonov's Understanding Digital Electronics"
    StartUpPosition =   3  'Windows Default
+   Begin VB.Menu mFile 
+      Caption         =   "File"
+      Index           =   0
+      Begin VB.Menu mnuExit 
+         Caption         =   "Exit"
+      End
+   End
 End
 Attribute VB_Name = "Mainframe"
 Attribute VB_GlobalNameSpace = False
@@ -21,5 +29,9 @@ Private Sub MDIForm_Load()
 End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)
-    config.OnFormUnload Me, "1.0.0"
+    config.OnFormUnload Me
+End Sub
+
+Private Sub mnuExit_Click()
+    Unload Me
 End Sub
