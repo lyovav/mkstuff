@@ -30,10 +30,11 @@ Private backDc As Long
 Private Sub Form_Load()
     On Error Resume Next
     Me.ScaleMode = vbPixels
-    Me.AutoRedraw = True
+    Me.AutoRedraw = False
 End Sub
 
 Private Sub Form_Paint()
+    OnPaint
     BitBlt Me.hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
 End Sub
 
@@ -51,7 +52,7 @@ Private Sub DeleteDBuffer()
     DeleteObject SelectObject(backDc, backBmp)
     DeleteDC backDc
     
-    Debug.Print "BKBUFFER: del &H" + Hex(backDc) + " &H" + Hex(backBmp)
+    ' Debug.Print "BKBUFFER: del &H" + Hex(backDc) + " &H" + Hex(backBmp)
 End Sub
 
 Private Sub CreateDBuffer()
@@ -69,31 +70,59 @@ Private Sub CreateDBuffer()
     backBmp = bmp
     backDc = dc
         
-    Debug.Print "BKBUFFER: new " + CStr(Me.ScaleWidth) + " x " + CStr(Me.ScaleHeight)
-    Draw
+    ' Debug.Print "BKBUFFER: new " + CStr(Me.ScaleWidth) + " x " + CStr(Me.ScaleHeight)
+    Form_Paint
 End Sub
 
-Private Sub DrawRule(which As Integer)
+Private Sub DrawRule(ByRef rc As RECT, which As Integer)
 
 End Sub
 
-Private Sub DrawGrid()
+Private Sub DrawGrid(ByRef rc As RECT)
+    Dim x1 As Long, x2 As Long
+    Dim y1 As Long, y2 As Long
+    Dim sx As Long, sy As Long
     
+    sx = 80
+    sy = 80
+    
+    x2 = (rc.Right - sx) / 2
+    x1 = (rc.Right + sx) / 2
+    y2 = (rc.Bottom - sy) / 2
+    y1 = (rc.Bottom + sy) / 2
+    
+    Dim pt As APOINT
+    Dim i As Long
+    
+    For i = 0 To 9
+        ALine backDc, x1, 0, x1, rc.Bottom
+        ALine backDc, x2, 0, x2, rc.Bottom
+        
+        x1 = x1 + sx
+        x2 = x2 - sx
+        
+        ALine backDc, 0, y1, rc.Right, y1
+        ALine backDc, 0, y2, rc.Right, y2
+        
+        y1 = y1 + sy
+        y2 = y2 - sy
+    Next i
 End Sub
 
-Private Sub Draw()
+Private Sub OnPaint()
     On Error GoTo PaintErr
     Dim rc As RECT
     
     GetClientRect Me.hWnd, rc
-    FillSolidRect backDc, rc, SchemeBgColor
+    FillSolidRect backDc, rc, DocBgColor
     
-    DrawGrid
-    DrawRule vbHorizontal
-    DrawRule vbVertical
+    DrawGrid rc
+    DrawRule rc, vbHorizontal
+    DrawRule rc, vbVertical
     
-    Form_Paint
+    'InvalidateRect Me.hWnd, 0, 0
     Exit Sub
+    
 PaintErr:
     Debug.Print "CHILDRAW: " + Err.Description
     Resume Next
