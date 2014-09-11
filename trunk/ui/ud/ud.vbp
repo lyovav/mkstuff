@@ -5,6 +5,7 @@ Module=WinAPI; ..\afx\WinAPI.bas
 Module=Pictures; ..\afx\Pictures.bas
 Form=ud.mainframe.frm
 Module=UdMain; ud.main.bas
+Form=ud.doc.frm
 Startup="Sub Main"
 HelpFile=""
 ExeName32="ud-1.0.0.exe"
