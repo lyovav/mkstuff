@@ -2,6 +2,13 @@ Attribute VB_Name = "WinAPI"
 Option Explicit
 DefInt A-Z
 
+Public Type RECT
+    Left As Long
+    Top As Long
+    Right As Long
+    Bottom As Long
+End Type
+
 Public Const SM_CXSCREEN            As Integer = 0
 Public Const SM_CYSCREEN            As Integer = 1
 Public Const SM_CXVSCROLL           As Integer = 2
@@ -128,14 +135,17 @@ Public Type WIN32_FIND_DATAA
 End Type
 
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
-Public Declare Function SendMessageA Lib "USER32" (ByVal hwnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SendMessageW Lib "USER32" (ByVal hwnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SetWindowLongA Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer, ByVal value As Long) As Long
-Public Declare Function GetWindowLongA Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer) As Long
-Public Declare Function SetWindowLongW Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer, ByVal value As Long) As Long
-Public Declare Function GetWindowLongW Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer) As Long
-Public Declare Function SetTimer Lib "USER32" (ByVal hwnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
-Public Declare Function KillTimer Lib "USER32" (ByVal hwnd As Long, ByVal nIDEvent As Long) As Long
+Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
+Public Declare Function GetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
+Public Declare Function SetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
+Public Declare Function GetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
+Public Declare Function SetTimer Lib "USER32" (ByVal hWnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
+Public Declare Function KillTimer Lib "USER32" (ByVal hWnd As Long, ByVal nIDEvent As Long) As Long
+Public Declare Function GetParent Lib "USER32" (ByVal hWnd As Long) As Long
+Public Declare Function GetDesktopWindow Lib "USER32" () As Long
+Public Declare Function GetClientRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT) As Long
 
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
@@ -191,6 +201,19 @@ Public Const DEVICE_DEFAULT_FONT As Integer = 14
 Public Const DEFAULT_PALETTE     As Integer = 15
 Public Const SYSTEM_FIXED_FONT   As Integer = 16
 
+Public Const ETO_OPAQUE            As Long = &H2
+Public Const ETO_CLIPPED           As Long = &H4
+Public Const ETO_GLYPH_INDEX       As Long = &H10
+Public Const ETO_RTLREADING        As Long = &H80
+Public Const ETO_NUMERICSLOCAL     As Long = &H400
+Public Const ETO_NUMERICSLATIN     As Long = &H800
+Public Const ETO_IGNORELANGUAGE    As Long = &H1000
+Public Const ETO_PDY               As Long = &H2000
+Public Const ETO_REVERSE_INDEX_MAP As Long = &H10000
+
+Public Const PLANES               As Long = 14
+Public Const BITSPIXEL            As Long = 12
+
 Public Type GUID
    Data1    As Long
    Data2    As Integer
@@ -218,12 +241,18 @@ Public Declare Function SelectObject Lib "GDI32" (ByVal hDC As Long, ByVal hObje
 Public Declare Function CreateSolidBrush Lib "GDI32" (ByVal crColor As Long) As Long
 Public Declare Function DeleteObject Lib "GDI32" (ByVal hObject As Long) As Long
 Public Declare Function DeleteDC Lib "GDI32" (ByVal hDC As Long) As Long
+Public Declare Function ExtTextOutA Lib "GDI32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal wOptions As Long, ByRef lpRect As RECT, ByVal lpString As String, ByVal nCount As Long, lpDx As Long) As Long
+Public Declare Function SetBkColor Lib "GDI32" (ByVal hDC As Long, ByVal color As Long) As Long
+Public Declare Function GetDC Lib "GDI32" (ByVal hWnd As Long) As Long
+Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hDC As Long) As Integer
+Public Declare Function GetWindowDC Lib "GDI32" (ByVal hWnd As Long) As Long
+
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer
     zp = InStr(str, Chr(0))
     If (zp > 0) Then
-        str = left(str, zp - 1)
+        str = Left(str, zp - 1)
     End If
     StripNulls = str
 End Function
@@ -231,3 +260,10 @@ End Function
 Public Function ProcPtr(ByVal nAddress As Long) As Long
     ProcPtr = nAddress
 End Function
+
+Public Sub FillSolidRect(ByVal hDC As Long, ByRef lpRect As RECT, ByVal clr As Long)
+    Dim lastColor As Long
+    lastColor = SetBkColor(hDC, clr)
+    ExtTextOutA hDC, 0, 0, ETO_OPAQUE, lpRect, 0, 0, 0
+    SetBkColor hDC, lastColor
+End Sub
