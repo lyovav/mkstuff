@@ -26,6 +26,7 @@ DefInt A-Z
 
 Private backBmp As Long
 Private backDc As Long
+Private scheme As New CScheme
 
 Private Sub Form_Load()
     On Error Resume Next
@@ -120,7 +121,7 @@ Private Sub OnPaint()
     DrawRule rc, vbHorizontal
     DrawRule rc, vbVertical
     
-    'InvalidateRect Me.hWnd, 0, 0
+    ' InvalidateRect Me.hWnd, rc, 0
     Exit Sub
     
 PaintErr:
