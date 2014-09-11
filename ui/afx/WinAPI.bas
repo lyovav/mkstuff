@@ -9,6 +9,12 @@ Public Type RECT
     Bottom As Long
 End Type
 
+Public Type APOINT
+    x As Long
+    y As Long
+End Type
+
+
 Public Const SM_CXSCREEN            As Integer = 0
 Public Const SM_CYSCREEN            As Integer = 1
 Public Const SM_CXVSCROLL           As Integer = 2
@@ -146,6 +152,7 @@ Public Declare Function KillTimer Lib "USER32" (ByVal hWnd As Long, ByVal nIDEve
 Public Declare Function GetParent Lib "USER32" (ByVal hWnd As Long) As Long
 Public Declare Function GetDesktopWindow Lib "USER32" () As Long
 Public Declare Function GetClientRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT) As Long
+Public Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT, ByVal bErase As Integer) As Long
 
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
@@ -246,6 +253,9 @@ Public Declare Function SetBkColor Lib "GDI32" (ByVal hDC As Long, ByVal color A
 Public Declare Function GetDC Lib "GDI32" (ByVal hWnd As Long) As Long
 Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hDC As Long) As Integer
 Public Declare Function GetWindowDC Lib "GDI32" (ByVal hWnd As Long) As Long
+Public Declare Function MoveToEx Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Integer
+Public Declare Function LineTo Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer) As Integer
+
 
 
 Public Function StripNulls(str As String) As String
@@ -266,4 +276,11 @@ Public Sub FillSolidRect(ByVal hDC As Long, ByRef lpRect As RECT, ByVal clr As L
     lastColor = SetBkColor(hDC, clr)
     ExtTextOutA hDC, 0, 0, ETO_OPAQUE, lpRect, 0, 0, 0
     SetBkColor hDC, lastColor
+End Sub
+
+Public Sub ALine(ByVal hDC As Long, ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer)
+    Dim pt As APOINT
+    
+    MoveToEx hDC, x1, y1, pt
+    LineTo hDC, x2, y2
 End Sub
