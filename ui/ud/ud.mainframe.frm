@@ -66,8 +66,9 @@ End Sub
 Public Sub AddForm(capt As String, visbl As Boolean)
     Dim childFrame As New CDoc
     
-    childFrame.Visible = visbl
     childFrame.Caption = capt
+    childFrame.WindowState = vbMaximized
+    childFrame.Visible = visbl
 
     totalChildCount = totalChildCount + 1
     child.Add childFrame, str(totalChildCount) + "> " + capt
