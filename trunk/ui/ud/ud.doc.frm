@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form CDoc 
+   BackColor       =   &H00F2FFFF&
    Caption         =   "Form1"
    ClientHeight    =   6585
    ClientLeft      =   120
@@ -16,3 +17,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub Form_Load()
+    Maximized = True
+End Sub
+
