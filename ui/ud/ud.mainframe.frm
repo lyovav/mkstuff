@@ -38,6 +38,21 @@ Option Explicit
 DefInt A-Z
 
 Private config As New WConf
+Private child As New Collection
+Private totalChildCount As Long
+
+Private Sub mnuNew_Click()
+    AddForm "Untitled...", True
+End Sub
+
+Private Sub mnuCloseDocWin_Click()
+    Unload ActiveForm
+End Sub
+
+Private Sub mnuExit_Click()
+    Unload Me
+    End
+End Sub
 
 Private Sub MDIForm_Load()
     config.OnFormLoad Me, "1.0.0"
@@ -47,12 +62,17 @@ Private Sub MDIForm_Unload(Cancel As Integer)
     config.OnFormUnload Me
 End Sub
 
-Private Sub mnuExit_Click()
-    Unload Me
-    End
+Public Sub AddForm(capt As String, visbl As Boolean)
+    Dim childFrame As New CDoc
+    
+    childFrame.Visible = visbl
+    childFrame.Caption = capt
+
+    totalChildCount = totalChildCount + 1
+    child.Add childFrame, str(totalChildCount) + "> " + capt
 End Sub
 
 Public Sub Init(comandLine As String)
-    ' Me.ActiveForm
+    AddForm "Trololo...", True
 End Sub
 
