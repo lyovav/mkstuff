@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.MDIForm Mainframe 
+   Appearance      =   0  'Flat
    BackColor       =   &H00E0E0E0&
    Caption         =   "Michael Nikonov's Understanding Digital Electronics"
    ClientHeight    =   6660

@@ -1,6 +1,7 @@
 VERSION 5.00
 Begin VB.Form CDoc 
-   BackColor       =   &H00F2FFFF&
+   Appearance      =   0  'Flat
+   BackColor       =   &H00F1FFFF&
    Caption         =   "Form1"
    ClientHeight    =   6585
    ClientLeft      =   120
