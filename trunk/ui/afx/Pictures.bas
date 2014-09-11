@@ -10,8 +10,8 @@ Private Type GdiplusStartupInput
 End Type
 
 Private Type PWMFRect16
-    left   As Integer
-    top    As Integer
+    Left   As Integer
+    Top    As Integer
     Right  As Integer
     Bottom As Integer
 End Type
@@ -43,8 +43,6 @@ Private Declare Function GdipDrawImageRectRectI Lib "gdiplus.dll" (ByVal Graphic
 Private Declare Sub GdiplusShutdown Lib "gdiplus.dll" (ByVal Token As Long)
 
 ' GDI and GDI+ constants
-Private Const PLANES = 14            '  Number of planes
-Private Const BITSPIXEL = 12         '  Number of bits per pixel
 Private Const InterpolationModeHighQualityBicubic = 7
 Private Const GDIP_WMF_PLACEABLEKEY = &H9AC6CDD7
 Private Const UnitPixel = 2

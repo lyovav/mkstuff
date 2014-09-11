@@ -1,8 +1,9 @@
 VERSION 5.00
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
-   BackColor       =   &H00F1FFFF&
-   Caption         =   "Form1"
+   AutoRedraw      =   -1  'True
+   BackColor       =   &H00400040&
+   Caption         =   "..."
    ClientHeight    =   6585
    ClientLeft      =   120
    ClientTop       =   450
@@ -10,8 +11,10 @@ Begin VB.Form CDoc
    Icon            =   "ud.doc.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   6585
-   ScaleWidth      =   9630
+   MousePointer    =   2  'Cross
+   ScaleHeight     =   439
+   ScaleMode       =   3  'Pixel
+   ScaleWidth      =   642
 End
 Attribute VB_Name = "CDoc"
 Attribute VB_GlobalNameSpace = False
@@ -21,19 +24,17 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private dbufBitmap As Long
-Private dbufDc As Long
+Private backBmp As Long
+Private backDc As Long
 
 Private Sub Form_Load()
     On Error Resume Next
     Me.ScaleMode = vbPixels
-    
-    dbufBitmap = 0
-    dbufDc = 0
+    Me.AutoRedraw = True
 End Sub
 
 Private Sub Form_Paint()
-    BitBlt Me.hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, dbufDc, 0, 0, vbSrcCopy
+    BitBlt Me.hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
 End Sub
 
 Private Sub Form_Resize()
@@ -46,29 +47,54 @@ End Sub
 
 Private Sub DeleteDBuffer()
     On Error Resume Next
-    Debug.Print "DLBUFFER: delete @" + Hex(dbufDc) + " @" + Hex(dbufBitmap)
-    DeleteObject dbufBitmap
-    DeleteDC dbufDc
+    
+    DeleteObject SelectObject(backDc, backBmp)
+    DeleteDC backDc
+    
+    Debug.Print "BKBUFFER: del &H" + Hex(backDc) + " &H" + Hex(backBmp)
 End Sub
 
 Private Sub CreateDBuffer()
     On Error Resume Next
+    
     Dim bmp As Long
     Dim dc As Long
+   
+    dc = CreateCompatibleDC(ByVal 0&)
+    bmp = CreateBitmap(Me.ScaleWidth, Me.ScaleHeight, GetDeviceCaps(dc, PLANES), GetDeviceCaps(dc, BITSPIXEL), ByVal 0&)
+    bmp = SelectObject(dc, bmp)
     
-    bmp = CreateCompatibleBitmap(Me.hDC, Me.ScaleWidth, Me.ScaleHeight)
-    dc = CreateCompatibleDC(Me.hDC)
-    SelectObject dc, bmp
-    
-    Debug.Print "DLBUFFER: new " + str(Me.ScaleWidth) + " x" + str(Me.ScaleHeight)
-    
-    If dc <> 0 And bmp <> 0 Then
-        DeleteDBuffer
-        dbufBitmap = bmp
-        dbufDc = dc
-    Else
-        DeleteDC dc
-        DeleteObject bmp
-    End If
+    DeleteDBuffer
+
+    backBmp = bmp
+    backDc = dc
+        
+    Debug.Print "BKBUFFER: new " + CStr(Me.ScaleWidth) + " x " + CStr(Me.ScaleHeight)
+    Draw
 End Sub
 
+Private Sub DrawRule(which As Integer)
+
+End Sub
+
+Private Sub DrawGrid()
+    
+End Sub
+
+Private Sub Draw()
+    On Error GoTo PaintErr
+    Dim rc As RECT
+    
+    GetClientRect Me.hWnd, rc
+    FillSolidRect backDc, rc, SchemeBgColor
+    
+    DrawGrid
+    DrawRule vbHorizontal
+    DrawRule vbVertical
+    
+    Form_Paint
+    Exit Sub
+PaintErr:
+    Debug.Print "CHILDRAW: " + Err.Description
+    Resume Next
+End Sub

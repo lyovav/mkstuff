@@ -6,6 +6,7 @@ Module=Pictures; ..\afx\Pictures.bas
 Form=ud.mainframe.frm
 Module=UdMain; ud.main.bas
 Form=ud.doc.frm
+Module=DefaultColors; ud.colors.default.bas
 Startup="Sub Main"
 HelpFile=""
 ExeName32="ud-1.0.0.exe"
