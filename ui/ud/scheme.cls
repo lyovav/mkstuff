@@ -78,7 +78,7 @@ Private Sub CalcVisibleIndexes()
         vCol = (rcDisplay.Left - rcAll.Left) / rcItem.Right - 1
         If vCol < 0 Then vCol = 0
         
-        vColNum = (rcDisplay.Right + rcItem.Right) / rcItem.Right + 2
+        vColNum = (rcDisplay.Right + rcItem.Right + rcItem.Right) / rcItem.Right + 1
         If vColNum > Cols Then vColNum = Cols
     Else
         vCol = 0
@@ -89,7 +89,7 @@ Private Sub CalcVisibleIndexes()
         vRow = (rcDisplay.Top - rcAll.Top) / rcItem.Bottom - 1
         If vRow < 0 Then vRow = 0
         
-        vRowNum = (rcDisplay.Bottom + rcItem.Bottom) / rcItem.Bottom + 2
+        vRowNum = (rcDisplay.Bottom + rcItem.Bottom + rcItem.Bottom) / rcItem.Bottom + 1
         If vRowNum > Rows Then vRowNum = Rows
     Else
         vRow = 0
