@@ -12,6 +12,8 @@ Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
     Dim yp As Integer
 
     Select Case uMsg
+        Case WM_MBUTTONDOWN
+        
         Case WM_MOUSEWHEEL
             keys = wParam And 65535
             delta = wParam / 65536 / WHEEL_DELTA
