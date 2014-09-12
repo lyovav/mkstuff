@@ -10,6 +10,7 @@ Module=DefaultColors; ud.colors.default.bas
 Class=CScheme; scheme.cls
 Module=Rects; ..\afx\Rects.bas
 Module=UdDocWndProc; ud.doc.wndproc.bas
+Class=CDouble; ..\afx\CDouble.cls
 Startup="Sub Main"
 HelpFile=""
 ExeName32="ud-1.0.0.exe"

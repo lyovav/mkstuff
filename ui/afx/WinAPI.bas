@@ -332,10 +332,13 @@ Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hDC As 
 Public Declare Function GetWindowDC Lib "GDI32" (ByVal hWnd As Long) As Long
 Public Declare Function MoveToEx Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Integer
 Public Declare Function LineTo Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer) As Integer
+Public Declare Function MoveToExNull Lib "GDI32" Alias "MoveToEx" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByVal lppt As Long) As Integer
 Public Declare Function SetBkMode Lib "GDI32" (ByVal hDC As Long, ByVal nBkMode As Long) As Long
 Public Declare Function SetTextColor Lib "GDI32" (ByVal hDC As Long, ByVal color As Long) As Long
 Public Declare Function CreateFontIndirectA Lib "GDI32" (ByRef lpLogFont As LOGFONT) As Long
 Public Declare Function CreatePen Lib "GDI32" (ByVal penStyle As Integer, ByVal Width As Integer, ByVal color As Long) As Long
+Public Declare Function Rectangle Lib "GDI32" (ByVal hDC As Long, ByVal rectLeft As Long, ByVal rectTop As Long, ByVal rectRight As Long, ByVal rectBottom As Long) As Integer
+
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer
@@ -414,3 +417,7 @@ End Function
 Public Sub Invalidate(ByRef frm As Form, Optional bErase As Integer = 0)
     InvalidateRectNull frm.hWnd, 0, bErase
 End Sub
+
+Public Function MoveTo(ByVal dc As Long, ByVal x As Integer, ByVal y As Integer) As Integer
+    MoveTo = MoveToExNull(dc, x, y, 0)
+End Function

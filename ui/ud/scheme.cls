@@ -19,7 +19,9 @@ Private Const DefItemHeight As Long = 48
 Private Const DefItemCols As Integer = 32
 Private Const DefItemRows As Integer = 32
 Private Const cdMinScale As Double = 0.1
-Private Const cdMaxScale As Double = 2.2
+Private Const cdMaxScale As Double = 10.2
+
+Public DebugString As String
 
 Private dScale As Double
 Private Item() As Byte
@@ -47,11 +49,14 @@ Private Sub Class_Terminate()
     DeleteObject penGrid
 End Sub
 
-
 Public Sub IncrementScale(val As Double)
     dScale = dScale + val
     If dScale < cdMinScale Then dScale = cdMinScale Else If dScale > cdMaxScale Then dScale = cdMaxScale
 End Sub
+
+Public Function GetScale() As Double
+    GetScale = dScale
+End Function
 
 Public Sub Allocate(cn As Integer, rn As Integer)
     ReDim Item(0 To cn, 0 To rn) As Byte
@@ -78,7 +83,7 @@ Private Sub CalcItemRect()
     End With
 End Sub
 
-Private Sub CalcMyRect()
+Private Sub CalcAllRect()
     With rcAll
         .Width = Cols * rcItem.Width
         .Height = Rows * rcItem.Height
@@ -87,28 +92,29 @@ Private Sub CalcMyRect()
     End With
 End Sub
 
-Private Sub CalcVisibleIndexes()
-    If rcAll.Width > rcDisplay.Width Then
-        vCol = (rcDisplay.Left - rcAll.Left) / rcItem.Width - 1
-        If vCol < 0 Then vCol = 0
+Private Function CalcVisibleStuff(ByRef count As Integer, maxCount As Integer, iw As Long, x1 As Long, w1 As Long, x2 As Long, w2 As Long) As Integer
+    Dim x As Integer
+    
+    If w1 > w2 Then
+        x = ((x2 - x1) / iw) - 1
+        count = (w2 / iw) + 2
+        count = count + x
         
-        vColNum = (rcDisplay.Width + rcItem.Width + rcItem.Width) / rcItem.Width + 1
-        If vColNum > Cols Then vColNum = Cols
+        If count > maxCount Then count = maxCount
+        If x < 0 Then x = 0
     Else
-        vCol = 0
-        vColNum = Cols
+        x = 0
+        count = maxCount
     End If
     
-    If rcAll.Height > rcDisplay.Height Then
-        vRow = (rcDisplay.Top - rcAll.Top) / rcItem.Height - 1
-        If vRow < 0 Then vRow = 0
-        
-        vRowNum = (rcDisplay.Height + rcItem.Height + rcItem.Height) / rcItem.Height + 1
-        If vRowNum > Rows Then vRowNum = Rows
-    Else
-        vRow = 0
-        vRowNum = Rows
-    End If
+    CalcVisibleStuff = x
+End Function
+
+Private Sub CalcVisibleIndexes()
+    vCol = CalcVisibleStuff(vColNum, Cols, rcItem.Width, rcAll.Left, rcAll.Width, rcDisplay.Left, rcDisplay.Width)
+    vRow = CalcVisibleStuff(vRowNum, Rows, rcItem.Height, rcAll.Top, rcAll.Height, rcDisplay.Top, rcDisplay.Height)
+    
+    DebugString = "[" + CStr(vCol) + " " + CStr(vRow) + " " + CStr(vColNum) + "x" + CStr(vRowNum) + "]"
 End Sub
 
 Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
@@ -116,7 +122,7 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     rcDisplay = RInit(x, y, cx, cy)
     
     CalcItemRect
-    CalcMyRect
+    CalcAllRect
     CalcVisibleIndexes
     
     Dim lastPen As Long, lastBkMode As Long, lastTextColor As Long
@@ -134,12 +140,19 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
             Dim itemText As String
             itemText = "(" + CStr(col) + ", " + CStr(row) + ")"
             
-            Dim rcDraw As RECT, rcText As RECT
-            rcDraw = ToRECT(rcItem)
-            rcText = rcDraw
+            Dim rcTemp As RECT
+            rcTemp = ToRECT(rcItem)
             
+            'Rectangle dc, rcTemp.Left, rcTemp.Top, rcTemp.right + 1, rcTemp.bottom + 1
+            
+            Dim rcText As RECT
+            rcText = rcTemp
             DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
-            ARect dc, rcDraw
+            
+            MoveTo dc, rcTemp.Left, rcTemp.Bottom
+            LineTo dc, rcTemp.Right, rcTemp.Bottom
+            LineTo dc, rcTemp.Right, rcTemp.Top
+            
         Next col
     Next row
 
