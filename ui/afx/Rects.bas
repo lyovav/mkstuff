@@ -23,11 +23,11 @@ Public Function RInit(x As Long, y As Long, cx As Long, cy As Long) As CRect
 End Function
 
 Public Function RRight(rc As CRect)
-    Right = rc.Left + rc.Width
+    RRight = rc.Left + rc.Width
 End Function
 
 Public Function RBottom(rc As CRect)
-    Bottom = rc.Top + rc.Height
+    RBottom = rc.Top + rc.Height
 End Function
 
 Public Function ToRECT(rc As CRect) As RECT

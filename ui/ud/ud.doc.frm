@@ -99,7 +99,8 @@ Private Sub CreateDBuffer(cx As Integer, cy As Integer)
     bmp = CreateBitmap(cx, cy, GetDeviceCaps(dc, PLANES), GetDeviceCaps(dc, BITSPIXEL), ByVal 0&)
     bmp = SelectObject(dc, bmp)
     
-    If hFont = 0 Then hFont = OLEFont2HFONT(Me.Font, dc)
+    DeleteObject hFont
+    hFont = OLEFont2HFONT(Me.Font, dc)
     lfnt = SelectObject(dc, hFont)
     
     DeleteDBuffer
@@ -129,7 +130,7 @@ PaintErr:
 End Sub
 
 Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Integer, yp As Integer)
-    Scheme.IncrementScale delta * 0.05
+    Scheme.IncrementScale CDbl(delta), keys
     UpdateTitle
     Invalidate Me
 End Sub

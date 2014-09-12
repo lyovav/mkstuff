@@ -18,8 +18,10 @@ Private Const DefItemWidth As Long = 48
 Private Const DefItemHeight As Long = 48
 Private Const DefItemCols As Integer = 32
 Private Const DefItemRows As Integer = 32
-Private Const cdMinScale As Double = 0.1
-Private Const cdMaxScale As Double = 10.2
+Private Const cdMinScale As Double = 0.01
+Private Const cdMaxScale As Double = 40.96
+Private Const cdScaleMul As Double = 0.05
+Private Const cdScaleMul2 As Double = 0.5
 
 Public DebugString As String
 
@@ -49,8 +51,11 @@ Private Sub Class_Terminate()
     DeleteObject penGrid
 End Sub
 
-Public Sub IncrementScale(val As Double)
+Public Sub IncrementScale(val As Double, keys As Integer)
+    If keys And 4 <> 0 Then val = val * cdScaleMul2 Else val = val * cdScaleMul
+    
     dScale = dScale + val
+    
     If dScale < cdMinScale Then dScale = cdMinScale Else If dScale > cdMaxScale Then dScale = cdMaxScale
 End Sub
 
@@ -64,14 +69,12 @@ Public Sub Allocate(cn As Integer, rn As Integer)
     Cols = UBound(Item, 2)
     Rows = UBound(Item, 1)
 
-    ' Filling by some initial values -------------------
     Dim row As Integer, col As Integer
     For row = 0 To Rows
         For col = 0 To Cols
             Item(row, col) = 0
         Next col
     Next row
-    ' --------------------------------------------------
 End Sub
 
 Private Sub CalcItemRect()
@@ -114,23 +117,52 @@ Private Sub CalcVisibleIndexes()
     vCol = CalcVisibleStuff(vColNum, Cols, rcItem.Width, rcAll.Left, rcAll.Width, rcDisplay.Left, rcDisplay.Width)
     vRow = CalcVisibleStuff(vRowNum, Rows, rcItem.Height, rcAll.Top, rcAll.Height, rcDisplay.Top, rcDisplay.Height)
     
-    DebugString = "[" + CStr(vCol) + " " + CStr(vRow) + " " + CStr(vColNum) + "x" + CStr(vRowNum) + "]"
+    DebugString = "<" + CStr(vCol) + "-" + CStr(vColNum) + "  " + CStr(vRow) + "-" + CStr(vRowNum) + ">"
+End Sub
+
+Public Sub DrawGrid(ByVal dc As Long)
+    On Error Resume Next
+    
+    Dim lastPen As Long
+    Dim row As Integer, col As Integer
+    Dim y As Long
+    
+    lastPen = SelectObject(dc, penGrid)
+    
+    For row = vRow To vRowNum - 1
+        y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
+        If y >= rcDisplay.Top Then
+            MoveTo dc, RRight(rcDisplay), y
+            LineTo dc, rcDisplay.Left, y
+        End If
+    Next row
+    
+    For col = vCol To vColNum - 1
+        y = rcAll.Left + (col * rcItem.Width) + rcItem.Width
+        If y >= rcDisplay.Left Then
+            MoveTo dc, y, rcDisplay.Top
+            LineTo dc, y, RBottom(rcDisplay)
+        End If
+    Next col
+    
+    SelectObject dc, lastPen
 End Sub
 
 Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     On Error Resume Next
+    
     rcDisplay = RInit(x, y, cx, cy)
     
     CalcItemRect
     CalcAllRect
     CalcVisibleIndexes
     
-    Dim lastPen As Long, lastBkMode As Long, lastTextColor As Long
+    Dim lastBkMode As Long, lastTextColor As Long
     
-    lastPen = SelectObject(dc, penGrid)
     lastBkMode = SetBkMode(dc, TRANSPARENT)
     lastTextColor = SetTextColor(dc, DocFgColor)
     
+#If True Then
     Dim row As Integer, col As Integer
     For row = vRow To vRowNum - 1
         rcItem.Top = rcAll.Top + (row * rcItem.Height)
@@ -143,20 +175,15 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
             Dim rcTemp As RECT
             rcTemp = ToRECT(rcItem)
             
-            'Rectangle dc, rcTemp.Left, rcTemp.Top, rcTemp.right + 1, rcTemp.bottom + 1
-            
             Dim rcText As RECT
             rcText = rcTemp
             DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
-            
-            MoveTo dc, rcTemp.Left, rcTemp.Bottom
-            LineTo dc, rcTemp.Right, rcTemp.Bottom
-            LineTo dc, rcTemp.Right, rcTemp.Top
-            
         Next col
     Next row
+#End If
+
+    DrawGrid dc
 
     SetTextColor dc, lastTextColor
     SetBkMode dc, lastBkMode
-    SelectObject dc, lastPen
 End Sub
