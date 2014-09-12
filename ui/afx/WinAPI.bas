@@ -369,9 +369,8 @@ Public Sub FillSolidRect(ByVal hDC As Long, ByRef lpRect As RECT, ByVal clr As L
     SetBkColor hDC, lastColor
 End Sub
 
-Public Sub ALine(ByVal hDC As Long, ByVal x1 As Integer, ByVal y1 As Integer, ByVal x2 As Integer, ByVal y2 As Integer)
-    Dim pt As APOINT
-    MoveToEx hDC, x1, y1, pt
+Public Sub ALine(ByVal hDC As Long, ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long)
+    MoveToExNull hDC, x1, y1, 0
     LineTo hDC, x2, y2
 End Sub
 
