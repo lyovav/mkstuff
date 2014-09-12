@@ -9,9 +9,9 @@ Begin VB.Form CDoc
    ClientTop       =   450
    ClientWidth     =   9630
    BeginProperty Font 
-      Name            =   "Terminus"
-      Size            =   12
-      Charset         =   0
+      Name            =   "Small Fonts"
+      Size            =   6.75
+      Charset         =   204
       Weight          =   400
       Underline       =   0   'False
       Italic          =   0   'False
