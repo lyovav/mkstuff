@@ -2,6 +2,7 @@ Attribute VB_Name = "WinAPI"
 Option Explicit
 DefInt A-Z
 
+' USER32
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
 Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
 Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
@@ -16,10 +17,12 @@ Public Declare Function GetDesktopWindow Lib "USER32" () As Long
 Public Declare Function GetClientRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT) As Long
 Public Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT, ByVal bErase As Integer) As Long
 Public Declare Function InvalidateRectNull Lib "USER32" Alias "InvalidateRect" (ByVal hWnd As Long, ByVal lpRect As Long, ByVal bErase As Integer) As Long
-
 Public Declare Function DrawTextA Lib "USER32" (ByVal hDC As Long, ByVal lpStr As String, ByVal nCount As Long, ByRef lpRect As RECT, ByVal wFormat As Long) As Long
 Public Declare Function OffsetRect Lib "USER32" (ByRef lpRect As RECT, ByVal x As Long, ByVal y As Long) As Long
 Public Declare Function CallWindowProcA Lib "USER32" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function SetCapture Lib "USER32" (ByVal hWnd As Long) As Long
+Public Declare Function GetCapture Lib "USER32" () As Long
+Public Declare Function ReleaseCapture Lib "USER32" () As Long
 
 ' KERNEL32
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
@@ -32,7 +35,7 @@ Public Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes 
 Public Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
 Public Declare Function MulDiv Lib "KERNEL32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
 
-' GDI Functions
+' GDI32
 Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long
 Public Declare Function CreateCompatibleDC Lib "GDI32" (ByVal hDC As Long) As Long
 Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (PicDesc As PICTDESC, RefIID As GUID, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
@@ -48,17 +51,16 @@ Public Declare Function DeleteDC Lib "GDI32" (ByVal hDC As Long) As Long
 Public Declare Function ExtTextOutA Lib "GDI32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal wOptions As Long, ByRef lpRect As RECT, ByVal lpString As String, ByVal nCount As Long, lpDx As Long) As Long
 Public Declare Function SetBkColor Lib "GDI32" (ByVal hDC As Long, ByVal color As Long) As Long
 Public Declare Function GetDC Lib "GDI32" (ByVal hWnd As Long) As Long
-Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hDC As Long) As Integer
+Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hDC As Long) As Long
 Public Declare Function GetWindowDC Lib "GDI32" (ByVal hWnd As Long) As Long
-Public Declare Function MoveToEx Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Integer
+Public Declare Function MoveToEx Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Long
 Public Declare Function LineTo Lib "GDI32" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer) As Integer
-Public Declare Function MoveToExNull Lib "GDI32" Alias "MoveToEx" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByVal lppt As Long) As Integer
+Public Declare Function MoveToExNull Lib "GDI32" Alias "MoveToEx" (ByVal hDC As Long, ByVal x As Integer, ByVal y As Integer, ByVal lppt As Long) As Long
 Public Declare Function SetBkMode Lib "GDI32" (ByVal hDC As Long, ByVal nBkMode As Long) As Long
 Public Declare Function SetTextColor Lib "GDI32" (ByVal hDC As Long, ByVal color As Long) As Long
 Public Declare Function CreateFontIndirectA Lib "GDI32" (ByRef lpLogFont As LOGFONT) As Long
 Public Declare Function CreatePen Lib "GDI32" (ByVal penStyle As Integer, ByVal Width As Integer, ByVal color As Long) As Long
-Public Declare Function Rectangle Lib "GDI32" (ByVal hDC As Long, ByVal rectLeft As Long, ByVal rectTop As Long, ByVal rectRight As Long, ByVal rectBottom As Long) As Integer
-
+Public Declare Function Rectangle Lib "GDI32" (ByVal hDC As Long, ByVal rectLeft As Long, ByVal rectTop As Long, ByVal rectRight As Long, ByVal rectBottom As Long) As Long
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer

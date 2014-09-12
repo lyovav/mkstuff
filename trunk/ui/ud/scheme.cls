@@ -14,14 +14,15 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private Const DefItemWidth As Long = 48
-Private Const DefItemHeight As Long = 48
-Private Const DefItemCols As Integer = 32
-Private Const DefItemRows As Integer = 32
+Private Const DefItemWidth As Long = 32
+Private Const DefItemHeight As Long = 32
+Private Const DefItemCols As Integer = 256
+Private Const DefItemRows As Integer = 256
+
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
-Private Const cdScaleMul As Double = 0.01
-Private Const cdScaleMul2 As Double = 0.05
+Private Const cdScaleMul As Double = 0.02
+Private Const cdScaleMul2 As Double = 0.1
 
 Public DebugString As String
 
@@ -55,7 +56,7 @@ Private Sub Class_Terminate()
     DeleteObject penGrid
 End Sub
 
-Public Sub IncrementScale(val As Double, keys As Integer)
+Public Sub IncrementScale(val As Double, keys As Long)
     If keys And 4 <> 0 Then val = val * cdScaleMul2 Else val = val * cdScaleMul
     
     dScale = dScale + val
@@ -155,7 +156,7 @@ Public Sub DrawGrid(ByVal dc As Long)
     
     For row = vRow To vRowNum - 1
         y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
-        If y >= rcDisplay.Top Then
+        If y >= rcDisplay.Top And y < RBottom(rcDisplay) Then
             ALine dc, begX, y, endX, y
         End If
     Next row
