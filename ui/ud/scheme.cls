@@ -22,9 +22,9 @@ Private Item() As Byte
 
 Private Cols As Integer
 Private Rows As Integer
-Private rcDisplay As RECT
-Private rcAll As RECT
-Private rcItem As RECT
+Private rcDisplay As CRect
+Private rcAll As CRect
+Private rcItem As CRect
 Private vCol As Integer
 Private vColNum As Integer
 Private vRow As Integer
@@ -42,14 +42,11 @@ Public Sub Allocate(cn As Integer, rn As Integer)
     Cols = UBound(Item, 2)
     Rows = UBound(Item, 1)
 
-    ' --------------------------------------------------
+    ' Filling by some initial values -------------------
     Dim row As Integer, col As Integer
     For row = 0 To Rows
         For col = 0 To Cols
             Item(row, col) = 0
-            
-            ' TODO: remove debug filling
-            Item(row, col) = CByte(0 + Rnd * 255)
         Next col
     Next row
     ' --------------------------------------------------
@@ -59,37 +56,37 @@ Private Sub CalcItemRect()
     With rcItem
         .Left = 0
         .Top = 0
-        .Right = DefItemWidth * dScale
-        .Bottom = DefItemHeight * dScale
+        .Width = DefItemWidth * dScale
+        .Height = DefItemHeight * dScale
     End With
 End Sub
 
 Private Sub CalcMyRect()
     With rcAll
-        .Right = Cols * rcItem.Right
-        .Bottom = Rows * rcItem.Bottom
-        .Left = rcDisplay.Left + (rcDisplay.Right - .Right) / 2
-        .Top = rcDisplay.Top + (rcDisplay.Bottom - .Bottom) / 2
+        .Width = Cols * rcItem.Width
+        .Height = Rows * rcItem.Height
+        .Left = rcDisplay.Left + (rcDisplay.Width - .Width) / 2
+        .Top = rcDisplay.Top + (rcDisplay.Height - .Height) / 2
     End With
 End Sub
 
 Private Sub CalcVisibleIndexes()
-    If rcAll.Right > rcDisplay.Right Then
-        vCol = (rcDisplay.Left - rcAll.Left) / rcItem.Right - 1
+    If rcAll.Width > rcDisplay.Width Then
+        vCol = (rcDisplay.Left - rcAll.Left) / rcItem.Width - 1
         If vCol < 0 Then vCol = 0
         
-        vColNum = (rcDisplay.Right + rcItem.Right + rcItem.Right) / rcItem.Right + 1
+        vColNum = (rcDisplay.Width + rcItem.Width + rcItem.Width) / rcItem.Width + 1
         If vColNum > Cols Then vColNum = Cols
     Else
         vCol = 0
         vColNum = Cols
     End If
     
-    If rcAll.Bottom > rcDisplay.Bottom Then
-        vRow = (rcDisplay.Top - rcAll.Top) / rcItem.Bottom - 1
+    If rcAll.Height > rcDisplay.Height Then
+        vRow = (rcDisplay.Top - rcAll.Top) / rcItem.Height - 1
         If vRow < 0 Then vRow = 0
         
-        vRowNum = (rcDisplay.Bottom + rcItem.Bottom + rcItem.Bottom) / rcItem.Bottom + 1
+        vRowNum = (rcDisplay.Height + rcItem.Height + rcItem.Height) / rcItem.Height + 1
         If vRowNum > Rows Then vRowNum = Rows
     Else
         vRow = 0
@@ -98,12 +95,7 @@ Private Sub CalcVisibleIndexes()
 End Sub
 
 Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
-    With rcDisplay
-        .Left = x
-        .Top = y
-        .Right = cx
-        .Bottom = cy
-    End With
+    rcDisplay = RInit(x, y, cx, cy)
     
     CalcItemRect
     CalcMyRect
@@ -113,24 +105,19 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     
     Dim row As Integer, col As Integer
     For row = vRow To vRowNum - 1
-        rcItem.Top = rcAll.Top + (row * rcItem.Bottom)
+        rcItem.Top = rcAll.Top + (row * rcItem.Height)
         For col = vCol To vColNum - 1
-            rcItem.Left = rcAll.Left + (col * rcItem.Right)
+            rcItem.Left = rcAll.Left + (col * rcItem.Width)
             
             Dim itemText As String
             itemText = "(" + CStr(col) + ", " + CStr(row) + ")"
             
-            Dim rcText As RECT
-            With rcText
-                .Left = rcItem.Left
-                .Top = rcItem.Top
-                .Right = rcItem.Left + rcItem.Right
-                .Bottom = rcItem.Top + rcItem.Bottom
-            End With
+            Dim rcDraw As RECT, rcText As RECT
+            rcDraw = ToRECT(rcItem)
+            rcText = rcDraw
             
-            DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
-            
-            ARect dc, rcItem
+            DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
+            ARect dc, rcDraw
         Next col
     Next row
 

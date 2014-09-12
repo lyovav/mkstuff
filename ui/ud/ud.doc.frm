@@ -10,9 +10,9 @@ Begin VB.Form CDoc
    ClientWidth     =   9630
    BeginProperty Font 
       Name            =   "Terminus"
-      Size            =   16.5
+      Size            =   12
       Charset         =   0
-      Weight          =   700
+      Weight          =   400
       Underline       =   0   'False
       Italic          =   0   'False
       Strikethrough   =   0   'False
@@ -51,7 +51,7 @@ End Sub
 
 Private Sub Form_Paint()
     OnPaint
-    BitBlt Me.hdc, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+    BitBlt Me.hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
 End Sub
 
 Private Sub Form_Resize()
