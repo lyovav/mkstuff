@@ -1,5 +1,5 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#E:\WINDOWS\system32\stdole2.tlb#OLE Automation
 Class=WConf; ..\afx\WConf.cls
 Module=WinAPI; ..\afx\WinAPI.bas
 Module=Pictures; ..\afx\Pictures.bas
@@ -9,6 +9,7 @@ Form=ud.doc.frm
 Module=DefaultColors; ud.colors.default.bas
 Class=CScheme; scheme.cls
 Module=Rects; ..\afx\Rects.bas
+Module=UdDocWndProc; ud.doc.wndproc.bas
 Startup="Sub Main"
 HelpFile=""
 ExeName32="ud-1.0.0.exe"
@@ -37,3 +38,6 @@ Unattended=0
 Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
+
+[MS Transaction Server]
+AutoRefresh=1

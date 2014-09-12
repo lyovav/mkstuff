@@ -14,27 +14,48 @@ Public Type APOINT
     y As Long
 End Type
 
-Global Const DT_TOP = &H0
-Global Const DT_LEFT = &H0
-Global Const DT_CENTER = &H1
-Global Const DT_RIGHT = &H2
-Global Const DT_VCENTER = &H4
-Global Const DT_BOTTOM = &H8
-Global Const DT_WORDBREAK = &H10
-Global Const DT_SINGLELINE = &H20
-Global Const DT_EXPANDTABS = &H40
-Global Const DT_TABSTOP = &H80
-Global Const DT_NOCLIP = &H100
-Global Const DT_EXTERNALLEADING = &H200
-Global Const DT_CALCRECT = &H400
-Global Const DT_NOPREFIX = &H800
-Global Const DT_INTERNAL = &H1000
-Global Const DT_EDITCONTROL = &H2000
-Global Const DT_PATH_ELLIPSIS = &H4000
-Global Const DT_END_ELLIPSIS = &H8000
-Global Const DT_MODIFYSTRING = &H10000
-Global Const DT_RTLREADING = &H20000
-Global Const DT_WORD_ELLIPSIS = &H40000
+Public Const WM_ERASEBKGND = &H14
+
+Public Const WM_MOUSEWHEEL = &H20A
+Public Const WM_MBUTTONUP = &H208
+Public Const WM_MBUTTONDOWN = &H207
+Public Const WM_MBUTTONDBLCLK = &H209
+Public Const WM_LBUTTONDOWN = &H201
+Public Const WM_LBUTTONUP = &H202
+Public Const WM_RBUTTONUP = &H205
+
+Public Const MK_LBUTTON = &H1
+Public Const MK_MBUTTON = &H10
+Public Const MK_RBUTTON = &H2
+
+Public Const WH_MOUSE = 7
+Public Const WHEEL_DELTA = 120
+
+Public Const WM_VSCROLL = &H115
+Public Const WM_USER As Long = &H400
+Public Const WM_SOMETHING = WM_USER + 3139
+
+Public Const DT_TOP = &H0
+Public Const DT_LEFT = &H0
+Public Const DT_CENTER = &H1
+Public Const DT_RIGHT = &H2
+Public Const DT_VCENTER = &H4
+Public Const DT_BOTTOM = &H8
+Public Const DT_WORDBREAK = &H10
+Public Const DT_SINGLELINE = &H20
+Public Const DT_EXPANDTABS = &H40
+Public Const DT_TABSTOP = &H80
+Public Const DT_NOCLIP = &H100
+Public Const DT_EXTERNALLEADING = &H200
+Public Const DT_CALCRECT = &H400
+Public Const DT_NOPREFIX = &H800
+Public Const DT_INTERNAL = &H1000
+Public Const DT_EDITCONTROL = &H2000
+Public Const DT_PATH_ELLIPSIS = &H4000
+Public Const DT_END_ELLIPSIS = &H8000
+Public Const DT_MODIFYSTRING = &H10000
+Public Const DT_RTLREADING = &H20000
+Public Const DT_WORD_ELLIPSIS = &H40000
 
 Public Const SM_CXSCREEN            As Integer = 0
 Public Const SM_CYSCREEN            As Integer = 1
@@ -174,8 +195,11 @@ Public Declare Function GetParent Lib "USER32" (ByVal hWnd As Long) As Long
 Public Declare Function GetDesktopWindow Lib "USER32" () As Long
 Public Declare Function GetClientRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT) As Long
 Public Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT, ByVal bErase As Integer) As Long
+Public Declare Function InvalidateRectNull Lib "USER32" Alias "InvalidateRect" (ByVal hWnd As Long, ByVal lpRect As Long, ByVal bErase As Integer) As Long
+
 Public Declare Function DrawTextA Lib "USER32" (ByVal hDC As Long, ByVal lpStr As String, ByVal nCount As Long, ByRef lpRect As RECT, ByVal wFormat As Long) As Long
 Public Declare Function OffsetRect Lib "USER32" (ByRef lpRect As RECT, ByVal x As Long, ByVal y As Long) As Long
+Public Declare Function CallWindowProcA Lib "USER32" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
 ' KERNEL32
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
@@ -320,6 +344,15 @@ Public Function StripNulls(str As String) As String
     StripNulls = str
 End Function
 
+Public Function LowWord(ByVal inDWord As Long) As Integer
+    LowWord = inDWord And &H7FFF&
+    If (inDWord And &H8000&) Then LowWord = LowWord Or &H8000
+End Function
+
+Public Function HighWord(ByVal inDWord As Long) As Integer
+    HighWord = LowWord(((inDWord And &HFFFF0000) \ &H10000) And &HFFFF&)
+End Function
+
 Public Function ProcPtr(ByVal nAddress As Long) As Long
     ProcPtr = nAddress
 End Function
@@ -376,3 +409,6 @@ Public Function OLEFont2HFONT(fnt As StdFont, ByVal hDC As Long) As Long
     OLEFont2HFONT = rv
 End Function
 
+Public Sub Invalidate(ByRef frm As Form, Optional bErase As Integer = 0)
+    InvalidateRectNull frm.hWnd, 0, bErase
+End Sub
