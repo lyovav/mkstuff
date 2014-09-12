@@ -14,9 +14,12 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private Const DefItemWidth As Long = 90
-Private Const DefItemHeight As Long = 120
+Private Const DefItemWidth As Long = 48
+Private Const DefItemHeight As Long = 48
+Private Const DefItemCols As Integer = 32
+Private Const DefItemRows As Integer = 32
 Private Const cdMinScale As Double = 0.1
+Private Const cdMaxScale As Double = 2.2
 
 Private dScale As Double
 Private Item() As Byte
@@ -31,14 +34,23 @@ Private vColNum As Integer
 Private vRow As Integer
 Private vRowNum As Integer
 
+' Appearance
+Private penGrid As Long
+
 Public Sub Class_Initialize()
+    penGrid = CreatePen(DocGridStyle, 1, DocGridColor)
     dScale = 1#
-    Allocate 6, 10
+    Allocate DefItemRows, DefItemCols
 End Sub
+
+Private Sub Class_Terminate()
+    DeleteObject penGrid
+End Sub
+
 
 Public Sub IncrementScale(val As Double)
     dScale = dScale + val
-    If dScale < cdMinScale Then dScale = cdMinScale
+    If dScale < cdMinScale Then dScale = cdMinScale Else If dScale > cdMaxScale Then dScale = cdMaxScale
 End Sub
 
 Public Sub Allocate(cn As Integer, rn As Integer)
@@ -100,13 +112,18 @@ Private Sub CalcVisibleIndexes()
 End Sub
 
 Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
+    On Error Resume Next
     rcDisplay = RInit(x, y, cx, cy)
     
     CalcItemRect
     CalcMyRect
     CalcVisibleIndexes
     
-    SetBkMode dc, TRANSPARENT
+    Dim lastPen As Long, lastBkMode As Long, lastTextColor As Long
+    
+    lastPen = SelectObject(dc, penGrid)
+    lastBkMode = SetBkMode(dc, TRANSPARENT)
+    lastTextColor = SetTextColor(dc, DocFgColor)
     
     Dim row As Integer, col As Integer
     For row = vRow To vRowNum - 1
@@ -126,4 +143,7 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
         Next col
     Next row
 
+    SetTextColor dc, lastTextColor
+    SetBkMode dc, lastBkMode
+    SelectObject dc, lastPen
 End Sub
