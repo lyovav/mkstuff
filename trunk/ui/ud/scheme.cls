@@ -16,6 +16,7 @@ DefInt A-Z
 
 Private Const DefItemWidth As Long = 90
 Private Const DefItemHeight As Long = 120
+Private Const cdMinScale As Double = 0.1
 
 Private dScale As Double
 Private Item() As Byte
@@ -30,10 +31,14 @@ Private vColNum As Integer
 Private vRow As Integer
 Private vRowNum As Integer
 
-
 Public Sub Class_Initialize()
     dScale = 1#
     Allocate 6, 10
+End Sub
+
+Public Sub IncrementScale(val As Double)
+    dScale = dScale + val
+    If dScale < cdMinScale Then dScale = cdMinScale
 End Sub
 
 Public Sub Allocate(cn As Integer, rn As Integer)

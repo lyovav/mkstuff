@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
-   BackColor       =   &H0000FFFF&
+   BackColor       =   &H00F2FFFF&
    Caption         =   "..."
    ClientHeight    =   6585
    ClientLeft      =   120
@@ -38,6 +38,7 @@ Private Const cyMinSize = 256
 
 Private backBmp As Long
 Private backDc As Long
+Private lastFont As Long
 Private hFont As Long
 
 Public Scheme As New CScheme
@@ -47,6 +48,7 @@ Private Sub Form_Load()
     Me.ScaleMode = vbPixels
     Me.AutoRedraw = False
     hFont = 0
+    InstallUDocWndProc Me
 End Sub
 
 Private Sub Form_Paint()
@@ -67,6 +69,7 @@ End Sub
 Private Sub DeleteDBuffer()
     On Error Resume Next
     
+    DeleteObject SelectObject(backDc, lastFont)
     DeleteObject SelectObject(backDc, backBmp)
     DeleteDC backDc
     
@@ -76,6 +79,7 @@ End Sub
 Private Sub CreateDBuffer(cx As Integer, cy As Integer)
     On Error Resume Next
     
+    Dim lfnt As Long
     Dim bmp As Long
     Dim dc As Long
     
@@ -87,12 +91,13 @@ Private Sub CreateDBuffer(cx As Integer, cy As Integer)
     bmp = SelectObject(dc, bmp)
     
     If hFont = 0 Then hFont = OLEFont2HFONT(Me.Font, dc)
-    SelectObject dc, hFont
+    lfnt = SelectObject(dc, hFont)
     
     DeleteDBuffer
 
     backBmp = bmp
     backDc = dc
+    lastFont = lfnt
         
     'Debug.Print "BKBUFFER: new " + CStr(cx) + " x " + CStr(cy)
     Form_Paint
@@ -112,4 +117,10 @@ Public Sub OnPaint()
 PaintErr:
     Debug.Print "CHILDRAW: " + Err.Description
     Resume Next
+End Sub
+
+Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Integer, yp As Integer)
+    'Debug.Print "MICEWHEEL: " + CStr(keys) + " " + CStr(delta)
+    Scheme.IncrementScale delta * 0.1
+    Invalidate Me
 End Sub
