@@ -8,6 +8,7 @@ Module=UdMain; ud.main.bas
 Form=ud.doc.frm
 Module=DefaultColors; ud.colors.default.bas
 Class=CScheme; scheme.cls
+Module=Rects; ..\afx\Rects.bas
 Startup="Sub Main"
 HelpFile=""
 ExeName32="ud-1.0.0.exe"
