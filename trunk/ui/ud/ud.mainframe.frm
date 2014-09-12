@@ -39,8 +39,8 @@ Option Explicit
 DefInt A-Z
 
 Private config As New WConf
-Private child As New Collection
-Private totalChildCount As Long
+'Private child As New Collection
+'Private totalChildCount As Long
 
 Private Sub mnuNew_Click()
     AddForm "Untitled...", True
@@ -66,13 +66,11 @@ End Sub
 
 Public Sub AddForm(capt As String, visbl As Boolean)
     Dim childFrame As New CDoc
-    
-    childFrame.Caption = capt
-    childFrame.WindowState = vbMaximized
-    childFrame.Visible = visbl
 
-    totalChildCount = totalChildCount + 1
-    child.Add childFrame, str(totalChildCount) + "> " + capt
+    childFrame.AddTo Me, capt, visbl, vbMaximized
+
+    'totalChildCount = totalChildCount + 1
+    'child.Add childFrame, str(totalChildCount) + "> " + capt
 End Sub
 
 Public Sub Init(comandLine As String)

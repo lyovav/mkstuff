@@ -40,6 +40,7 @@ Private backBmp As Long
 Private backDc As Long
 Private lastFont As Long
 Private hFont As Long
+Private originalCaption As String
 
 Public Scheme As New CScheme
 
@@ -48,7 +49,15 @@ Private Sub Form_Load()
     Me.ScaleMode = vbPixels
     Me.AutoRedraw = False
     hFont = 0
+    originalCaption = Me.Caption
     InstallUDocWndProc Me
+End Sub
+
+Public Sub AddTo(ByRef owner As MDIForm, title As String, visbl As Boolean, winsta As Integer)
+    Me.Caption = title
+    originalCaption = title
+    Me.WindowState = winsta
+    Me.Visible = visbl
 End Sub
 
 Private Sub Form_Paint()
@@ -120,7 +129,11 @@ PaintErr:
 End Sub
 
 Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Integer, yp As Integer)
-    'Debug.Print "MICEWHEEL: " + CStr(keys) + " " + CStr(delta)
-    Scheme.IncrementScale delta * 0.1
+    Scheme.IncrementScale delta * 0.05
+    UpdateTitle
     Invalidate Me
+End Sub
+
+Public Sub UpdateTitle()
+    Me.Caption = originalCaption + " ^" + CStr(Scheme.GetScale() * 100#) + "% " + Scheme.DebugString
 End Sub
