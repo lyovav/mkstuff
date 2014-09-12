@@ -20,8 +20,8 @@ Private Const DefItemCols As Integer = 32
 Private Const DefItemRows As Integer = 32
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
-Private Const cdScaleMul As Double = 0.05
-Private Const cdScaleMul2 As Double = 0.5
+Private Const cdScaleMul As Double = 0.01
+Private Const cdScaleMul2 As Double = 0.05
 
 Public DebugString As String
 
@@ -37,6 +37,10 @@ Private vCol As Integer
 Private vColNum As Integer
 Private vRow As Integer
 Private vRowNum As Integer
+Private begY As Long
+Private endY As Long
+Private begX As Long
+Private endX As Long
 
 ' Appearance
 Private penGrid As Long
@@ -120,6 +124,24 @@ Private Sub CalcVisibleIndexes()
     DebugString = "<" + CStr(vCol) + "-" + CStr(vColNum) + "  " + CStr(vRow) + "-" + CStr(vRowNum) + ">"
 End Sub
 
+Private Sub CalcLimits()
+    If rcAll.Height < rcDisplay.Height Then
+        begY = rcAll.Top
+        endY = RBottom(rcAll)
+    Else
+        begY = rcDisplay.Top
+        endY = RBottom(rcDisplay)
+    End If
+    
+    If rcAll.Width < rcDisplay.Width Then
+        begX = rcAll.Left
+        endX = RRight(rcAll)
+    Else
+        begX = rcDisplay.Left
+        endX = RRight(rcDisplay)
+    End If
+End Sub
+
 Public Sub DrawGrid(ByVal dc As Long)
     On Error Resume Next
     
@@ -129,19 +151,21 @@ Public Sub DrawGrid(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penGrid)
     
+    If begY >= rcDisplay.Top Then ALine dc, begX, begY, endX, begY
+    
     For row = vRow To vRowNum - 1
         y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
         If y >= rcDisplay.Top Then
-            MoveTo dc, RRight(rcDisplay), y
-            LineTo dc, rcDisplay.Left, y
+            ALine dc, begX, y, endX, y
         End If
     Next row
+    
+    If begX >= rcDisplay.Left Then ALine dc, begX, begY, begX, endY
     
     For col = vCol To vColNum - 1
         y = rcAll.Left + (col * rcItem.Width) + rcItem.Width
         If y >= rcDisplay.Left Then
-            MoveTo dc, y, rcDisplay.Top
-            LineTo dc, y, RBottom(rcDisplay)
+            ALine dc, y, begY, y, endY
         End If
     Next col
     
@@ -156,13 +180,14 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     CalcItemRect
     CalcAllRect
     CalcVisibleIndexes
+    CalcLimits
     
     Dim lastBkMode As Long, lastTextColor As Long
     
     lastBkMode = SetBkMode(dc, TRANSPARENT)
     lastTextColor = SetTextColor(dc, DocFgColor)
     
-#If True Then
+#If False Then
     Dim row As Integer, col As Integer
     For row = vRow To vRowNum - 1
         rcItem.Top = rcAll.Top + (row * rcItem.Height)

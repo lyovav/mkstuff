@@ -58,6 +58,7 @@ Public Sub AddTo(ByRef owner As MDIForm, title As String, visbl As Boolean, wins
     originalCaption = title
     Me.WindowState = winsta
     Me.Visible = visbl
+    UpdateTitle
 End Sub
 
 Private Sub Form_Paint()
