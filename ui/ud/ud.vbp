@@ -1,6 +1,8 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Class=WConf; ..\afx\WConf.cls
+Module=WinAPIConsts; ..\afx\WinAPI.consts.bas
+Module=WinAPITypes; ..\afx\WinAPI.types.bas
 Module=WinAPI; ..\afx\WinAPI.bas
 Module=Pictures; ..\afx\Pictures.bas
 Form=ud.mainframe.frm
