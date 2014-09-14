@@ -53,6 +53,7 @@ End Sub
 
 Private Sub mnuExit_Click()
     Unload Me
+    End
 End Sub
 
 Private Sub MDIForm_Load()

@@ -4,27 +4,30 @@ DefInt A-Z
 
 ' USER32
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
-Public Declare Function SendMessageA Lib "USER32" (ByVal hwnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SendMessageW Lib "USER32" (ByVal hwnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SetWindowLongA Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer, ByVal value As Long) As Long
-Public Declare Function GetWindowLongA Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer) As Long
-Public Declare Function SetWindowLongW Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer, ByVal value As Long) As Long
-Public Declare Function GetWindowLongW Lib "USER32" (ByVal hwnd As Long, ByVal index As Integer) As Long
-Public Declare Function SetTimer Lib "USER32" (ByVal hwnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
-Public Declare Function KillTimer Lib "USER32" (ByVal hwnd As Long, ByVal nIDEvent As Long) As Long
-Public Declare Function GetParent Lib "USER32" (ByVal hwnd As Long) As Long
+Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
+Public Declare Function GetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
+Public Declare Function SetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
+Public Declare Function GetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
+Public Declare Function SetTimer Lib "USER32" (ByVal hWnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
+Public Declare Function KillTimer Lib "USER32" (ByVal hWnd As Long, ByVal nIDEvent As Long) As Long
+Public Declare Function GetParent Lib "USER32" (ByVal hWnd As Long) As Long
 Public Declare Function GetDesktopWindow Lib "USER32" () As Long
-Public Declare Function GetClientRect Lib "USER32" (ByVal hwnd As Long, ByRef lpRect As RECT) As Long
-Public Declare Function InvalidateRect Lib "USER32" (ByVal hwnd As Long, ByRef lpRect As RECT, ByVal bErase As Integer) As Long
-Public Declare Function InvalidateRectNull Lib "USER32" Alias "InvalidateRect" (ByVal hwnd As Long, ByVal lpRect As Long, ByVal bErase As Integer) As Long
+Public Declare Function GetClientRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT) As Long
+Public Declare Function InvalidateRect Lib "USER32" (ByVal hWnd As Long, ByRef lpRect As RECT, ByVal bErase As Integer) As Long
+Public Declare Function InvalidateRectNull Lib "USER32" Alias "InvalidateRect" (ByVal hWnd As Long, ByVal lpRect As Long, ByVal bErase As Integer) As Long
 Public Declare Function DrawTextA Lib "USER32" (ByVal hdc As Long, ByVal lpStr As String, ByVal nCount As Long, ByRef lpRect As RECT, ByVal wFormat As Long) As Long
 Public Declare Function OffsetRect Lib "USER32" (ByRef lpRect As RECT, ByVal x As Long, ByVal y As Long) As Long
-Public Declare Function CallWindowProcA Lib "USER32" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Public Declare Function SetCapture Lib "USER32" (ByVal hwnd As Long) As Long
+Public Declare Function CallWindowProcA Lib "USER32" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function SetCapture Lib "USER32" (ByVal hWnd As Long) As Long
 Public Declare Function GetCapture Lib "USER32" () As Long
 Public Declare Function ReleaseCapture Lib "USER32" () As Long
-Public Declare Function BeginPaint Lib "USER32" (ByVal hwnd As Long, ByRef lpPaint As PAINTSTRUCT) As Long
-Public Declare Function EndPaint Lib "USER32" (ByVal hwnd As Long, ByRef lpPaint As PAINTSTRUCT) As Long
+Public Declare Function BeginPaint Lib "USER32" (ByVal hWnd As Long, ByRef lpPaint As PAINTSTRUCT) As Long
+Public Declare Function EndPaint Lib "USER32" (ByVal hWnd As Long, ByRef lpPaint As PAINTSTRUCT) As Long
+Public Declare Function GetCursorPos Lib "USER32" (ByRef lpPoint As APOINT) As Long
+Public Declare Function SetCursorPos Lib "USER32" (ByVal x As Long, ByVal y As Long) As Long
+Public Declare Function ScreenToClient Lib "USER32" (ByVal hWnd As Long, ByRef pn As APOINT) As Long
 
 ' KERNEL32
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
@@ -53,9 +56,9 @@ Public Declare Function DeleteObject Lib "GDI32" (ByVal hObject As Long) As Long
 Public Declare Function DeleteDC Lib "GDI32" (ByVal hdc As Long) As Long
 Public Declare Function ExtTextOutA Lib "GDI32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal wOptions As Long, ByRef lpRect As RECT, ByVal lpString As String, ByVal nCount As Long, lpDx As Long) As Long
 Public Declare Function SetBkColor Lib "GDI32" (ByVal hdc As Long, ByVal color As Long) As Long
-Public Declare Function GetDC Lib "GDI32" (ByVal hwnd As Long) As Long
-Public Declare Function ReleaseDC Lib "GDI32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
-Public Declare Function GetWindowDC Lib "GDI32" (ByVal hwnd As Long) As Long
+Public Declare Function GetDC Lib "GDI32" (ByVal hWnd As Long) As Long
+Public Declare Function ReleaseDC Lib "GDI32" (ByVal hWnd As Long, ByVal hdc As Long) As Long
+Public Declare Function GetWindowDC Lib "GDI32" (ByVal hWnd As Long) As Long
 Public Declare Function MoveToEx Lib "GDI32" (ByVal hdc As Long, ByVal x As Integer, ByVal y As Integer, ByRef lppt As APOINT) As Long
 Public Declare Function LineTo Lib "GDI32" (ByVal hdc As Long, ByVal x As Integer, ByVal y As Integer) As Integer
 Public Declare Function MoveToExNull Lib "GDI32" Alias "MoveToEx" (ByVal hdc As Long, ByVal x As Integer, ByVal y As Integer, ByVal lppt As Long) As Long
@@ -140,7 +143,7 @@ Public Function OLEFont2HFONT(fnt As StdFont, ByVal hdc As Long) As Long
 End Function
 
 Public Sub Invalidate(ByRef frm As Form, Optional bErase As Integer = 0)
-    InvalidateRectNull frm.hwnd, 0, bErase
+    InvalidateRectNull frm.hWnd, 0, bErase
 End Sub
 
 Public Function MoveTo(ByVal dc As Long, ByVal x As Integer, ByVal y As Integer) As Integer
