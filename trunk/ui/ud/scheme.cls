@@ -14,15 +14,15 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private Const DefItemWidth As Long = 32
-Private Const DefItemHeight As Long = 32
-Private Const DefItemCols As Integer = 256
-Private Const DefItemRows As Integer = 256
+Private Const DefItemWidth As Long = 64
+Private Const DefItemHeight As Long = 64
+Private Const DefItemCols As Integer = 16
+Private Const DefItemRows As Integer = 16
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
 Private Const cdScaleMul As Double = 0.02
-Private Const cdScaleMul2 As Double = 0.1
+Private Const cdScaleMul2 As Double = 0.5
 
 Public DebugString As String
 
@@ -42,6 +42,12 @@ Private begY As Long
 Private endY As Long
 Private begX As Long
 Private endX As Long
+Private lastLeft As Long
+Private lastTop As Long
+Private dragX As Long
+Private dragY As Long
+Private allX As Long
+Private allY As Long
 
 ' Appearance
 Private penGrid As Long
@@ -49,6 +55,8 @@ Private penGrid As Long
 Public Sub Class_Initialize()
     penGrid = CreatePen(DocGridStyle, 1, DocGridColor)
     dScale = 1#
+    allX = 0
+    allY = 0
     Allocate DefItemRows, DefItemCols
 End Sub
 
@@ -56,8 +64,27 @@ Private Sub Class_Terminate()
     DeleteObject penGrid
 End Sub
 
-Public Sub IncrementScale(val As Double, keys As Long)
-    If keys And 4 <> 0 Then val = val * cdScaleMul2 Else val = val * cdScaleMul
+Public Sub BeginDrag(keys As Integer, xp As Long, yp As Long)
+    lastLeft = allX
+    lastTop = allY
+    dragX = xp
+    dragY = yp
+End Sub
+
+Public Sub Drag(keys As Integer, xp As Long, yp As Long)
+    allX = lastLeft + (xp - dragX)
+    allY = lastTop + (yp - dragY)
+End Sub
+
+Public Sub EndDrag(keys As Integer, xp As Long, yp As Long)
+End Sub
+
+Public Sub IncrementScale(val As Double, keys As Integer)
+    If keys And MK_CONTROL <> 0 Then
+        val = val * cdScaleMul2
+    Else
+        val = val * cdScaleMul
+    End If
     
     dScale = dScale + val
     
@@ -95,8 +122,8 @@ Private Sub CalcAllRect()
     With rcAll
         .Width = Cols * rcItem.Width
         .Height = Rows * rcItem.Height
-        .Left = rcDisplay.Left + (rcDisplay.Width - .Width) / 2
-        .Top = rcDisplay.Top + (rcDisplay.Height - .Height) / 2
+        .Left = allX + rcDisplay.Left + (rcDisplay.Width - .Width) / 2
+        .Top = allY + rcDisplay.Top + (rcDisplay.Height - .Height) / 2
     End With
 End Sub
 
