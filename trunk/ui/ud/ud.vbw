@@ -1,13 +1,13 @@
 WConf = 0, 0, 0, 0, C
 WinAPIConsts = 150, 150, 1046, 805, C
 WinAPITypes = 175, 175, 1071, 830, C
-WinAPI = 165, 0, 1191, 862, C
+WinAPI = 165, 0, 1191, 862, 
 Pictures = 0, 0, 0, 0, C
 Mainframe = 0, 0, 562, 467, C, 562, 0, 1124, 311, C
 UdMain = 104, 104, 1140, 490, C
 CDoc = 254, 202, 1124, 933, , 0, 467, 562, 934, C
-DefaultColors = 156, 156, 1071, 804, C
+DefaultColors = 156, 156, 1071, 804, 
 CScheme = 0, 0, 1192, 934, Z
-Rects = 104, 104, 943, 752, C
+Rects = 104, 104, 943, 752, 
 UdDocWndProc = 0, 0, 1125, 777, C
 CDouble = 156, 156, 995, 804, C

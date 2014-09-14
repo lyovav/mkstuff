@@ -59,7 +59,7 @@ Public Declare Function MoveToExNull Lib "GDI32" Alias "MoveToEx" (ByVal hDC As 
 Public Declare Function SetBkMode Lib "GDI32" (ByVal hDC As Long, ByVal nBkMode As Long) As Long
 Public Declare Function SetTextColor Lib "GDI32" (ByVal hDC As Long, ByVal color As Long) As Long
 Public Declare Function CreateFontIndirectA Lib "GDI32" (ByRef lpLogFont As LOGFONT) As Long
-Public Declare Function CreatePen Lib "GDI32" (ByVal penStyle As Integer, ByVal Width As Integer, ByVal color As Long) As Long
+Public Declare Function CreatePen Lib "GDI32" (ByVal penStyle As Long, ByVal Width As Long, ByVal color As Long) As Long
 Public Declare Function Rectangle Lib "GDI32" (ByVal hDC As Long, ByVal rectLeft As Long, ByVal rectTop As Long, ByVal rectRight As Long, ByVal rectBottom As Long) As Long
 
 Public Function StripNulls(str As String) As String

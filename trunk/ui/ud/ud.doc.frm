@@ -55,6 +55,10 @@ Private Sub Form_KeyDown(code As Integer, bshift As Integer)
             Scheme.ToggleGridOnOff
             Invalidate Me, 0
             
+        Case Asc("R")
+            Scheme.ToggleRulesOnOff
+            Invalidate Me, 0
+            
     End Select
 End Sub
 
