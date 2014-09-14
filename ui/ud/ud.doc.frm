@@ -39,8 +39,8 @@ Begin VB.Form CDoc
       MousePointer    =   1
    End
    Begin ComctlLib.ImageList docImageList 
-      Left            =   360
-      Top             =   5520
+      Left            =   240
+      Top             =   240
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -100,8 +100,17 @@ Public Sub DrawBackBufer(ByVal hDC As Long)
     BitBlt hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
 End Sub
 
-Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Debug.Print "B: " + CStr(Button) + " S: " + CStr(Shift)
+Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y As Single)
+    SetFocus
+    
+    Scheme.HighlightByCoords CLng(x), CLng(y)
+    Invalidate Me
+    
+    Select Case btnNum
+    Case vbLeftButton
+    Case vbRightButton
+        Me.PopupMenu Mainframe.mnuDoc, , x, y
+    End Select
 End Sub
 
 Private Sub Form_Paint()

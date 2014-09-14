@@ -24,8 +24,8 @@ End Enum
 
 Private Const DefItemWidth As Long = 32
 Private Const DefItemHeight As Long = 24
-Private Const DefItemCols As Integer = 32
-Private Const DefItemRows As Integer = 24
+Private Const DefItemCols As Long = 32
+Private Const DefItemRows As Long = 24
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
@@ -46,15 +46,15 @@ Private bShowGrid As Boolean
 Private bShowRules As Boolean
 Private bShowMiceLines As Boolean
 Private MiceLineMode As Integer
-Private Cols As Integer
-Private Rows As Integer
+Private Cols As Long
+Private Rows As Long
 Private rcDisplay As CRect
 Private rcAll As CRect
 Private rcItem As CRect
-Private vCol As Integer
-Private vColNum As Integer
-Private vRow As Integer
-Private vRowNum As Integer
+Private vCol As Long
+Private vColNum As Long
+Private vRow As Long
+Private vRowNum As Long
 Private begY As Long
 Private endY As Long
 Private begX As Long
@@ -65,6 +65,8 @@ Private dragX As Long
 Private dragY As Long
 Private offsetX As Long
 Private offsetY As Long
+Private hotCol As Long
+Private hotRow As Long
 
 ' Appearance
 Private penGrid As Long
@@ -85,7 +87,7 @@ Public Sub Class_Initialize()
     bShowGrid = True
     bShowRules = True
     bShowMiceLines = True
-    MiceLineMode = MiceLinesFullWithCoords
+    MiceLineMode = MiceLinesFull
     
     Allocate DefItemRows, DefItemCols
 End Sub
@@ -102,6 +104,8 @@ Public Sub ResetView()
     dScale = 1#
     offsetX = 0
     offsetY = 0
+    hotCol = -1
+    hotRow = -1
 End Sub
 
 Public Sub ToggleGridOnOff()
@@ -155,13 +159,13 @@ Public Function GetScale() As Double
     GetScale = dScale
 End Function
 
-Public Sub Allocate(cn As Integer, rn As Integer)
+Public Sub Allocate(cn As Long, rn As Long)
     ReDim Item(0 To cn, 0 To rn) As Cell
     
     Cols = UBound(Item, 2)
     Rows = UBound(Item, 1)
 
-    Dim row As Integer, col As Integer
+    Dim row As Long, col As Long
     For row = 0 To Rows
         For col = 0 To Cols
             Item(row, col) = ZeroCell
@@ -187,12 +191,12 @@ Private Sub CalcAllRect()
     End With
 End Sub
 
-Private Function CalcVisibleStuff(ByRef count As Integer, maxCount As Integer _
+Private Function CalcVisibleStuff(ByRef count As Long, maxCount As Long _
                                 , iw As Long _
                                 , x1 As Long, w1 As Long _
                                 , x2 As Long, w2 As Long _
-                                ) As Integer
-    Dim rv As Integer
+                                ) As Long
+    Dim rv As Long
     
     rv = ((x2 - x1) \ iw) - 1
     count = (w2 \ iw) + 2
@@ -212,28 +216,18 @@ Private Sub CalcVisibleIndexes()
 End Sub
 
 Private Sub CalcLimits()
-    'If rcAll.Height < rcDisplay.Height Then
-        begY = rcAll.Top
-        endY = RBottom(rcAll)
-    'Else
-    '    begY = rcDisplay.Top
-    '    endY = RBottom(rcDisplay)
-    'End If
-    
-    'If rcAll.Width < rcDisplay.Width Then
-        begX = rcAll.Left
-        endX = RRight(rcAll)
-    'Else
-    '    begX = rcDisplay.Left
-    '    endX = RRight(rcDisplay)
-    'End If
+    begY = rcAll.Top
+    endY = RBottom(rcAll)
+   
+    begX = rcAll.Left
+    endX = RRight(rcAll)
 End Sub
 
 Public Sub DrawGrid(ByVal dc As Long)
     On Error Resume Next
     
     Dim lastPen As Long
-    Dim row As Integer, col As Integer
+    Dim row As Long, col As Long
     Dim y As Long
     
     lastPen = SelectObject(dc, penGrid)
@@ -265,7 +259,7 @@ Private Sub DrawRules(ByVal dc As Long)
     
     Dim lastPen As Long
     Dim y As Long
-    Dim i As Integer
+    Dim i As Long
     Dim rcHRule As RECT
     Dim rcVRule As RECT
     Dim rcText As RECT
@@ -411,6 +405,21 @@ Public Sub DrawMiceLines(ByVal dc As Long, ByVal hWnd As Long)
     End If
 End Sub
 
+Public Sub DrawHot(ByVal dc As Long)
+    If hotCol >= 0 And hotRow >= 0 And hotCol < Cols And hotRow < Rows Then
+        Dim rcHot As RECT
+        
+        With rcHot
+            .Left = rcAll.Left + (hotCol * rcItem.Width)
+            .Top = rcAll.Top + (hotRow * rcItem.Height)
+            .Right = .Left + rcItem.Width
+            .Bottom = .Top + rcItem.Height
+        End With
+        
+        FillSolidRect dc, rcHot, DocHotBgColor
+    End If
+End Sub
+
 Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx As Long, cy As Long)
     On Error Resume Next
     
@@ -425,12 +434,14 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
     CalcVisibleIndexes
     CalcLimits
     
+    DrawHot dc
+    
     Dim lastBkMode As Long, lastTextColor As Long
     lastBkMode = SetBkMode(dc, TRANSPARENT)
     lastTextColor = SetTextColor(dc, DocFgColor)
     
-#If True Then
-    Dim row As Integer, col As Integer
+#If False Then
+    Dim row As Long, col As Long
     For row = vRow To vRowNum - 1
         rcItem.Top = rcAll.Top + (row * rcItem.Height)
         For col = vCol To vColNum - 1
@@ -458,4 +469,14 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
 
     SetTextColor dc, lastTextColor
     SetBkMode dc, lastBkMode
+End Sub
+
+Public Sub HighlightByCoords(x As Long, y As Long)
+    On Error Resume Next
+    
+    Dim row As Long, col As Long
+    col = GetIndexFromPoint(x, y, row)
+    
+    hotCol = col
+    hotRow = row
 End Sub

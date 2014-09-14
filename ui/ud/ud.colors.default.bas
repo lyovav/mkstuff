@@ -3,6 +3,7 @@ Option Explicit
 DefInt A-Z
 
 Public Const DocBgColor As Long = &HF0FFFF
+Public Const DocHotBgColor As Long = &HE0EEEE
 Public Const DocFgColor As Long = &HE0E0E
 Public Const DocGridColor As Long = &H7E7E7E
 Public Const DocGridPenStyle As Long = 2
