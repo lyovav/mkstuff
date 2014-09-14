@@ -60,12 +60,14 @@ Private offsetY As Long
 Private penGrid As Long
 Private penRulesLine As Long
 Private penRulesMark As Long
+Private fontRules As Long
 
 Public Sub Class_Initialize()
     penGrid = CreatePen(DocGridPenStyle, 1, DocGridColor)
     penRulesLine = CreatePen(DocRulesPenStyle, 1, DocRulesColor)
     penRulesMark = CreatePen(DocRulesPenStyle, 2, DocRulesColor)
-    
+    fontRules = CreateFontA(-8, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Small fonts")
+
     ResetView
     
     bShowGrid = True
@@ -75,6 +77,7 @@ Public Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
+    DeleteObject fontRules
     DeleteObject penRulesMark
     DeleteObject penRulesLine
     DeleteObject penGrid
@@ -182,21 +185,21 @@ Private Sub CalcVisibleIndexes()
 End Sub
 
 Private Sub CalcLimits()
-    If rcAll.Height < rcDisplay.Height Then
+    'If rcAll.Height < rcDisplay.Height Then
         begY = rcAll.Top
         endY = RBottom(rcAll)
-    Else
-        begY = rcDisplay.Top
-        endY = RBottom(rcDisplay)
-    End If
+    'Else
+    '    begY = rcDisplay.Top
+    '    endY = RBottom(rcDisplay)
+    'End If
     
-    If rcAll.Width < rcDisplay.Width Then
+    'If rcAll.Width < rcDisplay.Width Then
         begX = rcAll.Left
         endX = RRight(rcAll)
-    Else
-        begX = rcDisplay.Left
-        endX = RRight(rcDisplay)
-    End If
+    'Else
+    '    begX = rcDisplay.Left
+    '    endX = RRight(rcDisplay)
+    'End If
 End Sub
 
 Public Sub DrawGrid(ByVal dc As Long)
@@ -208,7 +211,7 @@ Public Sub DrawGrid(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penGrid)
     
-    If rcAll.Height < rcDisplay.Height Then ALine dc, begX, begY, endX, begY
+    If begY >= rcDisplay.Top Then ALine dc, begX, begY, endX, begY
     
     For row = vRow To vRowNum - 1
         y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
@@ -218,7 +221,7 @@ Public Sub DrawGrid(ByVal dc As Long)
         End If
     Next row
     
-    If rcAll.Width < rcDisplay.Width Then ALine dc, begX, begY, begX, endY
+    If begX >= rcDisplay.Left Then ALine dc, begX, begY, begX, endY
     
     For col = vCol To vColNum - 1
         y = rcAll.Left + (col * rcItem.Width) + rcItem.Width
@@ -233,7 +236,7 @@ End Sub
 Private Sub DrawRules(ByVal dc As Long)
     On Error Resume Next
     
-    Dim lastPen As Long
+    Dim lastPen As Long, lastFont As Long
     Dim y As Long
     Dim i As Integer
     Dim rcHRule As RECT
@@ -258,6 +261,7 @@ Private Sub DrawRules(ByVal dc As Long)
     FillSolidRect dc, rcHRule, DocRuleBgColor
     FillSolidRect dc, rcVRule, DocRuleBgColor
     
+    lastFont = SelectObject(dc, fontRules)
     lastPen = SelectObject(dc, penRulesMark)
     
     For i = vCol To vColNum
@@ -311,6 +315,7 @@ Private Sub DrawRules(ByVal dc As Long)
     ALine dc, rcVRule.Left, rcAll.Top + (vRow * rcItem.Height), rcVRule.Left, rcAll.Top + ((vRow + vRowNum) * rcItem.Height)
     
     SelectObject dc, lastPen
+    SelectObject dc, lastFont
 End Sub
 
 Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
@@ -332,7 +337,7 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     lastBkMode = SetBkMode(dc, TRANSPARENT)
     lastTextColor = SetTextColor(dc, DocFgColor)
     
-#If False Then
+#If True Then
     Dim row As Integer, col As Integer
     For row = vRow To vRowNum - 1
         rcItem.Top = rcAll.Top + (row * rcItem.Height)
