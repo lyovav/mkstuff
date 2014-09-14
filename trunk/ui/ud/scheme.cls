@@ -14,6 +14,14 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
+Public Enum MiceLinesModeConsts
+    MiceLinesFull = 0
+    MiceLinesHalf
+    MiceLinesFullWithCoords
+    MiceLinesHalfWithCoords
+    MaxMiceLineMode
+End Enum
+
 Private Const DefItemWidth As Long = 32
 Private Const DefItemHeight As Long = 24
 Private Const DefItemCols As Integer = 32
@@ -28,7 +36,6 @@ Private Const ruleCx As Long = 16
 Private Const ruleCy As Long = 16
 Private Const ruleHalfCx As Long = ruleCx \ 2
 Private Const ruleHalfCy As Long = ruleCy \ 2
-Private Const ciMaxMiceLineMode As Integer = 3
 
 Public DebugString As String
 
@@ -78,7 +85,7 @@ Public Sub Class_Initialize()
     bShowGrid = True
     bShowRules = True
     bShowMiceLines = True
-    MiceLineMode = 2
+    MiceLineMode = MiceLinesHalfWithCoords
     
     Allocate DefItemRows, DefItemCols
 End Sub
@@ -133,12 +140,15 @@ Public Sub IncrementScale(val As Double, keys As Integer)
 End Sub
 
 Public Sub IncrementMiceMode(ByVal bshift As Integer)
-    Dim incm As Integer
-    If bshift <> 0 Then incm = -1 Else incm = 1
-    MiceLineMode = MiceLineMode + incm
-    
-    If MiceLineMode < 0 Then MiceLineMode = ciMaxMiceLineMode
-    If MiceLineMode > ciMaxMiceLineMode Then MiceLineMode = 0
+    If bshift <> 0 Then
+        bShowMiceLines = Not bShowMiceLines
+    Else
+        If bShowMiceLines = True Then
+            MiceLineMode = MiceLineMode + 1
+            If MiceLineMode < 0 Then MiceLineMode = MaxMiceLineMode - 1
+            If MiceLineMode > MaxMiceLineMode - 1 Then MiceLineMode = 0
+        End If
+    End If
 End Sub
 
 Public Function GetScale() As Double
