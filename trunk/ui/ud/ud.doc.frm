@@ -47,24 +47,6 @@ Private originalCaption As String
 
 Public Scheme As New CScheme
 
-Private Sub Form_KeyDown(code As Integer, bshift As Integer)
-    ' TODO: configure keyboard shortcuts
-    Select Case code
-        Case 8                  ' backspace - reset view
-            Scheme.ResetView
-            Invalidate Me, 0
-            
-        Case Asc("G")
-            Scheme.ToggleGridOnOff
-            Invalidate Me, 0
-            
-        Case Asc("R")
-            Scheme.ToggleRulesOnOff
-            Invalidate Me, 0
-            
-    End Select
-End Sub
-
 Private Sub Form_Load()
     On Error Resume Next
     Me.ScaleMode = vbPixels
@@ -143,11 +125,11 @@ Public Sub OnPaint()
     On Error GoTo PaintErr
     
     Dim rc As RECT
-    GetClientRect Me.hwnd, rc
+    GetClientRect Me.hWnd, rc
     
     FillSolidRect backDc, rc, DocBgColor
     
-    Scheme.Draw backDc, 0, 0, rc.Right, rc.Bottom
+    Scheme.Draw backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom
     Exit Sub
     
 PaintErr:
@@ -179,3 +161,26 @@ Public Sub OnEndDrag(keys As Integer, xp As Long, yp As Long)
     UpdateTitle
     Invalidate Me, 0
 End Sub
+
+Private Sub Form_KeyDown(code As Integer, bshift As Integer)
+    ' TODO: configure keyboard shortcuts
+    Select Case code
+    Case 8                  ' backspace - reset view
+        Scheme.ResetView
+        Invalidate Me, 0
+        
+    Case Asc("G")
+        Scheme.ToggleGridOnOff
+        Invalidate Me, 0
+        
+    Case Asc("R")
+        Scheme.ToggleRulesOnOff
+        Invalidate Me, 0
+        
+    Case Asc("M")
+        Scheme.IncrementMiceMode bshift
+        Invalidate Me, 0
+        
+    End Select
+End Sub
+
