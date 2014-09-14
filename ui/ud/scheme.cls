@@ -85,7 +85,7 @@ Public Sub Class_Initialize()
     bShowGrid = True
     bShowRules = True
     bShowMiceLines = True
-    MiceLineMode = MiceLinesHalfWithCoords
+    MiceLineMode = MiceLinesFullWithCoords
     
     Allocate DefItemRows, DefItemCols
 End Sub

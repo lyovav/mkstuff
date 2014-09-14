@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.Ocx"
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
@@ -24,6 +25,28 @@ Begin VB.Form CDoc
    ScaleHeight     =   439
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   642
+   Begin ComctlLib.Toolbar rtToolbar 
+      Align           =   4  'Align Right
+      Height          =   6585
+      Left            =   8895
+      TabIndex        =   0
+      Top             =   0
+      Width           =   735
+      _ExtentX        =   1296
+      _ExtentY        =   11615
+      _Version        =   327682
+      BorderStyle     =   1
+      MousePointer    =   1
+   End
+   Begin ComctlLib.ImageList docImageList 
+      Left            =   360
+      Top             =   5520
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      MaskColor       =   12632256
+      _Version        =   327682
+   End
 End
 Attribute VB_Name = "CDoc"
 Attribute VB_GlobalNameSpace = False
