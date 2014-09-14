@@ -44,6 +44,20 @@ Private originalCaption As String
 
 Public Scheme As New CScheme
 
+Private Sub Form_KeyDown(code As Integer, bshift As Integer)
+    ' TODO: configure keyboard shortcuts
+    Select Case code
+        Case 8                  ' backspace - reset view
+            Scheme.ResetView
+            Invalidate Me, 0
+            
+        Case Asc("G")
+            Scheme.ToggleGridOnOff
+            Invalidate Me, 0
+            
+    End Select
+End Sub
+
 Private Sub Form_Load()
     On Error Resume Next
     Me.ScaleMode = vbPixels
@@ -151,6 +165,6 @@ End Sub
 
 Public Sub OnEndDrag(keys As Integer, xp As Long, yp As Long)
     Scheme.EndDrag keys, xp, yp
+    UpdateTitle
     Invalidate Me, 0
 End Sub
-

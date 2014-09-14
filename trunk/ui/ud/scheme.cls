@@ -29,6 +29,7 @@ Public DebugString As String
 Private dScale As Double
 Private Item() As Byte
 
+Private bShowGrid As Boolean
 Private Cols As Integer
 Private Rows As Integer
 Private rcDisplay As CRect
@@ -46,17 +47,16 @@ Private lastLeft As Long
 Private lastTop As Long
 Private dragX As Long
 Private dragY As Long
-Private allX As Long
-Private allY As Long
+Private offsetX As Long
+Private offsetY As Long
 
 ' Appearance
 Private penGrid As Long
 
 Public Sub Class_Initialize()
     penGrid = CreatePen(DocGridStyle, 1, DocGridColor)
-    dScale = 1#
-    allX = 0
-    allY = 0
+    ResetView
+    bShowGrid = True
     Allocate DefItemRows, DefItemCols
 End Sub
 
@@ -64,16 +64,26 @@ Private Sub Class_Terminate()
     DeleteObject penGrid
 End Sub
 
+Public Sub ResetView()
+    dScale = 1#
+    offsetX = 0
+    offsetY = 0
+End Sub
+
+Public Sub ToggleGridOnOff()
+    bShowGrid = Not bShowGrid
+End Sub
+
 Public Sub BeginDrag(keys As Integer, xp As Long, yp As Long)
-    lastLeft = allX
-    lastTop = allY
+    lastLeft = offsetX
+    lastTop = offsetY
     dragX = xp
     dragY = yp
 End Sub
 
 Public Sub Drag(keys As Integer, xp As Long, yp As Long)
-    allX = lastLeft + (xp - dragX)
-    allY = lastTop + (yp - dragY)
+    offsetX = lastLeft + (xp - dragX)
+    offsetY = lastTop + (yp - dragY)
 End Sub
 
 Public Sub EndDrag(keys As Integer, xp As Long, yp As Long)
@@ -122,27 +132,26 @@ Private Sub CalcAllRect()
     With rcAll
         .Width = Cols * rcItem.Width
         .Height = Rows * rcItem.Height
-        .Left = allX + rcDisplay.Left + (rcDisplay.Width - .Width) / 2
-        .Top = allY + rcDisplay.Top + (rcDisplay.Height - .Height) / 2
+        .Left = offsetX + rcDisplay.Left + (rcDisplay.Width - .Width) / 2
+        .Top = offsetY + rcDisplay.Top + (rcDisplay.Height - .Height) / 2
     End With
 End Sub
 
-Private Function CalcVisibleStuff(ByRef count As Integer, maxCount As Integer, iw As Long, x1 As Long, w1 As Long, x2 As Long, w2 As Long) As Integer
-    Dim x As Integer
+Private Function CalcVisibleStuff(ByRef count As Integer, maxCount As Integer _
+                                , iw As Long _
+                                , x1 As Long, w1 As Long _
+                                , x2 As Long, w2 As Long _
+                                ) As Integer
+    Dim rv As Integer
     
-    If w1 > w2 Then
-        x = ((x2 - x1) / iw) - 1
-        count = (w2 / iw) + 2
-        count = count + x
-        
-        If count > maxCount Then count = maxCount
-        If x < 0 Then x = 0
-    Else
-        x = 0
-        count = maxCount
-    End If
+    rv = ((x2 - x1) / iw) - 1
+    count = (w2 / iw) + 2
+    count = count + rv
     
-    CalcVisibleStuff = x
+    If count > maxCount Then count = maxCount
+    If rv < 0 Then rv = 0
+   
+    CalcVisibleStuff = rv
 End Function
 
 Private Sub CalcVisibleIndexes()
@@ -179,21 +188,23 @@ Public Sub DrawGrid(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penGrid)
     
-    If begY >= rcDisplay.Top Then ALine dc, begX, begY, endX, begY
+    If rcAll.Height < rcDisplay.Height Then ALine dc, begX, begY, endX, begY
     
     For row = vRow To vRowNum - 1
         y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
-        If y >= rcDisplay.Top And y < RBottom(rcDisplay) Then
-            ALine dc, begX, y, endX, y
+        
+        If y >= rcDisplay.Top Then
+            If y <= RBottom(rcDisplay) Then ALine dc, begX, y, endX, y
         End If
     Next row
     
-    If begX >= rcDisplay.Left Then ALine dc, begX, begY, begX, endY
+    If rcAll.Width < rcDisplay.Width Then ALine dc, begX, begY, begX, endY
     
     For col = vCol To vColNum - 1
         y = rcAll.Left + (col * rcItem.Width) + rcItem.Width
+        
         If y >= rcDisplay.Left Then
-            ALine dc, y, begY, y, endY
+            If y <= RRight(rcDisplay) Then ALine dc, y, begY, y, endY
         End If
     Next col
     
@@ -235,7 +246,7 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     Next row
 #End If
 
-    DrawGrid dc
+    If bShowGrid = True Then DrawGrid dc
 
     SetTextColor dc, lastTextColor
     SetBkMode dc, lastBkMode
