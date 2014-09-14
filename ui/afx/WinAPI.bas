@@ -61,6 +61,7 @@ Public Declare Function SetTextColor Lib "GDI32" (ByVal hDC As Long, ByVal color
 Public Declare Function CreateFontIndirectA Lib "GDI32" (ByRef lpLogFont As LOGFONT) As Long
 Public Declare Function CreatePen Lib "GDI32" (ByVal penStyle As Long, ByVal Width As Long, ByVal color As Long) As Long
 Public Declare Function Rectangle Lib "GDI32" (ByVal hDC As Long, ByVal rectLeft As Long, ByVal rectTop As Long, ByVal rectRight As Long, ByVal rectBottom As Long) As Long
+Public Declare Function CreateFontA Lib "GDI32" (ByVal nHeight As Long, ByVal nWidth As Long, ByVal nEscapement As Long, ByVal nOrientation As Long, ByVal fnWeight As Long, ByVal fdwItalic As Boolean, ByVal fdwUnderline As Boolean, ByVal fdwStrikeOut As Boolean, ByVal fdwCharSet As Long, ByVal fdwOutputPrecision As Long, ByVal fdwClipPrecision As Long, ByVal fdwQuality As Long, ByVal fdwPitchAndFamily As Long, ByVal lpszFace As String) As Long
 
 Public Function StripNulls(str As String) As String
     Dim zp As Integer
