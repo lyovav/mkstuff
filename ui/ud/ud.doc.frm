@@ -6,7 +6,7 @@ Begin VB.Form CDoc
    Caption         =   "..."
    ClientHeight    =   6585
    ClientLeft      =   120
-   ClientTop       =   750
+   ClientTop       =   450
    ClientWidth     =   9630
    BeginProperty Font 
       Name            =   "Small Fonts"
@@ -24,9 +24,6 @@ Begin VB.Form CDoc
    ScaleHeight     =   439
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   642
-   Begin VB.Menu mnuDocInsert 
-      Caption         =   "Insert"
-   End
 End
 Attribute VB_Name = "CDoc"
 Attribute VB_GlobalNameSpace = False
@@ -43,44 +40,54 @@ Private backBmp As Long
 Private backDc As Long
 Private lastFont As Long
 Private hFont As Long
-Private originalCaption As String
+Private OriginalCaption As String
 
 Public Scheme As New CScheme
+
+Public DragOn As Boolean
+Public PrevWndProc As Long
+
+Private Sub Form_Initialize()
+    InstallCDocWndProc Me
+End Sub
 
 Private Sub Form_Load()
     On Error Resume Next
     Me.ScaleMode = vbPixels
     Me.AutoRedraw = False
     hFont = 0
-    originalCaption = Me.Caption
-    InstallUDocWndProc Me
+    DragOn = False
+    OriginalCaption = Me.Caption
 End Sub
 
-Public Sub AddTo(ByRef owner As MDIForm, title As String, visbl As Boolean, winsta As Integer)
+Private Sub Form_Unload(Cancel As Integer)
+    DeleteDBuffer
+    DeleteObject hFont
+End Sub
+
+Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, winsta As Integer)
     Me.Caption = title
-    originalCaption = title
+    OriginalCaption = title
     Me.WindowState = winsta
     Me.Visible = visbl
     UpdateTitle
 End Sub
 
-Public Sub DrawBackBufer(ByVal hdc As Long)
-    BitBlt hdc, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+Public Sub DrawBackBufer(ByVal hDC As Long)
+    BitBlt hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+    Debug.Print "B: " + CStr(Button) + " S: " + CStr(Shift)
 End Sub
 
 Private Sub Form_Paint()
     OnPaint
-    DrawBackBufer Me.hdc
+    DrawBackBufer Me.hDC
 End Sub
 
 Private Sub Form_Resize()
     CreateDBuffer Me.ScaleWidth, Me.ScaleHeight
-End Sub
-
-Private Sub Form_Unload(Cancel As Integer)
-    DeleteDBuffer
-    
-    If hFont = 0 Then DeleteObject hFont
 End Sub
 
 Private Sub DeleteDBuffer()
@@ -144,7 +151,7 @@ Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Lon
 End Sub
 
 Public Sub UpdateTitle()
-    Me.Caption = originalCaption + " ^" + CStr(CInt(Scheme.GetScale() * 100#)) + "% " + Scheme.DebugString
+    Me.Caption = OriginalCaption + " ^" + CStr(CInt(Scheme.GetScale() * 100#)) + "% " + Scheme.DebugString
 End Sub
 
 Public Sub OnBeginDrag(keys As Integer, xp As Long, yp As Long)
