@@ -36,6 +36,7 @@ Public Declare Function FileTimeToSystemTime Lib "KERNEL32" (lpFileTime As FILET
 Public Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
 Public Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
 Public Declare Function MulDiv Lib "KERNEL32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
+Public Declare Function GetPrivateProfileStringA Lib "KERNEL32" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
 
 ' GDI32
 Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long
@@ -145,3 +146,17 @@ End Sub
 Public Function MoveTo(ByVal dc As Long, ByVal x As Integer, ByVal y As Integer) As Integer
     MoveTo = MoveToExNull(dc, x, y, 0)
 End Function
+
+Public Function GetIniString(ByVal sHeading As String, ByVal sKey As String, sINIFileName As String) As String
+    Const cparmLen = 50
+    
+    Dim sReturn As String * cparmLen
+    Dim sDefault As String * cparmLen
+    Dim lLength As Long
+    
+    lLength = GetPrivateProfileStringA(sHeading, sKey, sDefault, sReturn, cparmLen, sINIFileName)
+    
+    GetIniString = Mid(sReturn, 1, lLength)
+End Function
+
+

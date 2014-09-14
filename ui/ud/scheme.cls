@@ -32,7 +32,7 @@ Private Const ruleHalfCy As Long = ruleCy / 2
 Public DebugString As String
 
 Private dScale As Double
-Private Item() As Byte
+Private Item() As Cell
 
 Private bShowGrid As Boolean
 Private bShowRules As Boolean
@@ -129,7 +129,7 @@ Public Function GetScale() As Double
 End Function
 
 Public Sub Allocate(cn As Integer, rn As Integer)
-    ReDim Item(0 To cn, 0 To rn) As Byte
+    ReDim Item(0 To cn, 0 To rn) As Cell
     
     Cols = UBound(Item, 2)
     Rows = UBound(Item, 1)
@@ -137,7 +137,7 @@ Public Sub Allocate(cn As Integer, rn As Integer)
     Dim row As Integer, col As Integer
     For row = 0 To Rows
         For col = 0 To Cols
-            Item(row, col) = 0
+            Item(row, col) = ZeroCell
         Next col
     Next row
 End Sub

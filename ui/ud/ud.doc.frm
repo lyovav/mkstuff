@@ -6,7 +6,7 @@ Begin VB.Form CDoc
    Caption         =   "..."
    ClientHeight    =   6585
    ClientLeft      =   120
-   ClientTop       =   450
+   ClientTop       =   750
    ClientWidth     =   9630
    BeginProperty Font 
       Name            =   "Small Fonts"
@@ -24,6 +24,9 @@ Begin VB.Form CDoc
    ScaleHeight     =   439
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   642
+   Begin VB.Menu mnuDocInsert 
+      Caption         =   "Insert"
+   End
 End
 Attribute VB_Name = "CDoc"
 Attribute VB_GlobalNameSpace = False
