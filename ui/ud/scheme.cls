@@ -14,15 +14,20 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private Const DefItemWidth As Long = 64
-Private Const DefItemHeight As Long = 64
-Private Const DefItemCols As Integer = 16
-Private Const DefItemRows As Integer = 16
+Private Const DefItemWidth As Long = 50
+Private Const DefItemHeight As Long = 50
+Private Const DefItemCols As Integer = 20
+Private Const DefItemRows As Integer = 12
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
 Private Const cdScaleMul As Double = 0.02
 Private Const cdScaleMul2 As Double = 0.5
+
+Private Const ruleCx As Long = 16
+Private Const ruleCy As Long = 16
+Private Const ruleHalfCx As Long = ruleCx / 2
+Private Const ruleHalfCy As Long = ruleCy / 2
 
 Public DebugString As String
 
@@ -30,6 +35,7 @@ Private dScale As Double
 Private Item() As Byte
 
 Private bShowGrid As Boolean
+Private bShowRules As Boolean
 Private Cols As Integer
 Private Rows As Integer
 Private rcDisplay As CRect
@@ -52,15 +58,25 @@ Private offsetY As Long
 
 ' Appearance
 Private penGrid As Long
+Private penRulesLine As Long
+Private penRulesMark As Long
 
 Public Sub Class_Initialize()
-    penGrid = CreatePen(DocGridStyle, 1, DocGridColor)
+    penGrid = CreatePen(DocGridPenStyle, 1, DocGridColor)
+    penRulesLine = CreatePen(DocRulesPenStyle, 1, DocRulesColor)
+    penRulesMark = CreatePen(DocRulesPenStyle, 2, DocRulesColor)
+    
     ResetView
+    
     bShowGrid = True
+    bShowRules = True
+    
     Allocate DefItemRows, DefItemCols
 End Sub
 
 Private Sub Class_Terminate()
+    DeleteObject penRulesMark
+    DeleteObject penRulesLine
     DeleteObject penGrid
 End Sub
 
@@ -72,6 +88,10 @@ End Sub
 
 Public Sub ToggleGridOnOff()
     bShowGrid = Not bShowGrid
+End Sub
+
+Public Sub ToggleRulesOnOff()
+    bShowRules = Not bShowRules
 End Sub
 
 Public Sub BeginDrag(keys As Integer, xp As Long, yp As Long)
@@ -194,7 +214,7 @@ Public Sub DrawGrid(ByVal dc As Long)
         y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
         
         If y >= rcDisplay.Top Then
-            If y <= RBottom(rcDisplay) Then ALine dc, begX, y, endX, y
+            ALine dc, begX, y, endX, y
         End If
     Next row
     
@@ -202,11 +222,93 @@ Public Sub DrawGrid(ByVal dc As Long)
     
     For col = vCol To vColNum - 1
         y = rcAll.Left + (col * rcItem.Width) + rcItem.Width
-        
         If y >= rcDisplay.Left Then
-            If y <= RRight(rcDisplay) Then ALine dc, y, begY, y, endY
+            ALine dc, y, begY, y, endY
         End If
     Next col
+    
+    SelectObject dc, lastPen
+End Sub
+
+Private Sub DrawRules(ByVal dc As Long)
+    On Error Resume Next
+    
+    Dim lastPen As Long
+    Dim y As Long
+    Dim i As Integer
+    Dim rcHRule As RECT
+    Dim rcVRule As RECT
+    Dim rcText As RECT
+    Dim text As String
+    
+    With rcHRule
+        .Left = rcDisplay.Left - ruleCx
+        .Top = rcDisplay.Top - ruleCy
+        .Right = .Left + rcDisplay.Width + ruleCx
+        .Bottom = .Top + ruleCy
+    End With
+    
+    With rcVRule
+        .Left = rcDisplay.Left - ruleCx
+        .Top = rcDisplay.Top
+        .Right = .Left + ruleCx
+        .Bottom = .Top + rcDisplay.Height
+    End With
+    
+    FillSolidRect dc, rcHRule, DocRuleBgColor
+    FillSolidRect dc, rcVRule, DocRuleBgColor
+    
+    lastPen = SelectObject(dc, penRulesMark)
+    
+    For i = vCol To vColNum
+        y = rcAll.Left + (i * rcItem.Width)
+        
+        If y >= rcDisplay.Left Then
+            ALine dc, y, rcHRule.Top, y, rcHRule.Top + ruleCy - 4
+            
+            If i <> vColNum Then
+                With rcText
+                    .Left = y + 1
+                    .Top = rcHRule.Top + 1
+                    .Right = .Left + rcItem.Width - 2
+                    .Bottom = rcHRule.Bottom - 2
+                End With
+                
+                text = CStr(i)
+                DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
+            End If
+        End If
+    Next i
+    
+    For i = vRow To vRowNum
+        y = rcAll.Top + (i * rcItem.Height)
+        
+        If y >= rcDisplay.Top Then
+            ALine dc, rcVRule.Left, y, rcVRule.Left + ruleCx - 4, y
+            
+            If i <> vRowNum Then
+                With rcText
+                    .Left = rcVRule.Left + 1
+                    .Top = y + 1
+                    .Right = rcVRule.Right - 2
+                    .Bottom = .Top + rcItem.Height
+                End With
+                
+                text = CStr(i)
+                DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
+            End If
+        End If
+    Next i
+    
+    lastPen = SelectObject(dc, penRulesLine)
+    
+    ALine dc, rcHRule.Left, rcHRule.Bottom, rcHRule.Right, rcHRule.Bottom
+    ALine dc, rcVRule.Right, rcVRule.Top, rcVRule.Right, rcVRule.Bottom
+    
+    lastPen = SelectObject(dc, penGrid)
+    
+    ALine dc, rcAll.Left + (vCol * rcItem.Width), rcHRule.Top, rcAll.Left + ((vCol + vColNum) * rcItem.Width), rcHRule.Top
+    ALine dc, rcVRule.Left, rcAll.Top + (vRow * rcItem.Height), rcVRule.Left, rcAll.Top + ((vRow + vRowNum) * rcItem.Height)
     
     SelectObject dc, lastPen
 End Sub
@@ -214,7 +316,11 @@ End Sub
 Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
     On Error Resume Next
     
-    rcDisplay = RInit(x, y, cx, cy)
+    If bShowRules = True Then
+        rcDisplay = RInit(x + ruleCx, y + ruleCy, cx - ruleCx, cy - ruleCy)
+    Else
+        rcDisplay = RInit(x, y, cx, cy)
+    End If
     
     CalcItemRect
     CalcAllRect
@@ -247,6 +353,7 @@ Public Sub Draw(ByVal dc As Long, x As Long, y As Long, cx As Long, cy As Long)
 #End If
 
     If bShowGrid = True Then DrawGrid dc
+    If bShowRules = True Then DrawRules dc
 
     SetTextColor dc, lastTextColor
     SetBkMode dc, lastBkMode
