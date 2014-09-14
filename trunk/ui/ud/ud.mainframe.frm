@@ -40,9 +40,26 @@ Begin VB.MDIForm Mainframe
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             TextSave        =   ""
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
+   End
+   Begin VB.Menu mnuDoc 
+      Caption         =   "Document"
+      Visible         =   0   'False
+      Begin VB.Menu mnuIns 
+         Caption         =   "Insert"
+         Begin VB.Menu mnuInsWire 
+            Caption         =   "Wire"
+         End
+         Begin VB.Menu mnuInsVoltmeter 
+            Caption         =   "Voltmeter"
+         End
+         Begin VB.Menu mnuInsAmpermeter 
+            Caption         =   "Ampermeter"
+         End
+      End
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
@@ -123,6 +140,7 @@ End Sub
 Public Sub AddForm(capt As String, visbl As Boolean)
     Dim childFrame As New CDoc
     childFrame.AddTo Me, capt, visbl, vbMaximized
+    
     'totalChildCount = totalChildCount + 1
     'child.Add childFrame, str(totalChildCount) + "> " + capt
 End Sub

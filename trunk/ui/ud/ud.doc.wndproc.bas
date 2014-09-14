@@ -78,7 +78,7 @@ Private Function WndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As
         Owner(Id).OnPaint
         Owner(Id).DrawBackBufer hDC
         EndPaint hWnd, ps
-        
+       
     Case Else
         WndProc = CallWindowProcA(Owner(Id).PrevWndProc, hWnd, uMsg, wParam, lParam)
         Exit Function
