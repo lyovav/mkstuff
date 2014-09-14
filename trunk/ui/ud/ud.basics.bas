@@ -2,14 +2,32 @@ Attribute VB_Name = "UdBasics"
 Option Explicit
 DefInt A-Z
 
-Public Type Cell
+Public Enum CellType
+    ctZero = -1
+    ctWire
+    ctVoltmeter
+    ctAmpermeter
+End Enum
+
+Public Type CellDesc
     Id As Long
 End Type
 
-Public ZeroCell As Cell
+Public ZeroCell As CellDesc
 
 Public Sub InitBasics()
     With ZeroCell
-        .Id = -1
+        .Id = ctZero
     End With
 End Sub
+
+Public Function CreateWire() As CellDesc
+    Dim rv As CellDesc
+    
+    With rv
+        .Id = ctWire
+    End With
+    
+    CreateWire = rv
+End Function
+

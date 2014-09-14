@@ -84,6 +84,7 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+    Scheme.SaveTempScheme
     DeleteDBuffer
     DeleteObject hFont
 End Sub
@@ -109,7 +110,7 @@ Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y 
     Select Case btnNum
     Case vbLeftButton
     Case vbRightButton
-        Me.PopupMenu Mainframe.mnuDoc, , x, y
+        Me.PopupMenu Mainframe.mnuScheme, , x, y
     End Select
 End Sub
 

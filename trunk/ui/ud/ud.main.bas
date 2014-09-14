@@ -8,12 +8,8 @@ Private Sub Main()
     Debug.Print "APPENTRY: Mainframe `" + Mainframe.LinkTopic + "` started"
     Debug.Print "APPENTRY: Command line - `" + Command$ + "`"
     
-    'InitUDLibrary
-    
     InitBasics
     
     Mainframe.Init
     Mainframe.Show
-    
-    'End
 End Sub

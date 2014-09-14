@@ -39,27 +39,9 @@ Begin VB.MDIForm Mainframe
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            TextSave        =   ""
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
-   End
-   Begin VB.Menu mnuDoc 
-      Caption         =   "Document"
-      Visible         =   0   'False
-      Begin VB.Menu mnuIns 
-         Caption         =   "Insert"
-         Begin VB.Menu mnuInsWire 
-            Caption         =   "Wire"
-         End
-         Begin VB.Menu mnuInsVoltmeter 
-            Caption         =   "Voltmeter"
-         End
-         Begin VB.Menu mnuInsAmpermeter 
-            Caption         =   "Ampermeter"
-         End
-      End
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
@@ -74,6 +56,21 @@ Begin VB.MDIForm Mainframe
       Begin VB.Menu mnuExit 
          Caption         =   "Exit"
          Shortcut        =   ^X
+      End
+   End
+   Begin VB.Menu mnuScheme 
+      Caption         =   "Scheme"
+      Begin VB.Menu mnuIns 
+         Caption         =   "Insert"
+         Begin VB.Menu mnuInsWire 
+            Caption         =   "Wire"
+         End
+         Begin VB.Menu mnuInsVoltmeter 
+            Caption         =   "Voltmeter"
+         End
+         Begin VB.Menu mnuInsAmpermeter 
+            Caption         =   "Ampermeter"
+         End
       End
    End
    Begin VB.Menu mnuWindow 

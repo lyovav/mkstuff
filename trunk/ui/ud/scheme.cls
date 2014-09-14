@@ -22,10 +22,10 @@ Public Enum MiceLinesModeConsts
     MaxMiceLineMode
 End Enum
 
-Private Const DefItemWidth As Long = 32
-Private Const DefItemHeight As Long = 24
-Private Const DefItemCols As Long = 32
-Private Const DefItemRows As Long = 24
+Private Const DefItemWidth As Long = 80
+Private Const DefItemHeight As Long = 80
+Private Const DefItemCols As Long = 18
+Private Const DefItemRows As Long = 14
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
@@ -38,9 +38,10 @@ Private Const ruleHalfCx As Long = ruleCx \ 2
 Private Const ruleHalfCy As Long = ruleCy \ 2
 
 Public DebugString As String
+Public TempFileName As String
 
 Private dScale As Double
-Private Item() As Cell
+Private Item() As CellDesc
 
 Private bShowGrid As Boolean
 Private bShowRules As Boolean
@@ -160,7 +161,7 @@ Public Function GetScale() As Double
 End Function
 
 Public Sub Allocate(cn As Long, rn As Long)
-    ReDim Item(0 To cn, 0 To rn) As Cell
+    ReDim Item(0 To cn, 0 To rn) As CellDesc
     
     Cols = UBound(Item, 2)
     Rows = UBound(Item, 1)
@@ -171,6 +172,21 @@ Public Sub Allocate(cn As Long, rn As Long)
             Item(row, col) = ZeroCell
         Next col
     Next row
+    
+    LoadTempScheme
+End Sub
+
+Private Function GetTempFileName() As String
+    TempFileName = "temp.scheme." + CStr(Cols) + "x" + CStr(Rows) + ".bin"
+    GetTempFileName = TempFileName
+End Function
+
+Public Sub LoadTempScheme()
+    BinLoadScheme GetTempFileName(), Item, Cols, Rows
+End Sub
+
+Public Sub SaveTempScheme()
+    BinSaveScheme GetTempFileName(), Item, Cols, Rows
 End Sub
 
 Private Sub CalcItemRect()
