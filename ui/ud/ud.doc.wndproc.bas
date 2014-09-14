@@ -6,7 +6,7 @@ Private prevWindowProc As Long
 Private owner As CDoc
 Private dragOn As Boolean
 
-Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Function UDocWndProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Dim keys As Integer
     Dim delta As Integer
     Dim xp As Long
@@ -17,7 +17,7 @@ Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
             keys = LowWord(wParam)
             xp = LowWord(lParam)
             yp = HighWord(lParam)
-            SetCapture hWnd
+            SetCapture hwnd
             dragOn = True
             owner.OnBeginDrag keys, xp, yp
             
@@ -47,10 +47,22 @@ Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
         Case WM_ERASEBKGND
             UDocWndProc = 1
             Exit Function
+            
+        Case WM_PAINT
+            Dim hdc As Long
+            Dim ps As PAINTSTRUCT
+
+            hdc = BeginPaint(hwnd, ps)
+            owner.OnPaint
+            owner.DrawBackBufer hdc
+            EndPaint hwnd, ps
+            
+            UDocWndProc = 0
+            Exit Function
     End Select
     
     If prevWindowProc <> 0 Then
-        UDocWndProc = CallWindowProcA(prevWindowProc, hWnd, uMsg, wParam, lParam)
+        UDocWndProc = CallWindowProcA(prevWindowProc, hwnd, uMsg, wParam, lParam)
     End If
 End Function
 
@@ -60,7 +72,7 @@ Public Sub InstallUDocWndProc(ByRef frm As CDoc)
     dragOn = False
     
     Set owner = frm
-    prevWindowProc = SetWindowLongA(owner.hWnd, GWL_WNDPROC, AddressOf UDocWndProc)
+    prevWindowProc = SetWindowLongA(owner.hwnd, GWL_WNDPROC, AddressOf UDocWndProc)
     
     Exit Sub
     

@@ -101,3 +101,11 @@ Public Type MDINEXTMENU
     hwndNext As Long
 End Type
 
+Public Type PAINTSTRUCT
+   hdc As Long
+   fErase As Long
+   rcPaint As RECT
+   fRestore As Long
+   fIncUpdate As Long
+   rgbReserved(0 To 16) As Byte
+End Type

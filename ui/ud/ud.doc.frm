@@ -79,9 +79,13 @@ Public Sub AddTo(ByRef owner As MDIForm, title As String, visbl As Boolean, wins
     UpdateTitle
 End Sub
 
+Public Sub DrawBackBufer(ByVal hdc As Long)
+    BitBlt hdc, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+End Sub
+
 Private Sub Form_Paint()
     OnPaint
-    BitBlt Me.hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+    DrawBackBufer Me.hdc
 End Sub
 
 Private Sub Form_Resize()
@@ -136,7 +140,7 @@ Public Sub OnPaint()
     On Error GoTo PaintErr
     
     Dim rc As RECT
-    GetClientRect Me.hWnd, rc
+    GetClientRect Me.hwnd, rc
     
     FillSolidRect backDc, rc, DocBgColor
     
