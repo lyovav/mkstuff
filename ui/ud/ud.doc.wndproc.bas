@@ -4,17 +4,17 @@ DefInt A-Z
 
 Private prevWindowProc As Long
 Private owner As CDoc
+Private dragOn As Boolean
 
 Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-    Dim keys As Long
+    Dim keys As Integer
     Dim delta As Integer
     Dim xp As Long
     Dim yp As Long
-    Dim dragOn As Boolean
-
+    
     Select Case uMsg
         Case WM_MBUTTONDOWN
-            keys = wParam And &HFFFF
+            keys = LowWord(wParam)
             xp = LowWord(lParam)
             yp = HighWord(lParam)
             SetCapture hWnd
@@ -23,14 +23,14 @@ Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
             
         Case WM_MOUSEMOVE
             If dragOn = True Then
-                keys = wParam And &HFFFF
+                keys = LowWord(wParam)
                 xp = LowWord(lParam)
                 yp = HighWord(lParam)
                 owner.OnDrag keys, xp, yp
             End If
             
         Case WM_MBUTTONUP
-            keys = wParam And &HFFFF
+            keys = LowWord(wParam)
             xp = LowWord(lParam)
             yp = HighWord(lParam)
             dragOn = False
@@ -38,8 +38,8 @@ Private Function UDocWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
             owner.OnEndDrag keys, xp, yp
             
         Case WM_MOUSEWHEEL
-            keys = wParam And &HFFFF
-            delta = wParam / 65535 / WHEEL_DELTA
+            keys = LowWord(wParam)
+            delta = HighWord(wParam) / WHEEL_DELTA
             xp = LowWord(lParam)
             yp = HighWord(lParam)
             owner.OnMouseWheel keys, delta, xp, yp
@@ -56,6 +56,8 @@ End Function
 
 Public Sub InstallUDocWndProc(ByRef frm As CDoc)
     On Error GoTo Error
+    
+    dragOn = False
     
     Set owner = frm
     prevWindowProc = SetWindowLongA(owner.hWnd, GWL_WNDPROC, AddressOf UDocWndProc)

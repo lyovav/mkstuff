@@ -130,7 +130,7 @@ PaintErr:
     Resume Next
 End Sub
 
-Public Sub OnMouseWheel(keys As Long, delta As Integer, xp As Long, yp As Long)
+Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
     Scheme.IncrementScale CDbl(delta), keys
     UpdateTitle
     Invalidate Me
@@ -140,12 +140,17 @@ Public Sub UpdateTitle()
     Me.Caption = originalCaption + " ^" + CStr(CInt(Scheme.GetScale() * 100#)) + "% " + Scheme.DebugString
 End Sub
 
-Public Sub OnBeginDrag(keys As Long, xp As Long, yp As Long)
+Public Sub OnBeginDrag(keys As Integer, xp As Long, yp As Long)
+    Scheme.BeginDrag keys, xp, yp
 End Sub
 
-Public Sub OnDrag(keys As Long, xp As Long, yp As Long)
+Public Sub OnDrag(keys As Integer, xp As Long, yp As Long)
+    Scheme.Drag keys, xp, yp
+    Invalidate Me, 0
 End Sub
 
-Public Sub OnEndDrag(keys As Long, xp As Long, yp As Long)
+Public Sub OnEndDrag(keys As Integer, xp As Long, yp As Long)
+    Scheme.EndDrag keys, xp, yp
+    Invalidate Me, 0
 End Sub
 
