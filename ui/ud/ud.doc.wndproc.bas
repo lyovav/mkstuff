@@ -37,6 +37,7 @@ Private Function WndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As
         xp = LowWord(lParam)
         yp = HighWord(lParam)
         SetCapture hWnd
+        Owner(Id).SetFocus
         Owner(Id).DragOn = True
         Owner(Id).OnBeginDrag keys, xp, yp
         

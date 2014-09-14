@@ -17,6 +17,9 @@ Begin VB.MDIForm Mainframe
          Caption         =   "New"
          Shortcut        =   ^N
       End
+      Begin VB.Menu mnuSep1 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuExit 
          Caption         =   "Exit"
          Shortcut        =   ^X
@@ -24,6 +27,25 @@ Begin VB.MDIForm Mainframe
    End
    Begin VB.Menu mnuWindow 
       Caption         =   "Window"
+      Begin VB.Menu mnuWindowList 
+         Caption         =   "List"
+         WindowList      =   -1  'True
+      End
+      Begin VB.Menu mnuSep2 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuTileHorz 
+         Caption         =   "Tile horizontally"
+      End
+      Begin VB.Menu mnuTieVert 
+         Caption         =   "Tile vertically"
+      End
+      Begin VB.Menu mnuCascade 
+         Caption         =   "Cascade"
+      End
+      Begin VB.Menu mnuSep 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuCloseDocWin 
          Caption         =   "Close document window"
          Shortcut        =   ^W
@@ -66,11 +88,21 @@ End Sub
 
 Public Sub AddForm(capt As String, visbl As Boolean)
     Dim childFrame As New CDoc
-
     childFrame.AddTo Me, capt, visbl, vbMaximized
-
     'totalChildCount = totalChildCount + 1
     'child.Add childFrame, str(totalChildCount) + "> " + capt
+End Sub
+
+Private Sub mnuTieVert_Click()
+    Arrange vbTileVertical
+End Sub
+
+Private Sub mnuTileHorz_Click()
+    Arrange vbTileHorizontal
+End Sub
+
+Private Sub mnuCascade_Click()
+    Arrange vbCascade
 End Sub
 
 Public Sub Init()
