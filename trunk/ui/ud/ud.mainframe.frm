@@ -53,7 +53,6 @@ End Sub
 
 Private Sub mnuExit_Click()
     Unload Me
-    End
 End Sub
 
 Private Sub MDIForm_Load()
@@ -73,7 +72,7 @@ Public Sub AddForm(capt As String, visbl As Boolean)
     'child.Add childFrame, str(totalChildCount) + "> " + capt
 End Sub
 
-Public Sub Init(comandLine As String)
+Public Sub Init()
     AddForm "Trololo...", True
 End Sub
 
