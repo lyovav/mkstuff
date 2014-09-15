@@ -1,12 +1,12 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.MDIForm Mainframe 
    Appearance      =   0  'Flat
    BackColor       =   &H00E0E0E0&
    Caption         =   "Michael Nikonov's: Understanding Digital Electronics"
    ClientHeight    =   6660
    ClientLeft      =   225
-   ClientTop       =   870
+   ClientTop       =   855
    ClientWidth     =   11220
    Icon            =   "ud.mainframe.frx":0000
    LinkTopic       =   "Michael Nikonov's Understanding Digital Electronics"
@@ -39,6 +39,7 @@ Begin VB.MDIForm Mainframe
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            TextSave        =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -108,12 +109,14 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private config As New WConf
+Private Config As New WConf
+Private DocCount As Long
 'Private child As New Collection
 'Private totalChildCount As Long
 
 Private Sub mnuNew_Click()
-    AddForm "Untitled...", True
+    AddForm "Untitled #" + CStr(1 + DocCount), True
+    DocCount = DocCount + 1
 End Sub
 
 Private Sub mnuCloseDocWin_Click()
@@ -127,11 +130,12 @@ Private Sub mnuExit_Click()
 End Sub
 
 Private Sub MDIForm_Load()
-    config.OnFormLoad Me, "1.0.0"
+    DocCount = 0
+    Config.OnFormLoad Me, "1.0.0"
 End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)
-    config.OnFormUnload Me
+    Config.OnFormUnload Me
 End Sub
 
 Public Sub AddForm(capt As String, visbl As Boolean)
@@ -155,6 +159,5 @@ Private Sub mnuCascade_Click()
 End Sub
 
 Public Sub Init()
-    AddForm "Trololo...", True
+    mnuNew_Click
 End Sub
-

@@ -3,7 +3,7 @@ Option Explicit
 DefInt A-Z
 
 Public Enum CellType
-    ctZero = -1
+    ctZero = 32
     ctWire
     ctVoltmeter
     ctAmpermeter

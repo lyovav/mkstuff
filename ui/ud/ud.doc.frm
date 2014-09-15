@@ -65,7 +65,7 @@ Private lastFont As Long
 Private hFont As Long
 Private OriginalCaption As String
 
-Public scheme As New CScheme
+Public Scheme As New CScheme
 
 Public DragOn As Boolean
 Public PrevWndProc As Long
@@ -81,13 +81,21 @@ Private Sub Form_Load()
     hFont = 0
     DragOn = False
     OriginalCaption = Me.Caption
-    scheme.LoadScheme scheme.GetTempFileName()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    scheme.SaveScheme scheme.GetTempFileName()
+    Scheme.SaveScheme OriginalCaption + Scheme.GetActualFileExt()
     DeleteDBuffer
     DeleteObject hFont
+End Sub
+
+Public Sub LoadFile(fName As String)
+    Dim ir As Integer
+    ir = Scheme.LoadScheme(fName)
+    
+    If ir <> IOErrOK Then
+        MsgBox Scheme.StatusText, vbCritical, Mainframe.Caption
+    End If
 End Sub
 
 Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, winsta As Integer)
@@ -96,6 +104,7 @@ Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, wins
     Me.WindowState = winsta
     Me.Visible = visbl
     UpdateTitle
+    Scheme.LoadScheme OriginalCaption + Scheme.GetActualFileExt()
 End Sub
 
 Public Sub DrawBackBufer(ByVal hDC As Long)
@@ -105,7 +114,7 @@ End Sub
 Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y As Single)
     SetFocus
     
-    scheme.HighlightByCoords CLng(x), CLng(y)
+    Scheme.HighlightByCoords CLng(x), CLng(y)
     Invalidate Me
     
     Select Case btnNum
@@ -170,7 +179,7 @@ Public Sub OnPaint()
     
     FillSolidRect backDc, rc, DocBgColor
     
-    scheme.Draw backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom
+    Scheme.Draw backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom
     Exit Sub
     
 PaintErr:
@@ -179,26 +188,26 @@ PaintErr:
 End Sub
 
 Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
-    scheme.IncrementScale CDbl(delta), keys
+    Scheme.IncrementScale CDbl(delta), keys
     UpdateTitle
     Invalidate Me
 End Sub
 
 Public Sub UpdateTitle()
-    Me.Caption = OriginalCaption + " ^" + CStr(CInt(scheme.GetScale() * 100#)) + "% " + scheme.DebugString
+    Me.Caption = OriginalCaption + " ^" + CStr(CInt(Scheme.GetScale() * 100#)) + "% " + Scheme.StatusText
 End Sub
 
 Public Sub OnBeginDrag(keys As Integer, xp As Long, yp As Long)
-    scheme.BeginDrag keys, xp, yp
+    Scheme.BeginDrag keys, xp, yp
 End Sub
 
 Public Sub OnDrag(keys As Integer, xp As Long, yp As Long)
-    scheme.Drag keys, xp, yp
+    Scheme.Drag keys, xp, yp
     Invalidate Me, 0
 End Sub
 
 Public Sub OnEndDrag(keys As Integer, xp As Long, yp As Long)
-    scheme.EndDrag keys, xp, yp
+    Scheme.EndDrag keys, xp, yp
     UpdateTitle
     Invalidate Me, 0
 End Sub
@@ -207,19 +216,19 @@ Private Sub Form_KeyDown(code As Integer, bshift As Integer)
     ' TODO: configure keyboard shortcuts
     Select Case code
     Case 8                  ' backspace - reset view
-        scheme.ResetView
+        Scheme.ResetView
         Invalidate Me, 0
         
     Case Asc("G")
-        scheme.ToggleGridOnOff
+        Scheme.ToggleGridOnOff
         Invalidate Me, 0
         
     Case Asc("R")
-        scheme.ToggleRulesOnOff
+        Scheme.ToggleRulesOnOff
         Invalidate Me, 0
         
     Case Asc("M")
-        scheme.IncrementMiceMode bshift
+        Scheme.IncrementMiceMode bshift
         Invalidate Me, 0
         
     End Select
