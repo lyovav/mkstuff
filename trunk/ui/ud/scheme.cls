@@ -14,12 +14,20 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Private Enum MiceLinesModeConsts
+Public Enum MiceLinesModeConsts
     MiceLinesFull = 0
     MiceLinesHalf
     MiceLinesFullWithCoords
     MiceLinesHalfWithCoords
     MaxMiceLineMode
+End Enum
+
+Public Enum FileIOresults
+    IOErrOK = 0
+    IOErrInvalidFile
+    IOErrWrongSignature
+    IOErrVersionMismatch
+    IOErrSystem
 End Enum
 
 Private Type ScmHead
@@ -48,10 +56,10 @@ Private Type ScmHead
     offsetX As Long                 ' 124
     offsetY As Long                 ' 128
     lReserver As Long               ' 132
-    Reserved(1 To 124) As Byte
+    Reserved(1 To 124) As Byte      ' must be 256!!!
 End Type
 
-Public DebugString As String
+Public StatusText As String
 
 Private Const clItemCx As Long = 80
 Private Const clItemCy As Long = 80
@@ -94,6 +102,7 @@ Public Sub Class_Initialize()
     Scm.Version(3) = 0
     Scm.Version(4) = 0
     Scm.lReserver = &HEEEEEE0E
+    Scm.Reserved(UBound(Scm.Reserved)) = Asc("Z")
     
     penGrid = CreatePen(DocGridPenStyle, 1, DocGridColor)
     penRulesLine = CreatePen(DocRulesPenStyle, 1, DocRulesColor)
@@ -108,7 +117,7 @@ Public Sub Class_Initialize()
     Scm.bShowMiceLines = True
     Scm.MiceLineMode = MiceLinesFull
     
-    Allocate clRows, clCols
+    ReAlloc clRows, clCols
 End Sub
 
 Private Sub Class_Terminate()
@@ -178,8 +187,8 @@ Public Function GetScale() As Double
     GetScale = Scm.dScale
 End Function
 
-Public Sub Allocate(cn As Long, rn As Long)
-    ReDim Item(0 To cn, 0 To rn) As CellDesc
+Public Sub ReAlloc(cn As Long, rn As Long)
+    ReDim Preserve Item(0 To cn, 0 To rn) As CellDesc
     
     Scm.Cols = UBound(Item, 2)
     Scm.Rows = UBound(Item, 1)
@@ -192,11 +201,37 @@ Public Sub Allocate(cn As Long, rn As Long)
     Next row
 End Sub
 
-Public Function GetTempFileName() As String
-    GetTempFileName = "temp.scheme." + CStr(Scm.Cols) + "x" + CStr(Scm.Rows) + ".udscheme"
+Public Function GetActualFileExt() As String
+    GetActualFileExt = ".scheme." + CStr(Scm.Cols) + "x" + CStr(Scm.Rows) + ".udscheme"
 End Function
 
-Public Sub LoadScheme(fName As String)
+Private Function CheckFileHeader(ByRef tempScm As ScmHead) As Integer
+    Dim i As Integer
+    
+    For i = 1 To UBound(tempScm.Sign)
+        If tempScm.Sign(i) <> Scm.Sign(i) Then
+            CheckFileHeader = 0
+            Exit Function
+        End If
+    Next i
+    
+    CheckFileHeader = 1
+End Function
+
+Private Function CheckFileVersion(ByRef tempScm As ScmHead) As Integer
+    Dim i As Integer
+    
+    For i = 1 To UBound(tempScm.Version)
+        If tempScm.Version(i) <> Scm.Version(i) Then
+            CheckFileVersion = 0
+            Exit Function
+        End If
+    Next i
+    
+    CheckFileVersion = 1
+End Function
+
+Public Function LoadScheme(fName As String) As Integer
     On Error GoTo IOErr
     Dim fn As Integer, fs As Long, reqLen As Long
     Dim tempScm As ScmHead
@@ -205,27 +240,51 @@ Public Sub LoadScheme(fName As String)
     reqLen = Len(tempScm)
     Open fName For Binary Access Read As #fn Len = reqLen
     fs = LOF(fn)
+    If fs < reqLen Then
+        StatusText = "`" + fName + "`" + vbCrLf + " invalid file size (" + CStr(fs) + ")"
+        Debug.Print StatusText
+        LoadScheme = IOErrInvalidFile
+        Exit Function
+    End If
+    
     Get #fn, , tempScm
     Close #fn
     
-    ReDim Item(0 To tempScm.Cols, 0 To tempScm.Rows) As CellDesc
-    reqLen = Len(Item(0, 0)) * tempScm.Cols * tempScm.Rows
-    Open fName For Binary Access Read As #fn Len = reqLen
-    Seek #fn, Len(tempScm)
-    Get #fn, , Item
+    If CheckFileHeader(tempScm) <> 1 Then
+        StatusText = "`" + fName + "`" + vbCrLf + " file has wrong signature (" + BytesToPlaneString(tempScm.Sign, 1, 4) + ")"
+        Debug.Print StatusText
+        LoadScheme = IOErrWrongSignature
+        Exit Function
+    Else
+        If CheckFileVersion(tempScm) <> 1 Then
+            StatusText = "`" + fName + "`" + vbCrLf _
+                       + " incompatible version (" + BytesToPlaneString(tempScm.Version, 1, 4) + ")" + vbCrLf _
+                       + "v" + BytesToPlaneString(Scm.Version, 1, 4) + " required "
+                       
+            Debug.Print StatusText
+            LoadScheme = IOErrVersionMismatch
+            Exit Function
+        Else
+            ReDim Item(0 To tempScm.Cols, 0 To tempScm.Rows) As CellDesc
+            reqLen = Len(Item(0, 0)) * tempScm.Cols * tempScm.Rows
+            Open fName For Binary Access Read As #fn Len = reqLen
+            Seek #fn, Len(tempScm) + 1
+            Get #fn, , Item
+            Close #fn
+            Scm = tempScm
+        End If
+    End If
     
-    Scm = tempScm
-    
-    Close #fn
-    Exit Sub
-    
+    LoadScheme = IOErrOK
+    Exit Function
 IOErr:
-    Err.Description = "LoadScheme failed: `" + fName + "` - " + Err.Description
-    Debug.Print Err.Description
+    StatusText = "LoadScheme failed: " + CStr(Err.Number) + " `" + fName + "` " + vbCrLf + Err.Description
+    Debug.Print StatusText
     Close #fn
-End Sub
+    LoadScheme = IOErrSystem
+End Function
 
-Public Sub SaveScheme(fName As String)
+Public Function SaveScheme(fName As String) As Integer
     On Error GoTo IOErr
     Dim fn As Integer, fs As Long, reqLen As Long
     
@@ -241,13 +300,14 @@ Public Sub SaveScheme(fName As String)
     Put #fn, , Item
     
     Close #fn
-    Exit Sub
-    
+    SaveScheme = IOErrOK
+    Exit Function
 IOErr:
-    Err.Description = "SaveScheme failed: `" + fName + "` - " + Err.Description
-    Debug.Print Err.Description
+    StatusText = "SaveScheme failed: " + CStr(Err.Number) + " `" + fName + "` " + vbCrLf + Err.Description
+    Debug.Print StatusText
     Close #fn
-End Sub
+    SaveScheme = IOErrSystem
+End Function
 
 Private Sub CalcItemRect()
     With Scm.rcItem
@@ -288,7 +348,7 @@ Private Sub CalcVisibleIndexes()
     Scm.vCol = CalcVisibleStuff(Scm.vColNum, Scm.Cols, Scm.rcItem.Width, Scm.rcAll.Left, Scm.rcAll.Width, Scm.rcDisplay.Left, Scm.rcDisplay.Width)
     Scm.vRow = CalcVisibleStuff(Scm.vRowNum, Scm.Rows, Scm.rcItem.Height, Scm.rcAll.Top, Scm.rcAll.Height, Scm.rcDisplay.Top, Scm.rcDisplay.Height)
     
-    DebugString = "<" + CStr(Scm.vCol) + "-" + CStr(Scm.vColNum) + "  " + CStr(Scm.vRow) + "-" + CStr(Scm.vRowNum) + ">"
+    StatusText = "<" + CStr(Scm.vCol) + "-" + CStr(Scm.vColNum) + "  " + CStr(Scm.vRow) + "-" + CStr(Scm.vRowNum) + ">"
 End Sub
 
 Private Sub CalcLimits()
@@ -497,6 +557,16 @@ Public Sub DrawHot(ByVal dc As Long)
     End If
 End Sub
 
+Public Sub HighlightByCoords(x As Long, y As Long)
+    On Error Resume Next
+    
+    Dim row As Long, col As Long
+    col = GetIndexFromPoint(x, y, row)
+    
+    Scm.hotCol = col
+    Scm.hotRow = row
+End Sub
+
 Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx As Long, cy As Long)
     On Error Resume Next
     
@@ -548,12 +618,3 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
     SetBkMode dc, lastBkMode
 End Sub
 
-Public Sub HighlightByCoords(x As Long, y As Long)
-    On Error Resume Next
-    
-    Dim row As Long, col As Long
-    col = GetIndexFromPoint(x, y, row)
-    
-    Scm.hotCol = col
-    Scm.hotRow = row
-End Sub
