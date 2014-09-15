@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
@@ -65,7 +65,7 @@ Private lastFont As Long
 Private hFont As Long
 Private OriginalCaption As String
 
-Public Scheme As New CScheme
+Public scheme As New CScheme
 
 Public DragOn As Boolean
 Public PrevWndProc As Long
@@ -81,10 +81,11 @@ Private Sub Form_Load()
     hFont = 0
     DragOn = False
     OriginalCaption = Me.Caption
+    scheme.LoadScheme scheme.GetTempFileName()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    Scheme.SaveTempScheme
+    scheme.SaveScheme scheme.GetTempFileName()
     DeleteDBuffer
     DeleteObject hFont
 End Sub
@@ -104,7 +105,7 @@ End Sub
 Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y As Single)
     SetFocus
     
-    Scheme.HighlightByCoords CLng(x), CLng(y)
+    scheme.HighlightByCoords CLng(x), CLng(y)
     Invalidate Me
     
     Select Case btnNum
@@ -169,7 +170,7 @@ Public Sub OnPaint()
     
     FillSolidRect backDc, rc, DocBgColor
     
-    Scheme.Draw backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom
+    scheme.Draw backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom
     Exit Sub
     
 PaintErr:
@@ -178,26 +179,26 @@ PaintErr:
 End Sub
 
 Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
-    Scheme.IncrementScale CDbl(delta), keys
+    scheme.IncrementScale CDbl(delta), keys
     UpdateTitle
     Invalidate Me
 End Sub
 
 Public Sub UpdateTitle()
-    Me.Caption = OriginalCaption + " ^" + CStr(CInt(Scheme.GetScale() * 100#)) + "% " + Scheme.DebugString
+    Me.Caption = OriginalCaption + " ^" + CStr(CInt(scheme.GetScale() * 100#)) + "% " + scheme.DebugString
 End Sub
 
 Public Sub OnBeginDrag(keys As Integer, xp As Long, yp As Long)
-    Scheme.BeginDrag keys, xp, yp
+    scheme.BeginDrag keys, xp, yp
 End Sub
 
 Public Sub OnDrag(keys As Integer, xp As Long, yp As Long)
-    Scheme.Drag keys, xp, yp
+    scheme.Drag keys, xp, yp
     Invalidate Me, 0
 End Sub
 
 Public Sub OnEndDrag(keys As Integer, xp As Long, yp As Long)
-    Scheme.EndDrag keys, xp, yp
+    scheme.EndDrag keys, xp, yp
     UpdateTitle
     Invalidate Me, 0
 End Sub
@@ -206,19 +207,19 @@ Private Sub Form_KeyDown(code As Integer, bshift As Integer)
     ' TODO: configure keyboard shortcuts
     Select Case code
     Case 8                  ' backspace - reset view
-        Scheme.ResetView
+        scheme.ResetView
         Invalidate Me, 0
         
     Case Asc("G")
-        Scheme.ToggleGridOnOff
+        scheme.ToggleGridOnOff
         Invalidate Me, 0
         
     Case Asc("R")
-        Scheme.ToggleRulesOnOff
+        scheme.ToggleRulesOnOff
         Invalidate Me, 0
         
     Case Asc("M")
-        Scheme.IncrementMiceMode bshift
+        scheme.IncrementMiceMode bshift
         Invalidate Me, 0
         
     End Select

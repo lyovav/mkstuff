@@ -2,7 +2,9 @@ Attribute VB_Name = "FileIO"
 Option Explicit
 DefInt A-Z
 
-Public Sub BinLoadScheme(filename As String, ByRef items() As CellDesc, numCols As Long, numRows As Long)
+#If False Then
+
+Public Sub BinLoadScheme(fName As String, ByRef scheme As CScheme)
     On Error GoTo ErrReadBin
     
     Dim fn As Integer
@@ -48,4 +50,4 @@ ErrWriteBin:
     Close #fn
 End Sub
 
-
+#End If

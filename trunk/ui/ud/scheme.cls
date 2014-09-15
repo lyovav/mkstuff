@@ -14,7 +14,7 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Public Enum MiceLinesModeConsts
+Private Enum MiceLinesModeConsts
     MiceLinesFull = 0
     MiceLinesHalf
     MiceLinesFullWithCoords
@@ -22,52 +22,60 @@ Public Enum MiceLinesModeConsts
     MaxMiceLineMode
 End Enum
 
-Private Const DefItemWidth As Long = 80
-Private Const DefItemHeight As Long = 80
-Private Const DefItemCols As Long = 18
-Private Const DefItemRows As Long = 14
+Private Type ScmHead
+    Sign(1 To 4) As Byte            ' 4
+    Version(1 To 4) As Byte         ' 8
+    Cols As Long                    ' 12
+    Rows As Long                    ' 16
+    dScale As Double                ' 24
+    bShowGrid As Boolean            ' 26
+    bShowRules As Boolean           ' 28
+    bShowMiceLines As Boolean       ' 30
+    MiceLineMode As Integer         ' 32
+    rcDisplay As CRect              ' 48
+    rcAll As CRect                  ' 64
+    rcItem As CRect                 ' 80
+    vCol As Long                    ' 84
+    vColNum As Long                 ' 88
+    vRow As Long                    ' 92
+    vRowNum As Long                 ' 96
+    begY As Long                    ' 100
+    endY As Long                    ' 104
+    begX As Long                    ' 108
+    endX As Long                    ' 112
+    hotCol As Long                  ' 116
+    hotRow As Long                  ' 120
+    offsetX As Long                 ' 124
+    offsetY As Long                 ' 128
+    lReserver As Long               ' 132
+    Reserved(1 To 124) As Byte
+End Type
+
+Public DebugString As String
+
+Private Const clItemCx As Long = 80
+Private Const clItemCy As Long = 80
+Private Const clCols As Long = 18
+Private Const clRows As Long = 14
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
 Private Const cdScaleMul As Double = 0.02
 Private Const cdScaleMul2 As Double = 0.5
 
-Private Const ruleCx As Long = 16
-Private Const ruleCy As Long = 16
-Private Const ruleHalfCx As Long = ruleCx \ 2
-Private Const ruleHalfCy As Long = ruleCy \ 2
+Private Const clRuleCx As Long = 16
+Private Const clRuleCy As Long = 16
+Private Const clRuleCx2 As Long = clRuleCx \ 2
+Private Const clRuleCy2 As Long = clRuleCy \ 2
 
-Public DebugString As String
-Public TempFileName As String
-
-Private dScale As Double
+Private Scm As ScmHead
 Private Item() As CellDesc
 
-Private bShowGrid As Boolean
-Private bShowRules As Boolean
-Private bShowMiceLines As Boolean
-Private MiceLineMode As Integer
-Private Cols As Long
-Private Rows As Long
-Private rcDisplay As CRect
-Private rcAll As CRect
-Private rcItem As CRect
-Private vCol As Long
-Private vColNum As Long
-Private vRow As Long
-Private vRowNum As Long
-Private begY As Long
-Private endY As Long
-Private begX As Long
-Private endX As Long
+' Drag
 Private lastLeft As Long
 Private lastTop As Long
 Private dragX As Long
 Private dragY As Long
-Private offsetX As Long
-Private offsetY As Long
-Private hotCol As Long
-Private hotRow As Long
 
 ' Appearance
 Private penGrid As Long
@@ -77,6 +85,16 @@ Private fontHelpers As Long
 Private penMiceLine As Long
 
 Public Sub Class_Initialize()
+    Scm.Sign(1) = Asc("W")
+    Scm.Sign(2) = Asc("C")
+    Scm.Sign(3) = Asc("D")
+    Scm.Sign(4) = Asc("X")
+    Scm.Version(1) = 1
+    Scm.Version(2) = 0
+    Scm.Version(3) = 0
+    Scm.Version(4) = 0
+    Scm.lReserver = &HEEEEEE0E
+    
     penGrid = CreatePen(DocGridPenStyle, 1, DocGridColor)
     penRulesLine = CreatePen(DocRulesPenStyle, 1, DocRulesColor)
     penRulesMark = CreatePen(DocRulesPenStyle, 2, DocRulesColor)
@@ -85,12 +103,12 @@ Public Sub Class_Initialize()
 
     ResetView
     
-    bShowGrid = True
-    bShowRules = True
-    bShowMiceLines = True
-    MiceLineMode = MiceLinesFull
+    Scm.bShowGrid = True
+    Scm.bShowRules = True
+    Scm.bShowMiceLines = True
+    Scm.MiceLineMode = MiceLinesFull
     
-    Allocate DefItemRows, DefItemCols
+    Allocate clRows, clCols
 End Sub
 
 Private Sub Class_Terminate()
@@ -102,31 +120,31 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Sub ResetView()
-    dScale = 1#
-    offsetX = 0
-    offsetY = 0
-    hotCol = -1
-    hotRow = -1
+    Scm.dScale = 1#
+    Scm.offsetX = 0
+    Scm.offsetY = 0
+    Scm.hotCol = -1
+    Scm.hotRow = -1
 End Sub
 
 Public Sub ToggleGridOnOff()
-    bShowGrid = Not bShowGrid
+    Scm.bShowGrid = Not Scm.bShowGrid
 End Sub
 
 Public Sub ToggleRulesOnOff()
-    bShowRules = Not bShowRules
+    Scm.bShowRules = Not Scm.bShowRules
 End Sub
 
 Public Sub BeginDrag(keys As Integer, xp As Long, yp As Long)
-    lastLeft = offsetX
-    lastTop = offsetY
+    lastLeft = Scm.offsetX
+    lastTop = Scm.offsetY
     dragX = xp
     dragY = yp
 End Sub
 
 Public Sub Drag(keys As Integer, xp As Long, yp As Long)
-    offsetX = lastLeft + (xp - dragX)
-    offsetY = lastTop + (yp - dragY)
+    Scm.offsetX = lastLeft + (xp - dragX)
+    Scm.offsetY = lastTop + (yp - dragY)
 End Sub
 
 Public Sub EndDrag(keys As Integer, xp As Long, yp As Long)
@@ -139,71 +157,113 @@ Public Sub IncrementScale(val As Double, keys As Integer)
         val = val * cdScaleMul
     End If
     
-    dScale = dScale + val
+    Scm.dScale = Scm.dScale + val
     
-    If dScale < cdMinScale Then dScale = cdMinScale Else If dScale > cdMaxScale Then dScale = cdMaxScale
+    If Scm.dScale < cdMinScale Then Scm.dScale = cdMinScale Else If Scm.dScale > cdMaxScale Then Scm.dScale = cdMaxScale
 End Sub
 
 Public Sub IncrementMiceMode(ByVal bshift As Integer)
     If bshift <> 0 Then
-        bShowMiceLines = Not bShowMiceLines
+        Scm.bShowMiceLines = Not Scm.bShowMiceLines
     Else
-        If bShowMiceLines = True Then
-            MiceLineMode = MiceLineMode + 1
-            If MiceLineMode < 0 Then MiceLineMode = MaxMiceLineMode - 1
-            If MiceLineMode > MaxMiceLineMode - 1 Then MiceLineMode = 0
+        If Scm.bShowMiceLines = True Then
+            Scm.MiceLineMode = Scm.MiceLineMode + 1
+            If Scm.MiceLineMode < 0 Then Scm.MiceLineMode = MaxMiceLineMode - 1
+            If Scm.MiceLineMode > MaxMiceLineMode - 1 Then Scm.MiceLineMode = 0
         End If
     End If
 End Sub
 
 Public Function GetScale() As Double
-    GetScale = dScale
+    GetScale = Scm.dScale
 End Function
 
 Public Sub Allocate(cn As Long, rn As Long)
     ReDim Item(0 To cn, 0 To rn) As CellDesc
     
-    Cols = UBound(Item, 2)
-    Rows = UBound(Item, 1)
+    Scm.Cols = UBound(Item, 2)
+    Scm.Rows = UBound(Item, 1)
 
     Dim row As Long, col As Long
-    For row = 0 To Rows
-        For col = 0 To Cols
+    For row = 0 To Scm.Rows
+        For col = 0 To Scm.Cols
             Item(row, col) = ZeroCell
         Next col
     Next row
-    
-    LoadTempScheme
 End Sub
 
-Private Function GetTempFileName() As String
-    TempFileName = "temp.scheme." + CStr(Cols) + "x" + CStr(Rows) + ".bin"
-    GetTempFileName = TempFileName
+Public Function GetTempFileName() As String
+    GetTempFileName = "temp.scheme." + CStr(Scm.Cols) + "x" + CStr(Scm.Rows) + ".udscheme"
 End Function
 
-Public Sub LoadTempScheme()
-    BinLoadScheme GetTempFileName(), Item, Cols, Rows
+Public Sub LoadScheme(fName As String)
+    On Error GoTo IOErr
+    Dim fn As Integer, fs As Long, reqLen As Long
+    Dim tempScm As ScmHead
+    
+    fn = FreeFile
+    reqLen = Len(tempScm)
+    Open fName For Binary Access Read As #fn Len = reqLen
+    fs = LOF(fn)
+    Get #fn, , tempScm
+    Close #fn
+    
+    ReDim Item(0 To tempScm.Cols, 0 To tempScm.Rows) As CellDesc
+    reqLen = Len(Item(0, 0)) * tempScm.Cols * tempScm.Rows
+    Open fName For Binary Access Read As #fn Len = reqLen
+    Seek #fn, Len(tempScm)
+    Get #fn, , Item
+    
+    Scm = tempScm
+    
+    Close #fn
+    Exit Sub
+    
+IOErr:
+    Err.Description = "LoadScheme failed: `" + fName + "` - " + Err.Description
+    Debug.Print Err.Description
+    Close #fn
 End Sub
 
-Public Sub SaveTempScheme()
-    BinSaveScheme GetTempFileName(), Item, Cols, Rows
+Public Sub SaveScheme(fName As String)
+    On Error GoTo IOErr
+    Dim fn As Integer, fs As Long, reqLen As Long
+    
+    fn = FreeFile
+    reqLen = Len(Scm)
+    Open fName For Binary Access Write As #fn Len = reqLen
+    Put #fn, , Scm
+    Close #fn
+    
+    reqLen = Len(Item(0, 0)) * Scm.Cols * Scm.Rows
+    Open fName For Binary Access Write As #fn Len = reqLen
+    Seek #fn, Len(Scm) + 1
+    Put #fn, , Item
+    
+    Close #fn
+    Exit Sub
+    
+IOErr:
+    Err.Description = "SaveScheme failed: `" + fName + "` - " + Err.Description
+    Debug.Print Err.Description
+    Close #fn
 End Sub
 
 Private Sub CalcItemRect()
-    With rcItem
+    With Scm.rcItem
         .Left = 0
         .Top = 0
-        .Width = DefItemWidth * dScale
-        .Height = DefItemHeight * dScale
+        .Width = clItemCx * Scm.dScale
+        .Height = clItemCy * Scm.dScale
     End With
 End Sub
 
 Private Sub CalcAllRect()
-    With rcAll
-        .Width = Cols * rcItem.Width
-        .Height = Rows * rcItem.Height
-        .Left = offsetX + rcDisplay.Left + (rcDisplay.Width - .Width) \ 2
-        .Top = offsetY + rcDisplay.Top + (rcDisplay.Height - .Height) \ 2
+    With Scm.rcAll
+        .Width = Scm.Cols * Scm.rcItem.Width
+        .Height = Scm.Rows * Scm.rcItem.Height
+        .Left = Scm.offsetX + Scm.rcDisplay.Left + (Scm.rcDisplay.Width - .Width) \ 2
+        .Top = Scm.offsetY + Scm.rcDisplay.Top + (Scm.rcDisplay.Height - .Height) \ 2
     End With
 End Sub
 
@@ -225,18 +285,18 @@ Private Function CalcVisibleStuff(ByRef count As Long, maxCount As Long _
 End Function
 
 Private Sub CalcVisibleIndexes()
-    vCol = CalcVisibleStuff(vColNum, Cols, rcItem.Width, rcAll.Left, rcAll.Width, rcDisplay.Left, rcDisplay.Width)
-    vRow = CalcVisibleStuff(vRowNum, Rows, rcItem.Height, rcAll.Top, rcAll.Height, rcDisplay.Top, rcDisplay.Height)
+    Scm.vCol = CalcVisibleStuff(Scm.vColNum, Scm.Cols, Scm.rcItem.Width, Scm.rcAll.Left, Scm.rcAll.Width, Scm.rcDisplay.Left, Scm.rcDisplay.Width)
+    Scm.vRow = CalcVisibleStuff(Scm.vRowNum, Scm.Rows, Scm.rcItem.Height, Scm.rcAll.Top, Scm.rcAll.Height, Scm.rcDisplay.Top, Scm.rcDisplay.Height)
     
-    DebugString = "<" + CStr(vCol) + "-" + CStr(vColNum) + "  " + CStr(vRow) + "-" + CStr(vRowNum) + ">"
+    DebugString = "<" + CStr(Scm.vCol) + "-" + CStr(Scm.vColNum) + "  " + CStr(Scm.vRow) + "-" + CStr(Scm.vRowNum) + ">"
 End Sub
 
 Private Sub CalcLimits()
-    begY = rcAll.Top
-    endY = RBottom(rcAll)
+    Scm.begY = Scm.rcAll.Top
+    Scm.endY = RBottom(Scm.rcAll)
    
-    begX = rcAll.Left
-    endX = RRight(rcAll)
+    Scm.begX = Scm.rcAll.Left
+    Scm.endX = RRight(Scm.rcAll)
 End Sub
 
 Public Sub DrawGrid(ByVal dc As Long)
@@ -248,22 +308,22 @@ Public Sub DrawGrid(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penGrid)
     
-    If begY >= rcDisplay.Top Then ALine dc, begX, begY, endX, begY
+    If Scm.begY >= Scm.rcDisplay.Top Then ALine dc, Scm.begX, Scm.begY, Scm.endX, Scm.begY
     
-    For row = vRow To vRowNum - 1
-        y = rcAll.Top + (row * rcItem.Height) + rcItem.Height
-        
-        If y >= rcDisplay.Top Then
-            ALine dc, begX, y, endX, y
+    For row = Scm.vRow To Scm.vRowNum - 1
+        y = Scm.rcAll.Top + (row * Scm.rcItem.Height) + Scm.rcItem.Height
+
+        If y >= Scm.rcDisplay.Top Then
+            ALine dc, Scm.begX, y, Scm.endX, y
         End If
     Next row
     
-    If begX >= rcDisplay.Left Then ALine dc, begX, begY, begX, endY
+    If Scm.begX >= Scm.rcDisplay.Left Then ALine dc, Scm.begX, Scm.begY, Scm.begX, Scm.endY
     
-    For col = vCol To vColNum - 1
-        y = rcAll.Left + (col * rcItem.Width) + rcItem.Width
-        If y >= rcDisplay.Left Then
-            ALine dc, y, begY, y, endY
+    For col = Scm.vCol To Scm.vColNum - 1
+        y = Scm.rcAll.Left + (col * Scm.rcItem.Width) + Scm.rcItem.Width
+        If y >= Scm.rcDisplay.Left Then
+            ALine dc, y, Scm.begY, y, Scm.endY
         End If
     Next col
     
@@ -282,17 +342,17 @@ Private Sub DrawRules(ByVal dc As Long)
     Dim text As String
     
     With rcHRule
-        .Left = rcDisplay.Left - ruleCx
-        .Top = rcDisplay.Top - ruleCy
-        .Right = .Left + rcDisplay.Width + ruleCx
-        .Bottom = .Top + ruleCy
+        .Left = Scm.rcDisplay.Left - clRuleCx
+        .Top = Scm.rcDisplay.Top - clRuleCy
+        .Right = .Left + Scm.rcDisplay.Width + clRuleCx
+        .Bottom = .Top + clRuleCy
     End With
     
     With rcVRule
-        .Left = rcDisplay.Left - ruleCx
-        .Top = rcDisplay.Top
-        .Right = .Left + ruleCx
-        .Bottom = .Top + rcDisplay.Height
+        .Left = Scm.rcDisplay.Left - clRuleCx
+        .Top = Scm.rcDisplay.Top
+        .Right = .Left + clRuleCx
+        .Bottom = .Top + Scm.rcDisplay.Height
     End With
     
     FillSolidRect dc, rcHRule, DocRuleBgColor
@@ -300,40 +360,40 @@ Private Sub DrawRules(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penRulesMark)
     
-    For i = vCol To vColNum
-        y = rcAll.Left + (i * rcItem.Width)
-        
-        If y >= rcDisplay.Left Then
-            ALine dc, y, rcHRule.Top, y, rcHRule.Top + ruleCy - 4
-            
-            If i <> vColNum Then
+    For i = Scm.vCol To Scm.vColNum
+        y = Scm.rcAll.Left + (i * Scm.rcItem.Width)
+
+        If y >= Scm.rcDisplay.Left Then
+            ALine dc, y, rcHRule.Top, y, rcHRule.Top + clRuleCy - 4
+
+            If i <> Scm.vColNum Then
                 With rcText
                     .Left = y + 1
                     .Top = rcHRule.Top + 1
-                    .Right = .Left + rcItem.Width - 2
+                    .Right = .Left + Scm.rcItem.Width - 2
                     .Bottom = rcHRule.Bottom - 2
                 End With
-                
+
                 text = CStr(i)
                 DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
             End If
         End If
     Next i
     
-    For i = vRow To vRowNum
-        y = rcAll.Top + (i * rcItem.Height)
-        
-        If y >= rcDisplay.Top Then
-            ALine dc, rcVRule.Left, y, rcVRule.Left + ruleCx - 4, y
-            
-            If i <> vRowNum Then
+    For i = Scm.vRow To Scm.vRowNum
+        y = Scm.rcAll.Top + (i * Scm.rcItem.Height)
+
+        If y >= Scm.rcDisplay.Top Then
+            ALine dc, rcVRule.Left, y, rcVRule.Left + clRuleCx - 4, y
+
+            If i <> Scm.vRowNum Then
                 With rcText
                     .Left = rcVRule.Left + 1
                     .Top = y + 1
                     .Right = rcVRule.Right - 2
-                    .Bottom = .Top + rcItem.Height
+                    .Bottom = .Top + Scm.rcItem.Height
                 End With
-                
+
                 text = CStr(i)
                 DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
             End If
@@ -347,28 +407,29 @@ Private Sub DrawRules(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penGrid)
     
-    ALine dc, rcAll.Left + (vCol * rcItem.Width), rcHRule.Top, rcAll.Left + ((vCol + vColNum) * rcItem.Width), rcHRule.Top
-    ALine dc, rcVRule.Left, rcAll.Top + (vRow * rcItem.Height), rcVRule.Left, rcAll.Top + ((vRow + vRowNum) * rcItem.Height)
+    ALine dc, Scm.rcAll.Left + (Scm.vCol * Scm.rcItem.Width), rcHRule.Top, Scm.rcAll.Left + ((Scm.vCol + Scm.vColNum) * Scm.rcItem.Width), rcHRule.Top
+    ALine dc, rcVRule.Left, Scm.rcAll.Top + (Scm.vRow * Scm.rcItem.Height) _
+            , rcVRule.Left, Scm.rcAll.Top + ((Scm.vRow + Scm.vRowNum) * Scm.rcItem.Height)
     
     SelectObject dc, lastPen
 End Sub
 
 Private Sub DrawFullMiceLines(ByVal dc As Long, ByRef mp As APOINT)
-    ALine dc, mp.x, rcDisplay.Top, mp.x, RBottom(rcDisplay)
-    ALine dc, rcDisplay.Left, mp.y, RRight(rcDisplay), mp.y
+    ALine dc, mp.x, Scm.rcDisplay.Top, mp.x, RBottom(Scm.rcDisplay)
+    ALine dc, Scm.rcDisplay.Left, mp.y, RRight(Scm.rcDisplay), mp.y
 End Sub
 
 Private Sub DrawHalfMiceLines(ByVal dc As Long, ByRef mp As APOINT)
-    ALine dc, mp.x, rcDisplay.Top, mp.x, mp.y
-    ALine dc, rcDisplay.Left, mp.y, mp.x, mp.y
+    ALine dc, mp.x, Scm.rcDisplay.Top, mp.x, mp.y
+    ALine dc, Scm.rcDisplay.Left, mp.y, mp.x, mp.y
 End Sub
 
 Public Function GetIndexFromPoint(ByVal x As Long, ByVal y As Long, ByRef row As Long) As Long
     On Error Resume Next
     Dim col As Long
     
-    col = (x - rcAll.Left) \ rcItem.Width
-    row = (y - rcAll.Top) \ rcItem.Height
+    col = (x - Scm.rcAll.Left) \ Scm.rcItem.Width
+    row = (y - Scm.rcAll.Top) \ Scm.rcItem.Height
     
     GetIndexFromPoint = col
 End Function
@@ -381,8 +442,8 @@ Private Sub DrawMiceCoords(ByVal dc As Long, ByRef mp As APOINT)
     With rcText
         .Left = mp.x + 2
         .Top = mp.y + 2
-        .Right = .Left + (ruleCx * 3)
-        .Bottom = .Top + (ruleCy + 3)
+        .Right = .Left + (clRuleCx * 3)
+        .Bottom = .Top + (clRuleCy + 3)
     End With
     
     col = GetIndexFromPoint(mp.x, mp.y, row)
@@ -404,7 +465,7 @@ Public Sub DrawMiceLines(ByVal dc As Long, ByVal hWnd As Long)
 
         lastPen = SelectObject(dc, penMiceLine)
         
-        Select Case MiceLineMode
+        Select Case Scm.MiceLineMode
         Case 0
             DrawFullMiceLines dc, mp
         Case 1
@@ -422,16 +483,16 @@ Public Sub DrawMiceLines(ByVal dc As Long, ByVal hWnd As Long)
 End Sub
 
 Public Sub DrawHot(ByVal dc As Long)
-    If hotCol >= 0 And hotRow >= 0 And hotCol < Cols And hotRow < Rows Then
+    If Scm.hotCol >= 0 And Scm.hotRow >= 0 And Scm.hotCol < Scm.Cols And Scm.hotRow < Scm.Rows Then
         Dim rcHot As RECT
-        
+
         With rcHot
-            .Left = rcAll.Left + (hotCol * rcItem.Width)
-            .Top = rcAll.Top + (hotRow * rcItem.Height)
-            .Right = .Left + rcItem.Width
-            .Bottom = .Top + rcItem.Height
+            .Left = Scm.rcAll.Left + (Scm.hotCol * Scm.rcItem.Width)
+            .Top = Scm.rcAll.Top + (Scm.hotRow * Scm.rcItem.Height)
+            .Right = .Left + Scm.rcItem.Width
+            .Bottom = .Top + Scm.rcItem.Height
         End With
-        
+
         FillSolidRect dc, rcHot, DocHotBgColor
     End If
 End Sub
@@ -439,10 +500,10 @@ End Sub
 Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx As Long, cy As Long)
     On Error Resume Next
     
-    If bShowRules = True Then
-        rcDisplay = RInit(x + ruleCx, y + ruleCy, cx - ruleCx, cy - ruleCy)
+    If Scm.bShowRules = True Then
+        Scm.rcDisplay = RInit(x + clRuleCx, y + clRuleCy, cx - clRuleCx, cy - clRuleCy)
     Else
-        rcDisplay = RInit(x, y, cx, cy)
+        Scm.rcDisplay = RInit(x, y, cx, cy)
     End If
     
     CalcItemRect
@@ -477,9 +538,9 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
     Dim lastFont As Long
     lastFont = SelectObject(dc, fontHelpers)
 
-    If bShowGrid = True Then DrawGrid dc
-    If bShowRules = True Then DrawRules dc
-    If bShowMiceLines = True Then DrawMiceLines dc, hWnd
+    If Scm.bShowGrid = True Then DrawGrid dc
+    If Scm.bShowRules = True Then DrawRules dc
+    If Scm.bShowMiceLines = True Then DrawMiceLines dc, hWnd
     
     SelectObject dc, lastFont
 
@@ -493,6 +554,6 @@ Public Sub HighlightByCoords(x As Long, y As Long)
     Dim row As Long, col As Long
     col = GetIndexFromPoint(x, y, row)
     
-    hotCol = col
-    hotRow = row
+    Scm.hotCol = col
+    Scm.hotRow = row
 End Sub
