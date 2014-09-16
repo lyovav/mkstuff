@@ -20,6 +20,8 @@ Begin VB.Form CDoc
    Icon            =   "ud.doc.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
+   MouseIcon       =   "ud.doc.frx":058A
+   MousePointer    =   99  'Custom
    ScaleHeight     =   428
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   868
