@@ -1,14 +1,13 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.Ocx"
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
    BackColor       =   &H00F2FFFF&
-   Caption         =   "..."
-   ClientHeight    =   6585
+   Caption         =   "Untitled"
+   ClientHeight    =   6420
    ClientLeft      =   120
    ClientTop       =   450
-   ClientWidth     =   9630
+   ClientWidth     =   13020
    BeginProperty Font 
       Name            =   "Small Fonts"
       Size            =   6.75
@@ -22,31 +21,9 @@ Begin VB.Form CDoc
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    MousePointer    =   2  'Cross
-   ScaleHeight     =   439
+   ScaleHeight     =   428
    ScaleMode       =   3  'Pixel
-   ScaleWidth      =   642
-   Begin ComctlLib.Toolbar rtbTools 
-      Align           =   4  'Align Right
-      Height          =   6585
-      Left            =   8895
-      TabIndex        =   0
-      Top             =   0
-      Width           =   735
-      _ExtentX        =   1296
-      _ExtentY        =   11615
-      _Version        =   327682
-      BorderStyle     =   1
-      MousePointer    =   1
-   End
-   Begin ComctlLib.ImageList docImageList 
-      Left            =   240
-      Top             =   240
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      BackColor       =   -2147483643
-      MaskColor       =   12632256
-      _Version        =   327682
-   End
+   ScaleWidth      =   868
 End
 Attribute VB_Name = "CDoc"
 Attribute VB_GlobalNameSpace = False
@@ -105,6 +82,7 @@ Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, wins
     Me.Visible = visbl
     UpdateTitle
     Scheme.LoadScheme OriginalCaption + Scheme.GetActualFileExt()
+    Scheme.DoDebugStuff
 End Sub
 
 Public Sub DrawBackBufer(ByVal hDC As Long)
@@ -178,9 +156,9 @@ Public Sub OnPaint()
     Dim rc As RECT
     GetClientRect Me.hWnd, rc
     
-    If rtbTools.Visible = True Then
-        rc.Right = rc.Right - rtbTools.Width
-    End If
+    'If rtbTools.Visible = True Then
+    '    rc.Right = rc.Right - rtbTools.Width
+    'End If
     
     FillSolidRect backDc, rc, DocBgColor
     
