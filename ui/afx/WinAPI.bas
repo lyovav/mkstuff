@@ -4,6 +4,8 @@ DefInt A-Z
 
 ' KERNEL32
 Public Declare Function GetLastError Lib "KERNEL32" () As Long
+Public Declare Function GetModuleHandleA Lib "KERNEL32" (ByVal lpFileName As String) As Long
+Public Declare Function GetModuleHandleANull Lib "KERNEL32" Alias "GetModuleHandleA" (ByVal lpFileName As Long) As Long
 Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
 Public Declare Function GetFileAttributesA Lib "KERNEL32" (ByVal lpFileName As String) As Long
@@ -49,6 +51,8 @@ Public Declare Function GetCursorPos Lib "USER32" (ByRef lpPoint As APOINT) As L
 Public Declare Function SetCursorPos Lib "USER32" (ByVal x As Long, ByVal y As Long) As Long
 Public Declare Function ScreenToClient Lib "USER32" (ByVal hWnd As Long, ByRef pn As APOINT) As Long
 Public Declare Function InflateRect Lib "USER32" (ByRef lpRect As RECT, ByVal dx As Long, ByVal dy As Long) As Long
+Public Declare Function SetCursor Lib "USER32" (ByVal hCursor As Long) As Long
+Public Declare Function LoadCursorA Lib "USER32" (ByVal hInstance As Long, ByVal lpCursorName As Long) As Long
 
 ' GDI32
 Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long
@@ -106,6 +110,16 @@ Public Sub FillSolidRect(ByVal hDC As Long, ByRef lpRect As RECT, ByVal clr As L
     lastColor = SetBkColor(hDC, clr)
     ExtTextOutA hDC, 0, 0, ETO_OPAQUE, lpRect, 0, 0, 0
     SetBkColor hDC, lastColor
+End Sub
+
+Public Sub ALineChecked(ByVal hDC As Long, ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long)
+    If x1 < 0 Then x1 = 0
+    If y1 < 0 Then y1 = 0
+    If x2 < 0 Then x2 = 0
+    If y2 < 0 Then y2 = 0
+    
+    MoveToExNull hDC, x1, y1, 0
+    LineTo hDC, x2, y2
 End Sub
 
 Public Sub ALine(ByVal hDC As Long, ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long)

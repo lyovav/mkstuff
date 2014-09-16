@@ -27,19 +27,15 @@ Public ZeroCell As CellDesc
 Private Sub DrawWire(ByVal dc As Long, rc As RECT, rc1 As RECT, cx As Long, cy As Long, flg As Long)
     Dim y As Long
     
-    If flg And cfHorizontal <> 0 Then
+    If (flg And cfHorizontal) <> 0 Then
         y = rc.Top + cy \ 2
-        MoveTo dc, rc.Left, y
-        LineTo dc, rc1.Left, y
-        MoveTo dc, rc1.Right, y
-        LineTo dc, rc.Right, y
+        ALineChecked dc, rc.Left, y, rc1.Left, y
+        ALineChecked dc, rc1.Right, y, rc.Right, y
     Else
-        If flg And cfVertical <> 0 Then
+        If (flg And cfVertical) <> 0 Then
             y = rc.Left + cx \ 2
-            MoveTo dc, y, rc.Top
-            LineTo dc, y, rc1.Top
-            MoveTo dc, y, rc1.Bottom
-            LineTo dc, y, rc.Bottom
+            ALineChecked dc, y, rc.Top, y, rc1.Top
+            ALineChecked dc, y, rc1.Bottom, y, rc.Bottom
         End If
     End If
 End Sub
@@ -76,7 +72,11 @@ Public Sub DrawCell(ByRef cell As CellDesc, ByVal dc As Long, ByVal x As Long, B
         DrawWire dc, rc, rc1, cx, cy, cell.Flags
         
     Case ctVivaLaResistance
-        InflateRect rc2, 0, -ey
+        If (cell.Flags And cfVertical) <> 0 Then
+            InflateRect rc2, -ex, 0
+        Else
+            InflateRect rc2, 0, -ey
+        End If
         Rectangle dc, rc2.Left, rc2.Top, rc2.Right, rc2.Bottom
         DrawWire dc, rc, rc1, cx, cy, cell.Flags
        

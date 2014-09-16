@@ -30,6 +30,12 @@ Public Enum FileIOresults
     IOErrSystem
 End Enum
 
+Public Enum CursorIndex
+    ciCross = 1
+    ciSpot
+    ciCursorCount
+End Enum
+
 Private Type ScmHead
     Sign(1 To 4) As Byte            ' 4
     Version(1 To 4) As Byte         ' 8
@@ -97,6 +103,9 @@ Private brushCell As Long
 Private fontHelpers As Long
 Private fontCell As Long
 
+' Cursors
+Private Cursor(1 To ciCursorCount - 1) As Long
+
 Public Sub DoDebugStuff()
     Clear
     
@@ -125,6 +134,9 @@ Public Sub Class_Initialize()
     brushCell = GetStockObject(NULL_BRUSH)
     fontHelpers = CreateFontA(-9, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Small fonts")
     fontCell = CreateFontA(-32, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Arial Narrow")
+    
+    Cursor(ciCross) = LoadCursorA(UdMain.hInstance, 101)
+    Cursor(ciSpot) = LoadCursorA(UdMain.hInstance, 102)
 
     ResetView
     
@@ -137,6 +149,12 @@ Public Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
+    Dim i As Integer
+    
+    For i = ciCursorCount - 1 To 1 Step -1
+        DeleteObject Cursor(i)
+    Next i
+    
     DeleteObject fontCell
     DeleteObject fontHelpers
     DeleteObject brushCell
@@ -146,6 +164,10 @@ Private Sub Class_Terminate()
     DeleteObject penRulesLine
     DeleteObject penGrid
 End Sub
+
+Public Function GetCursor(dex As Integer) As Long
+    GetCursor = Cursor(dex)
+End Function
 
 Public Sub ResetView()
     Scm.dScale = 1#
@@ -188,6 +210,10 @@ Public Sub IncrementScale(val As Double, keys As Integer)
     Scm.dScale = Scm.dScale + val
     
     If Scm.dScale < cdMinScale Then Scm.dScale = cdMinScale Else If Scm.dScale > cdMaxScale Then Scm.dScale = cdMaxScale
+End Sub
+
+Public Sub SetMousePointer()
+    SetCursor Cursor(ciCross)
 End Sub
 
 Public Sub IncrementMiceMode(ByVal bshift As Integer)
