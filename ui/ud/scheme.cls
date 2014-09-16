@@ -61,10 +61,10 @@ End Type
 
 Public StatusText As String
 
-Private Const clItemCx As Long = 80
-Private Const clItemCy As Long = 80
-Private Const clCols As Long = 18
-Private Const clRows As Long = 14
+Private Const clItemCx As Long = 64
+Private Const clItemCy As Long = 64
+Private Const clCols As Long = 64
+Private Const clRows As Long = 48
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
@@ -89,8 +89,21 @@ Private dragY As Long
 Private penGrid As Long
 Private penRulesLine As Long
 Private penRulesMark As Long
-Private fontHelpers As Long
 Private penMiceLine As Long
+Private penCell As Long
+Private brushCell As Long
+
+' Fonts
+Private fontHelpers As Long
+Private fontCell As Long
+
+Public Sub DoDebugStuff()
+    Clear
+    
+    Item(32, 23) = CreateVoltmeter()
+    Item(30, 24) = CreateAmpermeter()
+    Item(32, 24) = CreateResistor()
+End Sub
 
 Public Sub Class_Initialize()
     Scm.Sign(1) = Asc("W")
@@ -108,7 +121,10 @@ Public Sub Class_Initialize()
     penRulesLine = CreatePen(DocRulesPenStyle, 1, DocRulesColor)
     penRulesMark = CreatePen(DocRulesPenStyle, 2, DocRulesColor)
     penMiceLine = CreatePen(DocMiceLinePenStyle, 1, DocMiceLineColor)
+    penCell = CreatePen(DonCellPenStyle, DonCellPenWidth, DocCellPenColor)
+    brushCell = GetStockObject(NULL_BRUSH)
     fontHelpers = CreateFontA(-9, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Small fonts")
+    fontCell = CreateFontA(-32, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Arial Narrow")
 
     ResetView
     
@@ -121,7 +137,10 @@ Public Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
+    DeleteObject fontCell
     DeleteObject fontHelpers
+    DeleteObject brushCell
+    DeleteObject penCell
     DeleteObject penMiceLine
     DeleteObject penRulesMark
     DeleteObject penRulesLine
@@ -187,9 +206,7 @@ Public Function GetScale() As Double
     GetScale = Scm.dScale
 End Function
 
-Public Sub ReAlloc(cn As Long, rn As Long)
-    ReDim Preserve Item(0 To cn, 0 To rn) As CellDesc
-    
+Public Sub Clear()
     Scm.Cols = UBound(Item, 2)
     Scm.Rows = UBound(Item, 1)
 
@@ -199,6 +216,13 @@ Public Sub ReAlloc(cn As Long, rn As Long)
             Item(row, col) = ZeroCell
         Next col
     Next row
+End Sub
+
+Public Sub ReAlloc(cn As Long, rn As Long)
+    ReDim Preserve Item(0 To cn, 0 To rn) As CellDesc
+    
+    Scm.Cols = UBound(Item, 2)
+    Scm.Rows = UBound(Item, 1)
 End Sub
 
 Public Function GetActualFileExt() As String
@@ -591,25 +615,34 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
     lastBkMode = SetBkMode(dc, TRANSPARENT)
     lastTextColor = SetTextColor(dc, DocFgColor)
     
-#If False Then
-    Dim row As Long, col As Long
-    For row = vRow To vRowNum - 1
-        rcItem.Top = rcAll.Top + (row * rcItem.Height)
-        For col = vCol To vColNum - 1
-            rcItem.Left = rcAll.Left + (col * rcItem.Width)
+    Dim row As Long, col As Long, lastFont As Long, lastPen As Long, lastBrush As Long
+    
+    lastFont = SelectObject(dc, fontCell)
+    lastPen = SelectObject(dc, penCell)
+    lastBrush = SelectObject(dc, brushCell)
+    
+    For row = Scm.vRow To Scm.vRowNum - 1
+        Scm.rcItem.Top = Scm.rcAll.Top + (row * Scm.rcItem.Height)
+        For col = Scm.vCol To Scm.vColNum - 1
+            Scm.rcItem.Left = Scm.rcAll.Left + (col * Scm.rcItem.Width)
+            DrawCell Item(col, row), dc, Scm.rcItem.Left, Scm.rcItem.Top, Scm.rcItem.Width, Scm.rcItem.Height
             
-            'Dim itemText As String
-            'itemText = "(" + CStr(col) + ", " + CStr(row) + ")"
-            'Dim rcTemp As RECT
-            'rcTemp = ToRECT(rcItem)
-            'Dim rcText As RECT
-            'rcText = rcTemp
-            'DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
+#If DrawCellCoordText Then
+            Dim itemText As String
+            itemText = "(" + CStr(col) + ", " + CStr(row) + ")"
+            Dim rcTemp As RECT
+            rcTemp = ToRECT(rcItem)
+            Dim rcText As RECT
+            rcText = rcTemp
+            DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
+#End If
         Next col
     Next row
-#End If
 
-    Dim lastFont As Long
+    SelectObject dc, lastBrush
+    SelectObject dc, lastPen
+    SelectObject dc, lastFont
+
     lastFont = SelectObject(dc, fontHelpers)
 
     If Scm.bShowGrid = True Then DrawGrid dc

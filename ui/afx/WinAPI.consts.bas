@@ -646,3 +646,6 @@ Public Const BF_SOFT As Long = &H1000
 Public Const BF_ADJUST As Long = &H2000
 Public Const BF_FLAT As Long = &H4000
 Public Const BF_MONO As Long = &H8000
+
+' MNi helpers
+Public Const DT_CENTERD As Long = DT_CENTER + DT_VCENTER + DT_SINGLELINE
