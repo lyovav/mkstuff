@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.Ocx"
 Begin VB.Form CDoc 
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
@@ -25,7 +25,7 @@ Begin VB.Form CDoc
    ScaleHeight     =   439
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   642
-   Begin ComctlLib.Toolbar rtToolbar 
+   Begin ComctlLib.Toolbar rtbTools 
       Align           =   4  'Align Right
       Height          =   6585
       Left            =   8895
@@ -176,6 +176,10 @@ Public Sub OnPaint()
     
     Dim rc As RECT
     GetClientRect Me.hWnd, rc
+    
+    If rtbTools.Visible = True Then
+        rc.Right = rc.Right - rtbTools.Width
+    End If
     
     FillSolidRect backDc, rc, DocBgColor
     
