@@ -8,6 +8,7 @@ Begin VB.Form CDoc
    ClientLeft      =   120
    ClientTop       =   450
    ClientWidth     =   13020
+   DrawMode        =   11  'Not Xor Pen
    BeginProperty Font 
       Name            =   "Small Fonts"
       Size            =   6.75
@@ -17,6 +18,7 @@ Begin VB.Form CDoc
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HasDC           =   0   'False
    Icon            =   "ud.doc.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
@@ -34,24 +36,52 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
+Implements IHookXP
+
 Private Const cxMinSize = 256
 Private Const cyMinSize = 256
 
+Private Scheme As New CScheme
+Private TempSchemeFilename As String
 Private backBmp As Long
 Private backDc As Long
 Private lastFont As Long
 Private hFont As Long
 Private OriginalCaption As String
+Private DragOn As Boolean
 
-Public Scheme As New CScheme
-Public TempSchemeFilename As String
+Private Function IHookXP_Message(ByVal hWnd As Long, ByVal uiMsg As Long, ByVal wParam As Long, ByVal lParam As Long, ByVal dwRefData As Long) As Long
+    On Error Resume Next
+    
+    Dim paintDc As Long
+    Dim ps As PAINTSTRUCT
+    Dim delta As Integer, keys As Integer
+    Dim xp As Long, yp As Long
 
-Public DragOn As Boolean
-Public PrevWndProc As Long
+    Select Case uiMsg
+    Case WM_MOUSEWHEEL
+        keys = LowWord(wParam)
+        delta = HighWord(wParam) \ WHEEL_DELTA
+        xp = LowWord(lParam)
+        yp = HighWord(lParam)
+        Call OnMouseWheel(keys, delta, xp, yp)
 
-Private Sub Form_Initialize()
-    InstallCDocWndProc Me
-End Sub
+    Case WM_PAINT
+        paintDc = BeginPaint(hWnd, ps)
+        Call OnPaint
+        Call DrawBackBufer(paintDc)
+        EndPaint hWnd, ps
+        IHookXP_Message = 0
+        Exit Function
+        
+    Case WM_ERASEBKGND
+        IHookXP_Message = 0
+        Exit Function
+
+    End Select
+    
+    IHookXP_Message = HookDefault(hWnd, uiMsg, wParam, lParam)
+End Function
 
 Private Sub Form_Load()
     On Error Resume Next
@@ -60,21 +90,22 @@ Private Sub Form_Load()
     hFont = 0
     DragOn = False
     OriginalCaption = Me.Caption
-    Scheme.SetMousePointer
+    Call Scheme.SetMousePointer
+    Call HookSet(Me.hWnd, Me)
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    Scheme.SaveScheme TempSchemeFilename
-    DeleteDBuffer
-    DeleteObject hFont
+    Call Scheme.SaveScheme(TempSchemeFilename)
+    Call DeleteDBuffer
+    Call DeleteObject(hFont)
+    Call HookClear(Me.hWnd, Me)
 End Sub
 
 Public Sub LoadFile(fName As String)
     Dim ir As Integer
     ir = Scheme.LoadScheme(fName)
-    
     If ir <> IOErrOK Then
-        MsgBox Scheme.StatusText, vbCritical, Mainframe.Caption
+        Call MsgBox(Scheme.StatusText, vbCritical, Mainframe.Caption)
     End If
 End Sub
 
@@ -83,27 +114,60 @@ Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, wins
     OriginalCaption = title
     Me.WindowState = winsta
     Me.Visible = visbl
-    UpdateTitle
-    TempSchemeFilename = "." + OriginalCaption + Scheme.GetActualFileExt()
-    Scheme.LoadScheme TempSchemeFilename
-    Scheme.DoDebugStuff
+    Call UpdateTitle
+    TempSchemeFilename = ".\temp\" + OriginalCaption + Scheme.GetActualFileExt()
+   'Scheme.LoadScheme TempSchemeFilename
+    Call Scheme.DoDebugStuff
 End Sub
 
 Public Sub DrawBackBufer(ByVal hDC As Long)
-    BitBlt hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy
+    Call BitBlt(hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy)
 End Sub
 
-Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y As Single)
+Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
+    Scheme.IncrementScale CDbl(delta), keys
+    UpdateTitle
+    InvalidateRectNull hWnd, 0, 0
+End Sub
+
+Private Sub Form_MouseDown(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
     SetFocus
     
     Select Case btnNum
-    'Case vbLeftButton
-    '    Scheme.HighlightByCoords CLng(x), CLng(y)
-    '    Invalidate Me
+    Case vbLeftButton
+        Scheme.HighlightByCoords CLng(x), CLng(y)
+        InvalidateRectNull Me.hWnd, 0, 0
         
     Case vbRightButton
         Me.PopupMenu Mainframe.mnuScheme, , x, y
+        
+    Case vbMiddleButton
+        SetCapture Me.hWnd
+        DragOn = True
+        Scheme.BeginDrag iKeys, CLng(x), CLng(y)
+    End Select
+    
+    InvalidateRectNull Me.hWnd, 0, 0
+End Sub
 
+Private Sub Form_MouseMove(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
+    Select Case btnNum
+    Case vbMiddleButton
+        If DragOn Then
+            Scheme.Drag iKeys, CLng(x), CLng(y)
+        End If
+    End Select
+    
+    InvalidateRectNull Me.hWnd, 0, 0
+End Sub
+
+Private Sub Form_MouseUp(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
+    Select Case btnNum
+    Case vbMiddleButton
+        DragOn = False
+        ReleaseCapture
+        Scheme.EndDrag iKeys, CLng(x), CLng(y)
+        InvalidateRectNull Me.hWnd, 0, 0
     End Select
 End Sub
 
@@ -118,12 +182,9 @@ End Sub
 
 Private Sub DeleteDBuffer()
     On Error Resume Next
-    
     DeleteObject SelectObject(backDc, lastFont)
     DeleteObject SelectObject(backDc, backBmp)
     DeleteDC backDc
-    
-    'Debug.Print "BKBUFFER: del &H" + Hex(backDc) + " &H" + Hex(backBmp)
 End Sub
 
 Private Sub CreateDBuffer(cx As Integer, cy As Integer)
@@ -150,75 +211,35 @@ Private Sub CreateDBuffer(cx As Integer, cy As Integer)
     backDc = dc
     lastFont = lfnt
         
-    'Debug.Print "BKBUFFER: new " + CStr(cx) + " x " + CStr(cy)
     Form_Paint
 End Sub
 
 Public Sub OnPaint()
-    On Error GoTo PaintErr
-    
     Dim rc As RECT
-    GetClientRect Me.hWnd, rc
     
-    'If rtbTools.Visible = True Then
-    '    rc.Right = rc.Right - rtbTools.Width
-    'End If
-    
-    FillSolidRect backDc, rc, DocBgColor
-    
-    Scheme.Draw backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom
-    Exit Sub
-    
-PaintErr:
-    Debug.Print "CHILDRAW: " + Err.Description
-    Resume Next
-End Sub
-
-Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
-    Scheme.IncrementScale CDbl(delta), keys
-    UpdateTitle
-    Invalidate Me
+    Call GetClientRect(hWnd, rc)
+    Call FillSolidRect(backDc, rc, DocBgColor)
+    Call Scheme.Draw(backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom)
 End Sub
 
 Public Sub UpdateTitle()
     Me.Caption = OriginalCaption + " ^" + CStr(CInt(Scheme.GetScale() * 100#)) + "% " + Scheme.StatusText
 End Sub
 
-Public Sub OnBeginDrag(keys As Integer, xp As Long, yp As Long)
-    Scheme.BeginDrag keys, xp, yp
-End Sub
-
-Public Sub OnDrag(keys As Integer, xp As Long, yp As Long)
-    Scheme.Drag keys, xp, yp
-    Invalidate Me, 0
-End Sub
-
-Public Sub OnEndDrag(keys As Integer, xp As Long, yp As Long)
-    Scheme.EndDrag keys, xp, yp
-    UpdateTitle
-    Invalidate Me, 0
-End Sub
-
-Private Sub Form_KeyDown(code As Integer, bshift As Integer)
+Private Sub Form_KeyDown(iCode As Integer, iKeys As Integer)
     ' TODO: configure keyboard shortcuts
-    Select Case code
-    Case 8                  ' backspace - reset view
-        Scheme.ResetView
-        Invalidate Me, 0
-        
+    Select Case iCode
+    Case 8 ' backspace - reset view
+        Call Scheme.ResetView
     Case Asc("G")
-        Scheme.ToggleGridOnOff
-        Invalidate Me, 0
-        
+        Call Scheme.ToggleGridOnOff
     Case Asc("R")
-        Scheme.ToggleRulesOnOff
-        Invalidate Me, 0
-        
+        Call Scheme.ToggleRulesOnOff
     Case Asc("M")
-        Scheme.IncrementMiceMode bshift
-        Invalidate Me, 0
-       
+        Call Scheme.IncrementMiceMode(iKeys)
     End Select
+    
+    InvalidateRectNull hWnd, 0, 0
 End Sub
 
 

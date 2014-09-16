@@ -23,6 +23,8 @@ Public Declare Function SetFilePointerNull Lib "KERNEL32" Alias "SetFilePointer"
 Public Declare Function GetFileSize Lib "KERNEL32" (ByVal hFile As Long, ByRef lpHigh As Long) As Long
 Public Declare Function GetFileSizeNull Lib "KERNEL32" Alias "GetFileSize" (ByVal hFile As Long, ByVal lpHigh As Long) As Long
 Public Declare Function ReadFile Lib "KERNEL32" (ByVal hFile As Long, ByVal lpBuffer As Long, ByVal nLen As Long, ByRef lpnRead As Long, ByVal lpOverlapped As Long) As Long
+Public Declare Sub CopyPtrToObj Lib "KERNEL32" Alias "RtlMoveMemory" (ByRef Destination As Object, ByRef Source As Long, Optional ByVal Length As Long = 4)
+Public Declare Sub CopyObjToPtr Lib "KERNEL32" Alias "RtlMoveMemory" (ByRef Destination As Long, ByRef Source As Object, Optional ByVal Length As Long = 4)
 
 ' USER32
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
@@ -166,9 +168,9 @@ Public Function OLEFont2HFONT(fnt As StdFont, ByVal hDC As Long) As Long
     OLEFont2HFONT = rv
 End Function
 
-Public Sub Invalidate(ByRef frm As Form, Optional bErase As Integer = 0)
-    InvalidateRectNull frm.hWnd, 0, bErase
-End Sub
+'Public Sub Invalidate(ByRef frm As Form, Optional bErase As Integer = 0)
+'    InvalidateRectNull frm.hWnd, 0, bErase
+'End Sub
 
 Public Function MoveTo(ByVal dc As Long, ByVal x As Integer, ByVal y As Integer) As Integer
     MoveTo = MoveToExNull(dc, x, y, 0)

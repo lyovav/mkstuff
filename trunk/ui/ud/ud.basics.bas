@@ -3,8 +3,8 @@ Option Explicit
 DefInt A-Z
 
 Public Enum CellType
-    ctZero = 32
-    ctVoltmeter
+    ctZero = -1
+    ctVoltmeter = 1
     ctAmpermeter
     ctVivaLaResistance
 End Enum
