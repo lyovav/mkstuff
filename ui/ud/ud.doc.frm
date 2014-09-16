@@ -114,13 +114,14 @@ End Sub
 Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y As Single)
     SetFocus
     
-    Scheme.HighlightByCoords CLng(x), CLng(y)
-    Invalidate Me
-    
     Select Case btnNum
     Case vbLeftButton
+        Scheme.HighlightByCoords CLng(x), CLng(y)
+        Invalidate Me
+        
     Case vbRightButton
         Me.PopupMenu Mainframe.mnuScheme, , x, y
+
     End Select
 End Sub
 
