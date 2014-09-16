@@ -1,12 +1,12 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.Ocx"
 Begin VB.MDIForm Mainframe 
    Appearance      =   0  'Flat
    BackColor       =   &H00E0E0E0&
    Caption         =   "Michael Nikonov's: Understanding Digital Electronics"
    ClientHeight    =   6660
    ClientLeft      =   225
-   ClientTop       =   855
+   ClientTop       =   870
    ClientWidth     =   11220
    Icon            =   "ud.mainframe.frx":0000
    LinkTopic       =   "Michael Nikonov's Understanding Digital Electronics"
@@ -39,7 +39,6 @@ Begin VB.MDIForm Mainframe
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            TextSave        =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -61,17 +60,8 @@ Begin VB.MDIForm Mainframe
    End
    Begin VB.Menu mnuScheme 
       Caption         =   "Scheme"
-      Begin VB.Menu mnuIns 
-         Caption         =   "Insert"
-         Begin VB.Menu mnuInsWire 
-            Caption         =   "Wire"
-         End
-         Begin VB.Menu mnuInsVoltmeter 
-            Caption         =   "Voltmeter"
-         End
-         Begin VB.Menu mnuInsAmpermeter 
-            Caption         =   "Ampermeter"
-         End
+      Begin VB.Menu mnuScmProps 
+         Caption         =   "Properties"
       End
    End
    Begin VB.Menu mnuWindow 

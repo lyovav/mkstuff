@@ -426,6 +426,7 @@ Private Sub DrawRules(ByVal dc As Long)
         If y >= Scm.rcDisplay.Left Then
             ALine dc, y, rcHRule.Top, y, rcHRule.Top + clRuleCy - 4
 
+#If DrawTextOnRules Then
             If i <> Scm.vColNum Then
                 With rcText
                     .Left = y + 1
@@ -437,6 +438,7 @@ Private Sub DrawRules(ByVal dc As Long)
                 text = CStr(i)
                 DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
             End If
+#End If
         End If
     Next i
     
@@ -446,6 +448,7 @@ Private Sub DrawRules(ByVal dc As Long)
         If y >= Scm.rcDisplay.Top Then
             ALine dc, rcVRule.Left, y, rcVRule.Left + clRuleCx - 4, y
 
+#If DrawTextOnRules Then
             If i <> Scm.vRowNum Then
                 With rcText
                     .Left = rcVRule.Left + 1
@@ -457,6 +460,7 @@ Private Sub DrawRules(ByVal dc As Long)
                 text = CStr(i)
                 DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
             End If
+#End If
         End If
     Next i
     
