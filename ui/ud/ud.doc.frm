@@ -70,7 +70,7 @@ Private Function IHookXP_Message(ByVal hWnd As Long, ByVal uiMsg As Long, ByVal 
         paintDc = BeginPaint(hWnd, ps)
         Call OnPaint
         Call DrawBackBufer(paintDc)
-        EndPaint hWnd, ps
+        Call EndPaint(hWnd, ps)
         IHookXP_Message = 0
         Exit Function
         
@@ -116,7 +116,7 @@ Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, wins
     Me.Visible = visbl
     Call UpdateTitle
     TempSchemeFilename = ".\temp\" + OriginalCaption + Scheme.GetActualFileExt()
-   'Scheme.LoadScheme TempSchemeFilename
+   'Call Scheme.LoadScheme(TempSchemeFilename)
     Call Scheme.DoDebugStuff
 End Sub
 
@@ -125,59 +125,13 @@ Public Sub DrawBackBufer(ByVal hDC As Long)
 End Sub
 
 Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
-    Scheme.IncrementScale CDbl(delta), keys
-    UpdateTitle
-    InvalidateRectNull hWnd, 0, 0
-End Sub
-
-Private Sub Form_MouseDown(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
-    SetFocus
-    
-    Select Case btnNum
-    Case vbLeftButton
-        Scheme.HighlightByCoords CLng(x), CLng(y)
-        InvalidateRectNull Me.hWnd, 0, 0
-        
-    Case vbRightButton
-        Me.PopupMenu Mainframe.mnuScheme, , x, y
-        
-    Case vbMiddleButton
-        SetCapture Me.hWnd
-        DragOn = True
-        Scheme.BeginDrag iKeys, CLng(x), CLng(y)
-    End Select
-    
-    InvalidateRectNull Me.hWnd, 0, 0
-End Sub
-
-Private Sub Form_MouseMove(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
-    Select Case btnNum
-    Case vbMiddleButton
-        If DragOn Then
-            Scheme.Drag iKeys, CLng(x), CLng(y)
-        End If
-    End Select
-    
-    InvalidateRectNull Me.hWnd, 0, 0
-End Sub
-
-Private Sub Form_MouseUp(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
-    Select Case btnNum
-    Case vbMiddleButton
-        DragOn = False
-        ReleaseCapture
-        Scheme.EndDrag iKeys, CLng(x), CLng(y)
-        InvalidateRectNull Me.hWnd, 0, 0
-    End Select
-End Sub
-
-Private Sub Form_Paint()
-    OnPaint
-    DrawBackBufer Me.hDC
+    Call Scheme.IncrementScale(CDbl(delta), keys)
+    Call UpdateTitle
+    Call InvalidateRectNull(hWnd, 0, 0)
 End Sub
 
 Private Sub Form_Resize()
-    CreateDBuffer Me.ScaleWidth, Me.ScaleHeight
+    Call CreateDBuffer(Me.ScaleWidth, Me.ScaleHeight)
 End Sub
 
 Private Sub DeleteDBuffer()
@@ -211,12 +165,11 @@ Private Sub CreateDBuffer(cx As Integer, cy As Integer)
     backDc = dc
     lastFont = lfnt
         
-    Form_Paint
+    Call InvalidateRectNull(hWnd, 0, 0)
 End Sub
 
 Public Sub OnPaint()
     Dim rc As RECT
-    
     Call GetClientRect(hWnd, rc)
     Call FillSolidRect(backDc, rc, DocBgColor)
     Call Scheme.Draw(backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom)
@@ -231,6 +184,7 @@ Private Sub Form_KeyDown(iCode As Integer, iKeys As Integer)
     Select Case iCode
     Case 8 ' backspace - reset view
         Call Scheme.ResetView
+        Call UpdateTitle
     Case Asc("G")
         Call Scheme.ToggleGridOnOff
     Case Asc("R")
@@ -239,7 +193,47 @@ Private Sub Form_KeyDown(iCode As Integer, iKeys As Integer)
         Call Scheme.IncrementMiceMode(iKeys)
     End Select
     
-    InvalidateRectNull hWnd, 0, 0
+    Call InvalidateRectNull(hWnd, 0, 0)
 End Sub
 
+Private Sub Form_MouseDown(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
+    Call SetFocus
+    
+    Select Case btnNum
+    Case vbLeftButton
+        Call Scheme.HighlightByCoords(CLng(x), CLng(y))
+        Call InvalidateRectNull(Me.hWnd, 0, 0)
+        
+    Case vbRightButton
+        Call PopupMenu(Mainframe.mnuScheme, , x, y)
+        
+    Case vbMiddleButton
+        Call SetCapture(Me.hWnd)
+        DragOn = True
+        Call Scheme.BeginDrag(iKeys, CLng(x), CLng(y))
+    End Select
+    
+    InvalidateRectNull Me.hWnd, 0, 0
+End Sub
+
+Private Sub Form_MouseMove(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
+    Select Case btnNum
+    Case vbMiddleButton
+        If DragOn Then
+            Call Scheme.Drag(iKeys, CLng(x), CLng(y))
+        End If
+    End Select
+    
+    Call InvalidateRectNull(Me.hWnd, 0, 0)
+End Sub
+
+Private Sub Form_MouseUp(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
+    Select Case btnNum
+    Case vbMiddleButton
+        DragOn = False
+        Call ReleaseCapture
+        Call Scheme.EndDrag(iKeys, CLng(x), CLng(y))
+        Call InvalidateRectNull(Me.hWnd, 0, 0)
+    End Select
+End Sub
 

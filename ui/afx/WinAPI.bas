@@ -28,8 +28,8 @@ Public Declare Sub CopyObjToPtr Lib "KERNEL32" Alias "RtlMoveMemory" (ByRef Dest
 
 ' USER32
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
-Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
-Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal Message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
+Public Declare Function SendMessageW Lib "USER32" (ByVal hWnd As Long, ByVal Message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
 Public Declare Function SetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
 Public Declare Function GetWindowLongA Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer) As Long
 Public Declare Function SetWindowLongW Lib "USER32" (ByVal hWnd As Long, ByVal index As Integer, ByVal value As Long) As Long
@@ -55,6 +55,7 @@ Public Declare Function ScreenToClient Lib "USER32" (ByVal hWnd As Long, ByRef p
 Public Declare Function InflateRect Lib "USER32" (ByRef lpRect As RECT, ByVal dx As Long, ByVal dy As Long) As Long
 Public Declare Function SetCursor Lib "USER32" (ByVal hCursor As Long) As Long
 Public Declare Function LoadCursorA Lib "USER32" (ByVal hInstance As Long, ByVal lpCursorName As Long) As Long
+Public Declare Function InvertRect Lib "USER32" (ByVal hDC As Long, ByRef rcInv As RECT) As Long
 
 ' GDI32
 Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long

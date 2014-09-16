@@ -15,11 +15,11 @@ Option Explicit
 DefInt A-Z
 
 Public Enum MiceLinesModeConsts
-    MiceLinesFull = 0
-    MiceLinesHalf
-    MiceLinesFullWithCoords
-    MiceLinesHalfWithCoords
-    MaxMiceLineMode
+    mmLinesFull = 0
+    mmLinesHalf
+    mmLinesFullCoords
+    mmLinesHalfCoords
+    mmCount
 End Enum
 
 Public Enum FileIOresults
@@ -77,8 +77,8 @@ Private Const cdMaxScale As Double = 40.96
 Private Const cdScaleMul As Double = 0.02
 Private Const cdScaleMul2 As Double = 0.5
 
-Private Const clRuleCx As Long = 16
-Private Const clRuleCy As Long = 16
+Private Const clRuleCx As Long = 8
+Private Const clRuleCy As Long = 7
 Private Const clRuleCx2 As Long = clRuleCx \ 2
 Private Const clRuleCy2 As Long = clRuleCy \ 2
 
@@ -143,7 +143,7 @@ Public Sub Class_Initialize()
     Scm.bShowGrid = True
     Scm.bShowRules = True
     Scm.bShowMiceLines = True
-    Scm.MiceLineMode = MiceLinesFull
+    Scm.MiceLineMode = mmLinesFull
     
     Alloc clCols, clRows
 End Sub
@@ -185,29 +185,29 @@ Public Sub ToggleRulesOnOff()
     Scm.bShowRules = Not Scm.bShowRules
 End Sub
 
-Public Sub BeginDrag(keys As Integer, xp As Long, yp As Long)
+Public Sub BeginDrag(iKey As Integer, xp As Long, yp As Long)
     lastLeft = Scm.offsetX
     lastTop = Scm.offsetY
     dragX = xp
     dragY = yp
 End Sub
 
-Public Sub Drag(keys As Integer, xp As Long, yp As Long)
+Public Sub Drag(iKey As Integer, xp As Long, yp As Long)
     Scm.offsetX = lastLeft + (xp - dragX)
     Scm.offsetY = lastTop + (yp - dragY)
 End Sub
 
-Public Sub EndDrag(keys As Integer, xp As Long, yp As Long)
+Public Sub EndDrag(iKey As Integer, xp As Long, yp As Long)
 End Sub
 
-Public Sub IncrementScale(val As Double, keys As Integer)
-    If keys And MK_CONTROL <> 0 Then
-        val = val * cdScaleMul2
+Public Sub IncrementScale(dAmount As Double, iKey As Integer)
+    If (iKey And MK_CONTROL) <> 0 Then
+        dAmount = dAmount * cdScaleMul2
     Else
-        val = val * cdScaleMul
+        dAmount = dAmount * cdScaleMul
     End If
     
-    Scm.dScale = Scm.dScale + val
+    Scm.dScale = Scm.dScale + dAmount
     
     If Scm.dScale < cdMinScale Then Scm.dScale = cdMinScale Else If Scm.dScale > cdMaxScale Then Scm.dScale = cdMaxScale
 End Sub
@@ -222,8 +222,8 @@ Public Sub IncrementMiceMode(ByVal bshift As Integer)
     Else
         If Scm.bShowMiceLines = True Then
             Scm.MiceLineMode = Scm.MiceLineMode + 1
-            If Scm.MiceLineMode < 0 Then Scm.MiceLineMode = MaxMiceLineMode - 1
-            If Scm.MiceLineMode > MaxMiceLineMode - 1 Then Scm.MiceLineMode = 0
+            If Scm.MiceLineMode < 0 Then Scm.MiceLineMode = mmCount - 1
+            If Scm.MiceLineMode > mmCount - 1 Then Scm.MiceLineMode = 0
         End If
     End If
 End Sub
@@ -557,21 +557,21 @@ Private Sub DrawRules(ByVal dc As Long)
     
     lastPen = SelectObject(dc, penGrid)
     
-    ALine dc, Scm.rcAll.Left + (Scm.vCol * Scm.rcItem.Width), rcHRule.Top, Scm.rcAll.Left + ((Scm.vCol + Scm.vColNum) * Scm.rcItem.Width), rcHRule.Top
-    ALine dc, rcVRule.Left, Scm.rcAll.Top + (Scm.vRow * Scm.rcItem.Height) _
-            , rcVRule.Left, Scm.rcAll.Top + ((Scm.vRow + Scm.vRowNum) * Scm.rcItem.Height)
+    Call ALine(dc, Scm.rcAll.Left + (Scm.vCol * Scm.rcItem.Width), rcHRule.Top, Scm.rcAll.Left + ((Scm.vCol + Scm.vColNum) * Scm.rcItem.Width), rcHRule.Top)
+    Call ALine(dc, rcVRule.Left, Scm.rcAll.Top + (Scm.vRow * Scm.rcItem.Height) _
+                 , rcVRule.Left, Scm.rcAll.Top + ((Scm.vRow + Scm.vRowNum) * Scm.rcItem.Height))
     
-    SelectObject dc, lastPen
+    Call SelectObject(dc, lastPen)
 End Sub
 
 Private Sub DrawFullMiceLines(ByVal dc As Long, ByRef mp As APOINT)
-    ALine dc, mp.x, Scm.rcDisplay.Top, mp.x, RBottom(Scm.rcDisplay)
-    ALine dc, Scm.rcDisplay.Left, mp.y, RRight(Scm.rcDisplay), mp.y
+    Call ALine(dc, mp.x, Scm.rcDisplay.Top, mp.x, RBottom(Scm.rcDisplay))
+    Call ALine(dc, Scm.rcDisplay.Left, mp.y, RRight(Scm.rcDisplay), mp.y)
 End Sub
 
 Private Sub DrawHalfMiceLines(ByVal dc As Long, ByRef mp As APOINT)
-    ALine dc, mp.x, Scm.rcDisplay.Top, mp.x, mp.y
-    ALine dc, Scm.rcDisplay.Left, mp.y, mp.x, mp.y
+    Call ALine(dc, mp.x, Scm.rcDisplay.Top, mp.x, mp.y)
+    Call ALine(dc, Scm.rcDisplay.Left, mp.y, mp.x, mp.y)
 End Sub
 
 Public Function GetIndexFromPoint(ByVal x As Long, ByVal y As Long, ByRef row As Long) As Long
@@ -598,12 +598,12 @@ Private Sub DrawMiceCoords(ByVal dc As Long, ByRef mp As APOINT)
     
     col = GetIndexFromPoint(mp.x, mp.y, row)
    
-    FillSolidRect dc, rcText, DocCoordHintBgColor
+    Call FillSolidRect(dc, rcText, DocCoordHintBgColor)
 
     text = "[" + CStr(col) + ", " + CStr(row) + "]"
     lastTextColor = SetTextColor(dc, DocCoordHintFgColor)
-    DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
-    SetTextColor dc, lastTextColor
+    Call DrawTextA(dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE)
+    Call SetTextColor(dc, lastTextColor)
 End Sub
 
 Public Sub DrawMiceLines(ByVal dc As Long, ByVal hWnd As Long)
@@ -611,29 +611,33 @@ Public Sub DrawMiceLines(ByVal dc As Long, ByVal hWnd As Long)
     If GetCursorPos(mp) <> 0 Then
         Dim lastPen As Long, lastFont As Long
         
-        ScreenToClient hWnd, mp
+        Call ScreenToClient(hWnd, mp)
 
         lastPen = SelectObject(dc, penMiceLine)
         
         Select Case Scm.MiceLineMode
-        Case 0
-            DrawFullMiceLines dc, mp
-        Case 1
-            DrawHalfMiceLines dc, mp
-        Case 2
-            DrawFullMiceLines dc, mp
-            DrawMiceCoords dc, mp
-        Case 3
-            DrawHalfMiceLines dc, mp
-            DrawMiceCoords dc, mp
+        Case mmLinesFull
+            Call DrawFullMiceLines(dc, mp)
+        Case mmLinesHalf
+            Call DrawHalfMiceLines(dc, mp)
+        Case mmLinesFullCoords
+            Call DrawFullMiceLines(dc, mp)
+            Call DrawMiceCoords(dc, mp)
+        Case mmLinesHalfCoords
+            Call DrawHalfMiceLines(dc, mp)
+            Call DrawMiceCoords(dc, mp)
         End Select
         
-        SelectObject dc, lastPen
+        Call SelectObject(dc, lastPen)
     End If
 End Sub
 
+Public Function IsIndexValid(ByVal lCol As Long, ByVal lRow As Long) As Boolean
+    IsIndexValid = (lCol >= 0) And (lRow >= 0) And (lCol < Scm.Cols) And (lRow < Scm.Rows)
+End Function
+
 Public Sub DrawHot(ByVal dc As Long)
-    If Scm.hotCol >= 0 And Scm.hotRow >= 0 And Scm.hotCol < Scm.Cols And Scm.hotRow < Scm.Rows Then
+    If IsIndexValid(Scm.hotCol, Scm.hotRow) Then
         Dim rcHot As RECT
 
         With rcHot
@@ -643,7 +647,8 @@ Public Sub DrawHot(ByVal dc As Long)
             .Bottom = .Top + Scm.rcItem.Height
         End With
 
-        FillSolidRect dc, rcHot, DocHotBgColor
+        'Call FillSolidRect(dc, rcHot, DocHotBgColor)
+        Call InvertRect(dc, rcHot)
     End If
 End Sub
 
@@ -666,12 +671,10 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
         Scm.rcDisplay = RInit(x, y, cx, cy)
     End If
     
-    CalcItemRect
-    CalcAllRect
-    CalcVisibleIndexes
-    CalcLimits
-    
-    DrawHot dc
+    Call CalcItemRect
+    Call CalcAllRect
+    Call CalcVisibleIndexes
+    Call CalcLimits
     
     Dim lastBkMode As Long, lastTextColor As Long
     lastBkMode = SetBkMode(dc, TRANSPARENT)
@@ -687,7 +690,7 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
         Scm.rcItem.Top = Scm.rcAll.Top + (row * Scm.rcItem.Height)
         For col = Scm.vCol To Scm.vColNum - 1
             Scm.rcItem.Left = Scm.rcAll.Left + (col * Scm.rcItem.Width)
-            DrawCell Item(col, row), dc, Scm.rcItem.Left, Scm.rcItem.Top, Scm.rcItem.Width, Scm.rcItem.Height
+            Call DrawCell(Item(col, row), dc, Scm.rcItem.Left, Scm.rcItem.Top, Scm.rcItem.Width, Scm.rcItem.Height)
             
 #If DrawCellCoordText Then
             Dim itemText As String
@@ -696,24 +699,26 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
             rcTemp = ToRECT(rcItem)
             Dim rcText As RECT
             rcText = rcTemp
-            DrawTextA dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
+            Call DrawTextA(dc, itemText, Len(itemText), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE)
 #End If
         Next col
     Next row
 
-    SelectObject dc, lastBrush
-    SelectObject dc, lastPen
-    SelectObject dc, lastFont
+    Call SelectObject(dc, lastBrush)
+    Call SelectObject(dc, lastPen)
+    Call SelectObject(dc, lastFont)
 
     lastFont = SelectObject(dc, fontHelpers)
 
-    If Scm.bShowGrid = True Then DrawGrid dc
-    If Scm.bShowRules = True Then DrawRules dc
-    If Scm.bShowMiceLines = True Then DrawMiceLines dc, hWnd
+    If Scm.bShowGrid = True Then Call DrawGrid(dc)
+    If Scm.bShowRules = True Then Call DrawRules(dc)
+    If Scm.bShowMiceLines = True Then Call DrawMiceLines(dc, hWnd)
     
-    SelectObject dc, lastFont
+    Call SelectObject(dc, lastFont)
 
-    SetTextColor dc, lastTextColor
-    SetBkMode dc, lastBkMode
+    Call SetTextColor(dc, lastTextColor)
+    Call SetBkMode(dc, lastBkMode)
+
+    Call DrawHot(dc)
 End Sub
 
