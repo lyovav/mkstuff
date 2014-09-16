@@ -2,6 +2,26 @@ Attribute VB_Name = "WinAPI"
 Option Explicit
 DefInt A-Z
 
+' KERNEL32
+Public Declare Function GetLastError Lib "KERNEL32" () As Long
+Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
+Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
+Public Declare Function GetFileAttributesA Lib "KERNEL32" (ByVal lpFileName As String) As Long
+Public Declare Function FindClose Lib "KERNEL32" (ByVal hFindFile As Long) As Long
+Public Declare Function FileTimeToLocalFileTime Lib "KERNEL32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
+Public Declare Function FileTimeToSystemTime Lib "KERNEL32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+Public Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
+Public Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
+Public Declare Function MulDiv Lib "KERNEL32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
+Public Declare Function GetPrivateProfileStringA Lib "KERNEL32" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
+Public Declare Function CreateFileA Lib "KERNEL32" (ByVal lpFileName As String, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, ByRef lpSecurityAttributes As SECURITY_ATTRIBUTES, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
+Public Declare Function WriteFile Lib "KERNEL32" (ByVal hFile As Long, ByVal lpBuffer As Long, ByVal nLen As Long, ByRef nWritten As Long, ByVal lpOverlapped As Long) As Long
+Public Declare Function SetFilePointer Lib "KERNEL32" (ByVal hFile As Long, ByVal lDist As Long, ByRef lpDistHigh As Long, ByVal dwMoveMethod As Long) As Long
+Public Declare Function SetFilePointerNull Lib "KERNEL32" Alias "SetFilePointer" (ByVal hFile As Long, ByVal lDist As Long, ByVal lpDistHigh As Long, ByVal dwMoveMethod As Long) As Long
+Public Declare Function GetFileSize Lib "KERNEL32" (ByVal hFile As Long, ByRef lpHigh As Long) As Long
+Public Declare Function GetFileSizeNull Lib "KERNEL32" Alias "GetFileSize" (ByVal hFile As Long, ByVal lpHigh As Long) As Long
+Public Declare Function ReadFile Lib "KERNEL32" (ByVal hFile As Long, ByVal lpBuffer As Long, ByVal nLen As Long, ByRef lpnRead As Long, ByVal lpOverlapped As Long) As Long
+
 ' USER32
 Public Declare Function GetSystemMetrics Lib "USER32" (ByVal n As Integer) As Integer
 Public Declare Function SendMessageA Lib "USER32" (ByVal hWnd As Long, ByVal message As Integer, ByVal wParam As Integer, ByVal lParam As Long) As Long
@@ -29,18 +49,6 @@ Public Declare Function GetCursorPos Lib "USER32" (ByRef lpPoint As APOINT) As L
 Public Declare Function SetCursorPos Lib "USER32" (ByVal x As Long, ByVal y As Long) As Long
 Public Declare Function ScreenToClient Lib "USER32" (ByVal hWnd As Long, ByRef pn As APOINT) As Long
 Public Declare Function InflateRect Lib "USER32" (ByRef lpRect As RECT, ByVal dx As Long, ByVal dy As Long) As Long
-
-' KERNEL32
-Public Declare Function FindFirstFileA Lib "KERNEL32" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATAA) As Long
-Public Declare Function FindNextFileA Lib "KERNEL32" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATAA) As Long
-Public Declare Function GetFileAttributesA Lib "KERNEL32" (ByVal lpFileName As String) As Long
-Public Declare Function FindClose Lib "KERNEL32" (ByVal hFindFile As Long) As Long
-Public Declare Function FileTimeToLocalFileTime Lib "KERNEL32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
-Public Declare Function FileTimeToSystemTime Lib "KERNEL32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
-Public Declare Function CreateThread Lib "KERNEL32" (ByVal lpSecurityAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, ByVal lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
-Public Declare Function CloseHandle Lib "KERNEL32" (ByVal hObject As Long) As Long
-Public Declare Function MulDiv Lib "KERNEL32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
-Public Declare Function GetPrivateProfileStringA Lib "KERNEL32" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
 
 ' GDI32
 Public Declare Function GetStockObject Lib "GDI32" (ByVal index As Integer) As Long
@@ -188,3 +196,26 @@ End Function
 Public Function RHeight(ByRef rc As RECT) As Long
     RHeight = rc.Bottom - rc.Top
 End Function
+
+Public Function CreateEmptySECURITY_ATTRIBUTES() As SECURITY_ATTRIBUTES
+    Dim rv As SECURITY_ATTRIBUTES
+    
+    rv.bInheritHandle = 0
+    rv.lpSecurityDescriptor = 0
+    rv.nLength = Len(rv)
+    
+    CreateEmptySECURITY_ATTRIBUTES = rv
+End Function
+
+Public Function CreateEmptyOVERLAPPED() As OVERLAPPED
+    Dim rv As OVERLAPPED
+    
+    rv.Internal = 0
+    rv.InternalHigh = 0
+    rv.Offset = 0
+    rv.OffsetHigh = 0
+    rv.hEvent = 0
+   
+    CreateEmptyOVERLAPPED = rv
+End Function
+
