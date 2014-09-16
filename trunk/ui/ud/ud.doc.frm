@@ -20,7 +20,6 @@ Begin VB.Form CDoc
    Icon            =   "ud.doc.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   MousePointer    =   2  'Cross
    ScaleHeight     =   428
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   868
@@ -59,6 +58,7 @@ Private Sub Form_Load()
     hFont = 0
     DragOn = False
     OriginalCaption = Me.Caption
+    Scheme.SetMousePointer
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -95,9 +95,9 @@ Private Sub Form_MouseDown(btnNum As Integer, bshift As Integer, x As Single, y 
     SetFocus
     
     Select Case btnNum
-    Case vbLeftButton
-        Scheme.HighlightByCoords CLng(x), CLng(y)
-        Invalidate Me
+    'Case vbLeftButton
+    '    Scheme.HighlightByCoords CLng(x), CLng(y)
+    '    Invalidate Me
         
     Case vbRightButton
         Me.PopupMenu Mainframe.mnuScheme, , x, y
@@ -215,7 +215,7 @@ Private Sub Form_KeyDown(code As Integer, bshift As Integer)
     Case Asc("M")
         Scheme.IncrementMiceMode bshift
         Invalidate Me, 0
-        
+       
     End Select
 End Sub
 
