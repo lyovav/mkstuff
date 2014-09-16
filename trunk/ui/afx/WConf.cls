@@ -39,13 +39,13 @@ Public Sub OnFormLoad(ByRef frm As Form, Optional strVersion As String = "1.0.0"
     
     cx = frm.Width
     cy = frm.Height
-    x = ((GetSystemMetrics(SM_CXSCREEN) * Screen.TwipsPerPixelX) - cx) / 2
-    y = ((GetSystemMetrics(SM_CYFULLSCREEN) * Screen.TwipsPerPixelY) - cy) / 2
+    x = ((GetSystemMetrics(SM_CXSCREEN) * Screen.TwipsPerPixelX) - cx) \ 2
+    y = ((GetSystemMetrics(SM_CYFULLSCREEN) * Screen.TwipsPerPixelY) - cy) \ 2
     
     frm.WindowState = GetSetting(appName, scConfig, scWindowState, vbNormal)
     If frm.WindowState <> vbMaximized Then
-        frm.left = GetSetting(appName, scConfig, scLeft, x)
-        frm.top = GetSetting(appName, scConfig, scTop, y)
+        frm.Left = GetSetting(appName, scConfig, scLeft, x)
+        frm.Top = GetSetting(appName, scConfig, scTop, y)
         frm.Width = GetSetting(appName, scConfig, scWidth, frm.Width)
         frm.Height = GetSetting(appName, scConfig, scHeight, frm.Height)
     End If
@@ -56,19 +56,19 @@ Public Sub OnFormUnload(ByRef frm As Form)
 
     SaveSetting appName, scConfig, scWindowState, frm.WindowState
     If frm.WindowState <> vbMaximized Then
-        SaveSetting appName, scConfig, scLeft, frm.left
-        SaveSetting appName, scConfig, scTop, frm.top
+        SaveSetting appName, scConfig, scLeft, frm.Left
+        SaveSetting appName, scConfig, scTop, frm.Top
         SaveSetting appName, scConfig, scWidth, frm.Width
         SaveSetting appName, scConfig, scHeight, frm.Height
     End If
 End Sub
 
 Public Sub LoadTextBox(ByRef tb As TextBox, Optional deft As String = "")
-    tb.Text = GetSetting(appName, scConfig, tb.name, deft)
+    tb.text = GetSetting(appName, scConfig, tb.name, deft)
 End Sub
 
 Public Sub SaveTextBox(ByRef tb As TextBox)
-    SaveSetting appName, scConfig, tb.name, tb.Text
+    SaveSetting appName, scConfig, tb.name, tb.text
 End Sub
 
 Public Function GetString(name As String, Optional deft As String = "") As String
