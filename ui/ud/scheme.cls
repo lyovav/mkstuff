@@ -100,7 +100,7 @@ Private fontCell As Long
 Public Sub DoDebugStuff()
     Clear
     
-    Item(32, 23) = CreateVoltmeter()
+    Item(32, 22) = CreateVoltmeter()
     Item(30, 24) = CreateAmpermeter()
     Item(32, 24) = CreateResistor()
 End Sub
@@ -133,7 +133,7 @@ Public Sub Class_Initialize()
     Scm.bShowMiceLines = True
     Scm.MiceLineMode = MiceLinesFull
     
-    ReAlloc clRows, clCols
+    Alloc clCols, clRows
 End Sub
 
 Private Sub Class_Terminate()
@@ -218,8 +218,15 @@ Public Sub Clear()
     Next row
 End Sub
 
-Public Sub ReAlloc(cn As Long, rn As Long)
-    ReDim Preserve Item(0 To cn, 0 To rn) As CellDesc
+Private Sub ReAlloc(cn As Long, rn As Long)
+    ReDim Preserve Item(0 To rn, 0 To cn) As CellDesc
+    
+    Scm.Cols = UBound(Item, 2)
+    Scm.Rows = UBound(Item, 1)
+End Sub
+
+Private Sub Alloc(cn As Long, rn As Long)
+    ReDim Item(0 To rn, 0 To cn) As CellDesc
     
     Scm.Cols = UBound(Item, 2)
     Scm.Rows = UBound(Item, 1)
@@ -257,30 +264,44 @@ End Function
 
 Public Function LoadScheme(fName As String) As Integer
     On Error GoTo IOErr
-    Dim fn As Integer, fs As Long, reqLen As Long
-    Dim tempScm As ScmHead
+    Dim hr As Long
     
-    fn = FreeFile
-    reqLen = Len(tempScm)
-    Open fName For Binary Access Read As #fn Len = reqLen
-    fs = LOF(fn)
-    If fs < reqLen Then
-        StatusText = "`" + fName + "`" + vbCrLf + " invalid file size (" + CStr(fs) + ")"
+    Dim secAttr As SECURITY_ATTRIBUTES
+    secAttr = CreateEmptySECURITY_ATTRIBUTES()
+   
+    Dim hScheme As Long
+    hScheme = CreateFileA(fName, GENERIC_READ, FILE_SHARE_READ, secAttr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0)
+    hr = GetLastError()
+    If hScheme = INVALID_HANDLE_VALUE Then
+        Err.Raise hr
+    End If
+    
+    Dim tempScm As ScmHead
+    Dim fileSize As Long, fileSizeHigh As Long
+    
+    fileSize = GetFileSize(hScheme, fileSizeHigh)
+    If fileSize < Len(tempScm) Then
+        CloseHandle hScheme
+        StatusText = "`" + fName + "`" + vbCrLf + " invalid file size (" + CStr(fileSize) + ")"
         Debug.Print StatusText
         LoadScheme = IOErrInvalidFile
         Exit Function
     End If
     
-    Get #fn, , tempScm
-    Close #fn
+    Dim read As Long
+    ReadFile hScheme, VarPtr(tempScm), Len(tempScm), read, 0
+    If read <> Len(tempScm) Then Err.Raise GetLastError()
     
     If CheckFileHeader(tempScm) <> 1 Then
+        CloseHandle hScheme
         StatusText = "`" + fName + "`" + vbCrLf + " file has wrong signature (" + BytesToPlaneString(tempScm.Sign, 1, 4) + ")"
         Debug.Print StatusText
         LoadScheme = IOErrWrongSignature
         Exit Function
     Else
         If CheckFileVersion(tempScm) <> 1 Then
+            CloseHandle hScheme
+            
             StatusText = "`" + fName + "`" + vbCrLf _
                        + " incompatible version (" + BytesToPlaneString(tempScm.Version, 1, 4) + ")" + vbCrLf _
                        + "v" + BytesToPlaneString(Scm.Version, 1, 4) + " required "
@@ -289,47 +310,62 @@ Public Function LoadScheme(fName As String) As Integer
             LoadScheme = IOErrVersionMismatch
             Exit Function
         Else
-            ReDim Item(0 To tempScm.Cols, 0 To tempScm.Rows) As CellDesc
-            reqLen = Len(Item(0, 0)) * tempScm.Cols * tempScm.Rows
-            Open fName For Binary Access Read As #fn Len = reqLen
-            Seek #fn, Len(tempScm) + 1
-            Get #fn, , Item
-            Close #fn
+            Alloc tempScm.Cols, tempScm.Rows
+            
+            Dim itemsLen As Long
+            itemsLen = Len(Item(0, 0)) * Scm.Cols * Scm.Rows
+            ReadFile hScheme, VarPtr(Item(0, 0)), itemsLen, read, 0
+            If read <> itemsLen Then
+                Clear
+                Err.Raise GetLastError()
+            End If
+            
             Scm = tempScm
         End If
     End If
     
+    CloseHandle hScheme
     LoadScheme = IOErrOK
     Exit Function
 IOErr:
+    CloseHandle hScheme
+    
     StatusText = "LoadScheme failed: " + CStr(Err.Number) + " `" + fName + "` " + vbCrLf + Err.Description
     Debug.Print StatusText
-    Close #fn
+    
     LoadScheme = IOErrSystem
 End Function
 
 Public Function SaveScheme(fName As String) As Integer
     On Error GoTo IOErr
-    Dim fn As Integer, fs As Long, reqLen As Long
     
-    fn = FreeFile
-    reqLen = Len(Scm)
-    Open fName For Binary Access Write As #fn Len = reqLen
-    Put #fn, , Scm
-    Close #fn
+    Dim secAttr As SECURITY_ATTRIBUTES
+    secAttr = CreateEmptySECURITY_ATTRIBUTES()
+   
+    Dim hScheme As Long
+    hScheme = CreateFileA(fName, GENERIC_WRITE, FILE_SHARE_READ, secAttr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0)
+    If hScheme = INVALID_HANDLE_VALUE Then Err.Raise GetLastError()
     
-    reqLen = Len(Item(0, 0)) * Scm.Cols * Scm.Rows
-    Open fName For Binary Access Write As #fn Len = reqLen
-    Seek #fn, Len(Scm) + 1
-    Put #fn, , Item
+    Dim written As Long
+    WriteFile hScheme, VarPtr(Scm), Len(Scm), written, 0
+    If written <> Len(Scm) Then Err.Raise GetLastError()
     
-    Close #fn
+    Dim itemsLen As Long
+    itemsLen = Len(Item(0, 0)) * Scm.Cols * Scm.Rows
+    
+    WriteFile hScheme, VarPtr(Item(0, 0)), itemsLen, written, 0
+    If written <> itemsLen Then Err.Raise GetLastError()
+    
+    CloseHandle hScheme
+    
     SaveScheme = IOErrOK
     Exit Function
 IOErr:
+    CloseHandle hScheme
+    
     StatusText = "SaveScheme failed: " + CStr(Err.Number) + " `" + fName + "` " + vbCrLf + Err.Description
     Debug.Print StatusText
-    Close #fn
+
     SaveScheme = IOErrSystem
 End Function
 

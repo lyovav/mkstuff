@@ -43,6 +43,7 @@ Private hFont As Long
 Private OriginalCaption As String
 
 Public Scheme As New CScheme
+Public TempSchemeFilename As String
 
 Public DragOn As Boolean
 Public PrevWndProc As Long
@@ -61,7 +62,7 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    Scheme.SaveScheme OriginalCaption + Scheme.GetActualFileExt()
+    Scheme.SaveScheme TempSchemeFilename
     DeleteDBuffer
     DeleteObject hFont
 End Sub
@@ -81,7 +82,8 @@ Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, wins
     Me.WindowState = winsta
     Me.Visible = visbl
     UpdateTitle
-    Scheme.LoadScheme OriginalCaption + Scheme.GetActualFileExt()
+    TempSchemeFilename = "." + OriginalCaption + Scheme.GetActualFileExt()
+    Scheme.LoadScheme TempSchemeFilename
     Scheme.DoDebugStuff
 End Sub
 

@@ -102,10 +102,24 @@ Public Type MDINEXTMENU
 End Type
 
 Public Type PAINTSTRUCT
-   hdc As Long
+   hDC As Long
    fErase As Long
    rcPaint As RECT
    fRestore As Long
    fIncUpdate As Long
    rgbReserved(0 To 16) As Byte
+End Type
+
+Public Type SECURITY_ATTRIBUTES
+    nLength As Long
+    lpSecurityDescriptor As Long
+    bInheritHandle As Long
+End Type
+
+Public Type OVERLAPPED
+    Internal As Long
+    InternalHigh As Long
+    Offset As Long
+    OffsetHigh As Long
+    hEvent As Long
 End Type
