@@ -15,8 +15,6 @@ Private Sub Main()
     Debug.Print "APPENTRY: Mainframe `" + Mainframe.LinkTopic + "` started"
     Debug.Print "APPENTRY: Command line - `" + Command$ + "`"
     
-    InitBasics
-    
     Mainframe.Init
     Mainframe.Show
 End Sub
