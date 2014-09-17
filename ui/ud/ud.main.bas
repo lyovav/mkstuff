@@ -9,6 +9,12 @@ Public hInstance As Long
 Private Sub Main()
     Randomize
     
+    Dim pn As New Pin
+    Dim ct As ICell
+    
+    Set ct = Nothing
+    Call pn.Connect(ct)
+    
     hInstance = GetModuleHandleANull(0)
     InitCommonControls
     
