@@ -5,6 +5,7 @@ DefInt A-Z
 Public Enum CellType
     ctBlank = 32
     ctPin
+    ctWire
     ctVoltmeter
     ctAmpermeter
     ctVivaLaResistance
@@ -31,8 +32,8 @@ Public Type CellDesc
     Id As Long
     Type As Long
     Flags As Long
-    Pin(1 To 2) As PinDesc
-    Text(1 To 32) As Byte
+    Pin(1 To 4) As PinDesc
+    Text(1 To 8) As Byte
 End Type
 
 Public BlankCell As CellDesc
@@ -57,7 +58,9 @@ Private Sub DrawWire(cell As CellDesc, ByVal dc As Long, rc As RECT, hcx As Long
     Dim i As Long
     Call MoveToChecked(dc, rc.Left + cell.Pin(1).x * hcx, rc.Top + cell.Pin(1).y * hcy)
     For i = 2 To UBound(cell.Pin)
-        Call LineToChecked(dc, rc.Left + cell.Pin(i).x * hcx, rc.Top + cell.Pin(i).y * hcy)
+        If cell.Pin(i).x <> -1 Then
+            Call LineToChecked(dc, rc.Left + cell.Pin(i).x * hcx, rc.Top + cell.Pin(i).y * hcy)
+        End If
     Next i
 End Sub
 
@@ -105,7 +108,13 @@ Public Sub InitBasics()
     End With
 End Sub
 
-Public Function CreateBlankCell(ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long) As CellDesc
+Public Function IsBlankCell(ByRef cell As CellDesc) As Boolean
+    IsBlankCell = (cell.Type = ctBlank)
+End Function
+
+Public Function CreateBlankCell(Optional x1 As Long = 0, Optional y1 As Long = 1, Optional x2 As Long = 2, Optional y2 As Long = 1 _
+                              , Optional x3 As Long = -1, Optional y3 As Long = -1, Optional x4 As Long = -1, Optional y4 As Long = -1 _
+                              ) As CellDesc
     Dim rv As CellDesc, i As Long
     With rv
         .Id = 0
@@ -117,12 +126,27 @@ Public Function CreateBlankCell(ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As 
         .Pin(2).x = x2 '  1|     |
         .Pin(2).y = y2 '  2|_____|
         
+        .Pin(3).x = x3
+        .Pin(3).y = y3
+        .Pin(4).x = x4
+        .Pin(4).y = y4
+        
         For i = LBound(.Text) To UBound(.Text)
             .Text(i) = 0
         Next i
     End With
     CreateBlankCell = rv
 End Function
+
+Public Function CreateWire(Optional x1 As Long = 0, Optional y1 As Long = 1, Optional x2 As Long = 2, Optional y2 As Long = 1 _
+                         , Optional x3 As Long = -1, Optional y3 As Long = -1, Optional x4 As Long = -1, Optional y4 As Long = -1 _
+                           ) As CellDesc
+    Dim rv As CellDesc
+    rv = CreateBlankCell(x1, y1, x2, y2, x3, y3, x4, y4)
+    rv.Type = ctWire
+    CreateWire = rv
+End Function
+
 
 Public Function CreatePin(ByVal x As Long, ByVal y As Long) As CellDesc
     Dim rv As CellDesc
