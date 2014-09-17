@@ -137,8 +137,8 @@ Public Sub Class_Initialize()
     fontHelpers = CreateFontA(-9, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Small fonts")
     fontCell = CreateFontA(-18, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Arial Narrow")
     
-    Cursor(ciCross) = LoadCursorA(AppEntry.hInstance, 101)
-    Cursor(ciSpot) = LoadCursorA(AppEntry.hInstance, 102)
+    'Cursor(ciCross) = LoadCursorA(AppEntry.hInstance, 101)
+    'Cursor(ciSpot) = LoadCursorA(AppEntry.hInstance, 102)
 
     Call ResetView(True, True)
     
@@ -493,7 +493,7 @@ Private Sub DrawRules(ByVal dc As Long)
     Dim rcHRule As RECT
     Dim rcVRule As RECT
     Dim rcText As RECT
-    Dim text As String
+    Dim Text As String
     
     With rcHRule
         .Left = scm.rcDisplay.Left - clRuleCx
@@ -529,8 +529,8 @@ Private Sub DrawRules(ByVal dc As Long)
                     .Bottom = rcHRule.Bottom - 2
                 End With
 
-                text = CStr(i)
-                DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
+                Text = CStr(i)
+                DrawTextA dc, Text, Len(Text), rcText, DT_CENTER + DT_BOTTOM + DT_SINGLELINE
             End If
 #End If
         End If
@@ -551,8 +551,8 @@ Private Sub DrawRules(ByVal dc As Long)
                     .Bottom = .Top + scm.rcItem.Height
                 End With
 
-                text = CStr(i)
-                DrawTextA dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
+                Text = CStr(i)
+                DrawTextA dc, Text, Len(Text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE
             End If
 #End If
         End If
@@ -594,7 +594,7 @@ End Function
 
 Private Sub DrawMiceCoords(ByVal dc As Long, ByRef mp As APOINT)
     Dim rcText As RECT
-    Dim text As String
+    Dim Text As String
     Dim row As Long, col As Long, lastTextColor As Long
     
     With rcText
@@ -608,9 +608,9 @@ Private Sub DrawMiceCoords(ByVal dc As Long, ByRef mp As APOINT)
    
     Call FillSolidRect(dc, rcText, DocCoordHintBgColor)
 
-    text = "[" + CStr(col) + ", " + CStr(row) + "]"
+    Text = "[" + CStr(col) + ", " + CStr(row) + "]"
     lastTextColor = SetTextColor(dc, DocCoordHintFgColor)
-    Call DrawTextA(dc, text, Len(text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE)
+    Call DrawTextA(dc, Text, Len(Text), rcText, DT_CENTER + DT_VCENTER + DT_SINGLELINE)
     Call SetTextColor(dc, lastTextColor)
 End Sub
 
@@ -734,8 +734,11 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
 End Sub
 
 Public Sub ConnectByWyre(ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long)
-    Dim sc As Long, sr As Long
+    Dim sc As Long, sr As Long ' start pos
+    Dim ec As Long, er As Long ' end pos
+    Dim cc As Long, cr As Long ' count
+    Dim stepc As Long, stepr As Long ' step
     
     sc = GetIndexFromPoint(x1, y1, sr)
-    
+    ec = GetIndexFromPoint(x2, y2, er)
 End Sub
