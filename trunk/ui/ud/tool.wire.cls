@@ -34,10 +34,7 @@ End Function
 
 Private Sub ITool_OnBegin(ByRef pScheme As CScheme, ByVal x As Long, ByVal y As Long, ByVal iKeys As Integer)
     If bInProgress Then
-        bInProgress = False
-        lEndX = x
-        lEndY = y
-        Call pScheme.ConnectByWyre(lStartX, lStartY, lEndX, lEndY)
+        Call ITool_OnEnd(pScheme, x, y, iKeys, False)
     Else
         lStartX = x
         lStartY = y
@@ -50,7 +47,15 @@ Private Sub ITool_OnMove(ByVal x As Long, ByVal y As Long, ByVal iKeys As Intege
     lCurrY = y
 End Sub
 
-Private Sub ITool_OnEnd(ByRef pScheme As CScheme, ByVal x As Long, ByVal y As Long, ByVal iKeys As Integer)
+Private Sub ITool_OnEnd(ByRef pScheme As CScheme, ByVal x As Long, ByVal y As Long, ByVal iKeys As Integer, ByVal bCancel As Boolean)
+    If bInProgress Then
+        bInProgress = False
+        If Not bCancel Then
+            lEndX = x
+            lEndY = y
+            Call pScheme.ConnectByWyre(lStartX, lStartY, lEndX, lEndY)
+        End If
+    End If
 End Sub
 
 Private Sub ITool_OnDraw(ByVal dc As Long, ByRef pScheme As CScheme)

@@ -1,5 +1,5 @@
 VERSION 5.00
-Begin VB.Form DocProps 
+Begin VB.Form w 
    BorderStyle     =   3  'Fixed Dialog
    ClientHeight    =   4230
    ClientLeft      =   2760
@@ -43,7 +43,7 @@ Begin VB.Form DocProps
       End
    End
 End
-Attribute VB_Name = "DocProps"
+Attribute VB_Name = "w"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True

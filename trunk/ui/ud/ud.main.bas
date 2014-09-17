@@ -1,4 +1,4 @@
-Attribute VB_Name = "UdMain"
+Attribute VB_Name = "AppEntry"
 Option Explicit
 DefInt A-Z
 

@@ -43,12 +43,12 @@ Public Function ToRECT(rc As CRect) As RECT
     ToRECT = rv
 End Function
 
-Public Sub DrawRect(ByVal hDC As Long, rc As CRect)
+Public Sub DrawRect(ByVal hDc As Long, rc As CRect)
     Dim pt As APOINT
-    MoveToEx hDC, rc.Left, rc.Top, pt
-    LineTo hDC, RRight(rc), rc.Top
-    LineTo hDC, RRight(rc), RBottom(rc)
-    LineTo hDC, rc.Left, RBottom(rc)
-    LineTo hDC, rc.Left, rc.Top
+    MoveToEx hDc, rc.Left, rc.Top, pt
+    LineTo hDc, RRight(rc), rc.Top
+    LineTo hDc, RRight(rc), RBottom(rc)
+    LineTo hDc, rc.Left, RBottom(rc)
+    LineTo hDc, rc.Left, rc.Top
 End Sub
 

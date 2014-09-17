@@ -23,7 +23,7 @@ End Sub
 Public Sub OnMove(ByVal x As Long, ByVal y As Long, ByVal iKeys As Integer)
 End Sub
 
-Public Sub OnEnd(ByRef pScheme As CScheme, ByVal x As Long, ByVal y As Long, ByVal iKeys As Integer)
+Public Sub OnEnd(ByRef pScheme As CScheme, ByVal x As Long, ByVal y As Long, ByVal iKeys As Integer, ByVal bCancel As Boolean)
 End Sub
 
 Public Sub OnDraw(ByVal dc As Long, ByRef pScheme As CScheme)
