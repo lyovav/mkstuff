@@ -14,10 +14,35 @@ Attribute VB_Exposed = False
 Option Explicit
 DefInt A-Z
 
-Public dI As Double
-Public dU As Double
+Private Connection() As ICell
 
-Private Sub Class_Initialize()
-    dI = 0#
-    dU = 0#
+Public Sub Connect(pCell As ICell)
+    On Error Resume Next
+    
+    If pCell Then
+        Dim iCur As Long
+        iCur = UBound(Connection)
+        iCur = iCur + 1
+        ReDim Connection(0 To iCur) As ICell
+        Set Connection(iCur) = pCell
+    End If
 End Sub
+
+Public Sub ProcessInput(ByRef dU As Double, ByRef dI As Double)
+    On Error Resume Next
+    Dim iMax As Long, i As Long
+    iMax = UBound(Connection)
+    For i = 1 To iMax
+        Call Connection(i).ProcessInput(dU, dI)
+    Next i
+End Sub
+
+Public Sub ResetOutout(ByRef dU As Double, ByRef dI As Double)
+    On Error Resume Next
+    Dim iMax As Long, i As Long
+    iMax = UBound(Connection)
+    For i = 1 To iMax
+        Call Connection(i).ResetOutout(dU, dI)
+    Next i
+End Sub
+

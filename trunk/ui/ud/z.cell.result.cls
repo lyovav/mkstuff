@@ -6,21 +6,10 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "ICell"
+Attribute VB_Name = "ICellResult"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-DefInt A-Z
-
-Public Sub Process()
-End Sub
-
-Public Sub ProcessInput(ByRef dU As Double, ByRef dI As Double)
-End Sub
-
-Public Sub ResetOutput(ByRef dU As Double, ByRef dI As Double)
-End Sub
-
-
+DefInt Z-A
