@@ -185,6 +185,8 @@ End Sub
 Private Sub Form_KeyDown(iCode As Integer, iKeys As Integer)
     ' TODO: configure keyboard shortcuts
     Select Case iCode
+    Case 27 ' ESC - cancel current tool
+        Call pTool.OnEnd(Scheme, 0, 0, 0, True)
     Case 8 ' backspace - reset ZOOM only
         Call Scheme.ResetView(False, False)
         Call UpdateTitle
@@ -204,12 +206,10 @@ Private Sub Form_MouseDown(btnNum As Integer, iKeys As Integer, x As Single, y A
     
     Select Case btnNum
     Case vbLeftButton
-        Call Scheme.HighlightByCoords(CLng(x), CLng(y))
+        'Call Scheme.HighlightByCoords(CLng(x), CLng(y))
         Call pTool.OnBegin(Scheme, CLng(x), CLng(y), iKeys)
-        
     Case vbRightButton
         Call PopupMenu(Mainframe.mnuScheme, , x, y)
-        
     Case vbMiddleButton
         Call SetCapture(Me.hWnd)
         DragOn = True
@@ -233,9 +233,6 @@ End Sub
 
 Private Sub Form_MouseUp(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
     Select Case btnNum
-    Case vbLeftButton
-        Call pTool.OnEnd(Scheme, CLng(x), CLng(y), iKeys)
-    
     Case vbMiddleButton
         DragOn = False
         Call ReleaseCapture

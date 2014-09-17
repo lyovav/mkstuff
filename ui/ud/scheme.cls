@@ -131,12 +131,12 @@ Public Sub Class_Initialize()
     penRulesMark = CreatePen(DocRulesPenStyle, 2, DocRulesColor)
     penMiceLine = CreatePen(DocMiceLinePenStyle, 1, DocMiceLineColor)
     penCell = CreatePen(DonCellPenStyle, DonCellPenWidth, DocCellPenColor)
-    brushCell = GetStockObject(NULL_BRUSH)
+    brushCell = CreateSolidBrush(DocBgColor)
     fontHelpers = CreateFontA(-9, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Small fonts")
     fontCell = CreateFontA(-32, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Arial Narrow")
     
-    Cursor(ciCross) = LoadCursorA(UdMain.hInstance, 101)
-    Cursor(ciSpot) = LoadCursorA(UdMain.hInstance, 102)
+    Cursor(ciCross) = LoadCursorA(AppEntry.hInstance, 101)
+    Cursor(ciSpot) = LoadCursorA(AppEntry.hInstance, 102)
 
     Call ResetView(True, True)
     
@@ -245,7 +245,7 @@ Public Sub Clear()
     Dim row As Long, col As Long
     For row = 0 To scm.Rows
         For col = 0 To scm.Cols
-            Item(row, col) = ZeroCell
+            Item(row, col) = BlankCell
         Next col
     Next row
 End Sub
@@ -612,30 +612,25 @@ Private Sub DrawMiceCoords(ByVal dc As Long, ByRef mp As APOINT)
     Call SetTextColor(dc, lastTextColor)
 End Sub
 
-Public Sub DrawMiceLines(ByVal dc As Long, ByVal hWnd As Long)
-    Dim mp As APOINT
-    If GetCursorPos(mp) <> 0 Then
-        Dim lastPen As Long, lastFont As Long
-        
-        Call ScreenToClient(hWnd, mp)
+Private Sub DrawMiceLines(ByVal dc As Long, ByRef mp As APOINT)
+    Dim lastPen As Long, lastFont As Long
 
-        lastPen = SelectObject(dc, penMiceLine)
-        
-        Select Case scm.MiceLineMode
-        Case mmLinesFull
-            Call DrawFullMiceLines(dc, mp)
-        Case mmLinesHalf
-            Call DrawHalfMiceLines(dc, mp)
-        Case mmLinesFullCoords
-            Call DrawFullMiceLines(dc, mp)
-            Call DrawMiceCoords(dc, mp)
-        Case mmLinesHalfCoords
-            Call DrawHalfMiceLines(dc, mp)
-            Call DrawMiceCoords(dc, mp)
-        End Select
-        
-        Call SelectObject(dc, lastPen)
-    End If
+    lastPen = SelectObject(dc, penMiceLine)
+    
+    Select Case scm.MiceLineMode
+    Case mmLinesFull
+        Call DrawFullMiceLines(dc, mp)
+    Case mmLinesHalf
+        Call DrawHalfMiceLines(dc, mp)
+    Case mmLinesFullCoords
+        Call DrawFullMiceLines(dc, mp)
+        Call DrawMiceCoords(dc, mp)
+    Case mmLinesHalfCoords
+        Call DrawHalfMiceLines(dc, mp)
+        Call DrawMiceCoords(dc, mp)
+    End Select
+    
+    Call SelectObject(dc, lastPen)
 End Sub
 
 Public Function IsIndexValid(ByVal lCol As Long, ByVal lRow As Long) As Boolean
@@ -670,6 +665,10 @@ End Sub
 
 Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx As Long, cy As Long, ByRef pTool As ITool)
     On Error Resume Next
+    Dim lastBkMode As Long, lastTextColor As Long
+    Dim row As Long, col As Long
+    Dim lastFont As Long, lastPen As Long, lastBrush As Long
+    Dim miceCoords As APOINT
     
     If scm.bShowRules = True Then
         scm.rcDisplay = RInit(x + clRuleCx, y + clRuleCy, cx - clRuleCx, cy - clRuleCy)
@@ -682,11 +681,11 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
     Call CalcVisibleIndexes
     Call CalcLimits
     
-    Dim lastBkMode As Long, lastTextColor As Long
     lastBkMode = SetBkMode(dc, TRANSPARENT)
     lastTextColor = SetTextColor(dc, DocFgColor)
     
-    Dim row As Long, col As Long, lastFont As Long, lastPen As Long, lastBrush As Long
+    Call GetCursorPos(miceCoords)
+    Call ScreenToClient(hWnd, miceCoords)
     
     lastFont = SelectObject(dc, fontCell)
     lastPen = SelectObject(dc, penCell)
@@ -696,7 +695,7 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
         scm.rcItem.Top = scm.rcAll.Top + (row * scm.rcItem.Height)
         For col = scm.vCol To scm.vColNum - 1
             scm.rcItem.Left = scm.rcAll.Left + (col * scm.rcItem.Width)
-            Call DrawCell(Item(col, row), dc, scm.rcItem.Left, scm.rcItem.Top, scm.rcItem.Width, scm.rcItem.Height)
+            Call DrawCell(Item(col, row), dc, scm.rcItem, miceCoords)
             
 #If DrawCellCoordText Then
             Dim itemText As String
@@ -722,7 +721,7 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
 
     If scm.bShowGrid = True Then Call DrawGrid(dc)
     If scm.bShowRules = True Then Call DrawRules(dc)
-    If scm.bShowMiceLines = True Then Call DrawMiceLines(dc, hWnd)
+    If scm.bShowMiceLines = True Then Call DrawMiceLines(dc, miceCoords)
     
     Call SelectObject(dc, lastFont)
 
@@ -733,4 +732,8 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
 End Sub
 
 Public Sub ConnectByWyre(ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long)
+    Dim sc As Long, sr As Long
+    
+    sc = GetIndexFromPoint(x1, y1, sr)
+    
 End Sub

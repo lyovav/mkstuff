@@ -1,113 +1,108 @@
-Attribute VB_Name = "UdBasics"
+Attribute VB_Name = "Basics"
 Option Explicit
 DefInt A-Z
 
 Public Enum CellType
-    ctZero = -1
-    ctVoltmeter = 1
+    ctBlank = 32
+    ctVoltmeter
     ctAmpermeter
     ctVivaLaResistance
 End Enum
 
 Public Enum CellFlags
     cfNone = 0
-    cfHorizontal = &H1
-    cfVertical = &H2
 End Enum
+
+Public Type PinDesc
+    x As Long
+    y As Long
+End Type
+
+' Pin coords
+'.Pin(1).x = 0   '   0__1__2
+'.Pin(1).y = 1   '  0|     |
+'.Pin(2).x = 2   '  1|     |
+'.Pin(2).y = 1   '  2|_____|
 
 Public Type CellDesc
     Id As Long
     Type As Long
     Flags As Long
-    Reserved As Long
+    Pin(1 To 2) As PinDesc
 End Type
 
-Public ZeroCell As CellDesc
+Public BlankCell As CellDesc
 
-Private Sub DrawWire(ByVal dc As Long, rc As RECT, rc1 As RECT, cx As Long, cy As Long, flg As Long)
-    Dim y As Long
-    
-    If (flg And cfHorizontal) <> 0 Then
-        y = rc.Top + cy \ 2
-        ALineChecked dc, rc.Left, y, rc1.Left, y
-        ALineChecked dc, rc1.Right, y, rc.Right, y
-    Else
-        If (flg And cfVertical) <> 0 Then
-            y = rc.Left + cx \ 2
-            ALineChecked dc, y, rc.Top, y, rc1.Top
-            ALineChecked dc, y, rc1.Bottom, y, rc.Bottom
-        End If
-    End If
+Private Sub DrawWire(cell As CellDesc, ByVal dc As Long, rc As RECT, hcx As Long, hcy As Long)
+    ALineChecked dc _
+               , rc.Left + cell.Pin(1).x * hcx _
+               , rc.Top + cell.Pin(1).y * hcy _
+               , rc.Left + cell.Pin(2).x * hcx _
+               , rc.Top + cell.Pin(2).y * hcx
 End Sub
 
-Public Sub DrawCell(ByRef cell As CellDesc, ByVal dc As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long)
-    If cell.Type = ctZero Then
+Public Sub DrawCell(ByRef cell As CellDesc, ByVal dc As Long, ByRef rcItem As CRect, ByRef miceCoords As APOINT)
+    If cell.Type = ctBlank Then
         Exit Sub
     End If
-    
+
     Dim rc As RECT
-    rc = InitRECT(x, y, cx, cy)
-    
     Dim rc1 As RECT
-    rc1 = rc
-    
+    Dim cx As Long, cy As Long
     Dim ex As Long, ey As Long
+   
+    cx = rcItem.Width
+    cy = rcItem.Height
     ex = cx \ 6
     ey = cy \ 6
+    rc = ToRECT(rcItem)
+    rc1 = rc
+    Call InflateRect(rc1, -ex, -ey)
     
-    InflateRect rc1, -ex, -ey
-    
-    Dim rc2 As RECT
-    rc2 = rc1
+    DrawWire cell, dc, rc, cx \ 2, cy \ 2
     
     Select Case cell.Type
     Case ctVoltmeter
         EllipseRc dc, rc1
         DrawTextA dc, "V", 1, rc1, DT_CENTERD
-        DrawWire dc, rc, rc1, cx, cy, cell.Flags
-        
     Case ctAmpermeter
         EllipseRc dc, rc1
         DrawTextA dc, "A", 1, rc1, DT_CENTERD
-        DrawWire dc, rc, rc1, cx, cy, cell.Flags
-        
     Case ctVivaLaResistance
-        If (cell.Flags And cfVertical) <> 0 Then
-            InflateRect rc2, -ex, 0
-        Else
-            InflateRect rc2, 0, -ey
-        End If
-        Rectangle dc, rc2.Left, rc2.Top, rc2.Right, rc2.Bottom
-        DrawWire dc, rc, rc1, cx, cy, cell.Flags
-       
+        InflateRect rc1, 0, -ey
+        Rectangle dc, rc1.Left, rc1.Top, rc1.Right, rc1.Bottom
     End Select
 End Sub
 
 Public Sub InitBasics()
-    ZeroCell = CreateZeroCell()
-    With ZeroCell
+    BlankCell = CreateBlankCell()
+    With BlankCell
         .Id = 0
-        .Type = ctZero
+        .Type = ctBlank
     End With
 End Sub
 
-Public Function CreateZeroCell() As CellDesc
+Public Function CreateBlankCell() As CellDesc
     Dim rv As CellDesc
     
     With rv
         .Id = 0
-        .Type = ctZero
-        .Flags = cfHorizontal
+        .Type = ctBlank
+        .Flags = 0
+        .Pin(1).x = 0   '   0__1__2
+        .Pin(1).y = 1   '  0|     |
+        .Pin(2).x = 2   '  1|     |
+        .Pin(2).y = 1   '  2|_____|
     End With
     
-    CreateZeroCell = rv
+    CreateBlankCell = rv
 End Function
 
 
 Public Function CreateVoltmeter() As CellDesc
     Dim rv As CellDesc
     
-    rv = CreateZeroCell()
+    rv = CreateBlankCell()
     rv.Type = ctVoltmeter
     
     CreateVoltmeter = rv
@@ -116,7 +111,7 @@ End Function
 Public Function CreateAmpermeter() As CellDesc
     Dim rv As CellDesc
     
-    rv = CreateZeroCell()
+    rv = CreateBlankCell()
     rv.Type = ctAmpermeter
     
     CreateAmpermeter = rv
@@ -125,7 +120,7 @@ End Function
 Public Function CreateResistor() As CellDesc
     Dim rv As CellDesc
     
-    rv = CreateZeroCell()
+    rv = CreateBlankCell()
     rv.Type = ctVivaLaResistance
     
     CreateResistor = rv

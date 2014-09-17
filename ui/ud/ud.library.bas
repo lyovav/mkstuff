@@ -1,4 +1,4 @@
-Attribute VB_Name = "UdLib"
+Attribute VB_Name = "Lib"
 Option Explicit
 DefInt A-Z
 
