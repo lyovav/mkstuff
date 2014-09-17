@@ -49,6 +49,8 @@ Private lastFont As Long
 Private hFont As Long
 Private OriginalCaption As String
 Private DragOn As Boolean
+Private pTool As ITool
+Private toolWire As New CToolWire
 
 Private Function IHookXP_Message(ByVal hWnd As Long, ByVal uiMsg As Long, ByVal wParam As Long, ByVal lParam As Long, ByVal dwRefData As Long) As Long
     On Error Resume Next
@@ -85,6 +87,7 @@ End Function
 
 Private Sub Form_Load()
     On Error Resume Next
+    Set pTool = toolWire
     Me.ScaleMode = vbPixels
     Me.AutoRedraw = False
     hFont = 0
@@ -120,8 +123,8 @@ Public Sub AddTo(ByRef Owner As MDIForm, title As String, visbl As Boolean, wins
     Call Scheme.DoDebugStuff
 End Sub
 
-Public Sub DrawBackBufer(ByVal hDC As Long)
-    Call BitBlt(hDC, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy)
+Public Sub DrawBackBufer(ByVal hDc As Long)
+    Call BitBlt(hDc, 0, 0, Me.ScaleWidth, Me.ScaleHeight, backDc, 0, 0, vbSrcCopy)
 End Sub
 
 Public Sub OnMouseWheel(keys As Integer, delta As Integer, xp As Long, yp As Long)
@@ -172,7 +175,7 @@ Public Sub OnPaint()
     Dim rc As RECT
     Call GetClientRect(hWnd, rc)
     Call FillSolidRect(backDc, rc, DocBgColor)
-    Call Scheme.Draw(backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom)
+    Call Scheme.Draw(backDc, Me.hWnd, 0, 0, rc.Right, rc.Bottom, pTool)
 End Sub
 
 Public Sub UpdateTitle()
@@ -182,8 +185,8 @@ End Sub
 Private Sub Form_KeyDown(iCode As Integer, iKeys As Integer)
     ' TODO: configure keyboard shortcuts
     Select Case iCode
-    Case 8 ' backspace - reset view
-        Call Scheme.ResetView
+    Case 8 ' backspace - reset ZOOM only
+        Call Scheme.ResetView(False, False)
         Call UpdateTitle
     Case Asc("G")
         Call Scheme.ToggleGridOnOff
@@ -202,7 +205,7 @@ Private Sub Form_MouseDown(btnNum As Integer, iKeys As Integer, x As Single, y A
     Select Case btnNum
     Case vbLeftButton
         Call Scheme.HighlightByCoords(CLng(x), CLng(y))
-        Call InvalidateRectNull(Me.hWnd, 0, 0)
+        Call pTool.OnBegin(Scheme, CLng(x), CLng(y), iKeys)
         
     Case vbRightButton
         Call PopupMenu(Mainframe.mnuScheme, , x, y)
@@ -224,11 +227,15 @@ Private Sub Form_MouseMove(btnNum As Integer, iKeys As Integer, x As Single, y A
         End If
     End Select
     
+    Call pTool.OnMove(CLng(x), CLng(y), iKeys)
     Call InvalidateRectNull(Me.hWnd, 0, 0)
 End Sub
 
 Private Sub Form_MouseUp(btnNum As Integer, iKeys As Integer, x As Single, y As Single)
     Select Case btnNum
+    Case vbLeftButton
+        Call pTool.OnEnd(Scheme, CLng(x), CLng(y), iKeys)
+    
     Case vbMiddleButton
         DragOn = False
         Call ReleaseCapture
