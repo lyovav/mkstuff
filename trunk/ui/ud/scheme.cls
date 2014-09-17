@@ -112,6 +112,8 @@ Public Sub DoDebugStuff()
     Item(32, 22) = CreateVoltmeter()
     Item(30, 24) = CreateAmpermeter()
     Item(32, 24) = CreateResistor()
+    Item(28, 24) = CreatePin(2, 1)
+    Item(34, 24) = CreatePin(0, 1)
 End Sub
 
 Public Sub Class_Initialize()
