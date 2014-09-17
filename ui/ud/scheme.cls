@@ -65,12 +65,21 @@ Private Type ScmHead
     Reserved(1 To 124) As Byte      ' must be 256!!!
 End Type
 
+Private Enum CellDescType
+    cdtBlank = -1
+    cdtNull
+End Enum
+
+Private Type CellDesc
+    Type As Long
+End Type
+
 Public StatusText As String
 
 Private Const clItemCx As Long = 64
 Private Const clItemCy As Long = 64
-Private Const clCols As Long = 64
-Private Const clRows As Long = 48
+Private Const clCols As Long = 12
+Private Const clRows As Long = 8
 
 Private Const cdMinScale As Double = 0.01
 Private Const cdMaxScale As Double = 40.96
@@ -108,12 +117,6 @@ Private Cursor(1 To ciCursorCount - 1) As Long
 
 Public Sub DoDebugStuff()
     Clear
-    
-    Item(32, 22) = CreateVoltmeter()
-    Item(30, 24) = CreateAmpermeter()
-    Item(32, 24) = CreateResistor()
-    Item(28, 24) = CreatePin(2, 1)
-    Item(34, 24) = CreatePin(0, 1)
 End Sub
 
 Public Sub Class_Initialize()
@@ -243,11 +246,14 @@ End Function
 Public Sub Clear()
     scm.Cols = UBound(Item, 2)
     scm.Rows = UBound(Item, 1)
+    
+    Dim blankCell As CellDesc
+    blankCell.Type = cdtBlank
 
     Dim row As Long, col As Long
     For row = 0 To scm.Rows
         For col = 0 To scm.Cols
-            Item(row, col) = BlankCell
+            Item(row, col) = blankCell
         Next col
     Next row
 End Sub
@@ -650,7 +656,6 @@ Public Sub DrawHot(ByVal dc As Long)
             .Bottom = .Top + scm.rcItem.Height
         End With
 
-        'Call FillSolidRect(dc, rcHot, DocHotBgColor)
         Call InvertRect(dc, rcHot)
     End If
 End Sub
@@ -697,7 +702,7 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
         scm.rcItem.Top = scm.rcAll.Top + (row * scm.rcItem.Height)
         For col = scm.vCol To scm.vColNum - 1
             scm.rcItem.Left = scm.rcAll.Left + (col * scm.rcItem.Width)
-            Call DrawCell(Item(col, row), dc, scm.rcItem, miceCoords)
+            'Call DrawCell(Item(col, row), dc, scm.rcItem, miceCoords)
             
 #If DrawCellCoordText Then
             Dim itemText As String
@@ -734,11 +739,4 @@ Public Sub Draw(ByVal dc As Long, ByVal hWnd As Long, x As Long, y As Long, cx A
 End Sub
 
 Public Sub ConnectByWyre(ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long)
-    Dim sc As Long, sr As Long ' start pos
-    Dim ec As Long, er As Long ' end pos
-    Dim cc As Long, cr As Long ' count
-    Dim stepc As Long, stepr As Long ' step
-    
-    sc = GetIndexFromPoint(x1, y1, sr)
-    ec = GetIndexFromPoint(x2, y2, er)
 End Sub
