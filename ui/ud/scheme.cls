@@ -133,7 +133,7 @@ Public Sub Class_Initialize()
     penCell = CreatePen(DonCellPenStyle, DonCellPenWidth, DocCellPenColor)
     brushCell = CreateSolidBrush(DocBgColor)
     fontHelpers = CreateFontA(-9, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Small fonts")
-    fontCell = CreateFontA(-32, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Arial Narrow")
+    fontCell = CreateFontA(-18, 0, 0, 0, FW_NORMAL, False, False, False, 0, 0, 0, PROOF_QUALITY, 0, "Arial Narrow")
     
     Cursor(ciCross) = LoadCursorA(AppEntry.hInstance, 101)
     Cursor(ciSpot) = LoadCursorA(AppEntry.hInstance, 102)
