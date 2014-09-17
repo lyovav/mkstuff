@@ -4,6 +4,7 @@ DefInt A-Z
 
 Public Enum CellType
     ctBlank = 32
+    ctPin
     ctVoltmeter
     ctAmpermeter
     ctVivaLaResistance
@@ -34,11 +35,18 @@ End Type
 Public BlankCell As CellDesc
 
 Private Sub DrawWire(cell As CellDesc, ByVal dc As Long, rc As RECT, hcx As Long, hcy As Long)
-    ALineChecked dc _
-               , rc.Left + cell.Pin(1).x * hcx _
-               , rc.Top + cell.Pin(1).y * hcy _
-               , rc.Left + cell.Pin(2).x * hcx _
-               , rc.Top + cell.Pin(2).y * hcx
+    Dim ub As Long, i As Long
+    
+    ub = UBound(cell.Pin)
+    If ub < 2 Then
+        Call MoveToChecked(dc, rc.Left + hcx, rc.Top + hcy)
+    Else
+        Call MoveToChecked(dc, rc.Left + cell.Pin(1).x * hcx, rc.Top + cell.Pin(1).y * hcy)
+    End If
+    
+    For i = 2 To ub
+        Call LineToChecked(dc, rc.Left + cell.Pin(i).x * hcx, rc.Top + cell.Pin(i).y * hcy)
+    Next i
 End Sub
 
 Public Sub DrawCell(ByRef cell As CellDesc, ByVal dc As Long, ByRef rcItem As CRect, ByRef miceCoords As APOINT)
@@ -49,28 +57,33 @@ Public Sub DrawCell(ByRef cell As CellDesc, ByVal dc As Long, ByRef rcItem As CR
     Dim rc As RECT
     Dim rc1 As RECT
     Dim cx As Long, cy As Long
-    Dim ex As Long, ey As Long
    
     cx = rcItem.Width
     cy = rcItem.Height
-    ex = cx \ 6
-    ey = cy \ 6
     rc = ToRECT(rcItem)
     rc1 = rc
-    Call InflateRect(rc1, -ex, -ey)
     
-    DrawWire cell, dc, rc, cx \ 2, cy \ 2
+    Call DrawWire(cell, dc, rc, cx \ 2, cy \ 2)
     
     Select Case cell.Type
+    Case ctPin
+        Call InflateRect(rc1, -(cx \ 10), -(cy \ 10))
+        EllipseRc dc, rc1
+
     Case ctVoltmeter
+        Call InflateRect(rc1, -(cx \ 6), -(cy \ 6))
         EllipseRc dc, rc1
-        DrawTextA dc, "V", 1, rc1, DT_CENTERD
+        DrawTextA dc, "V", 1, rc1, DT_CENTERED
+        
     Case ctAmpermeter
+        Call InflateRect(rc1, -(cx \ 6), -(cy \ 6))
         EllipseRc dc, rc1
-        DrawTextA dc, "A", 1, rc1, DT_CENTERD
+        DrawTextA dc, "A", 1, rc1, DT_CENTERED
+        
     Case ctVivaLaResistance
-        InflateRect rc1, 0, -ey
+        Call InflateRect(rc1, -(cx \ 6), -(cy \ 3))
         Rectangle dc, rc1.Left, rc1.Top, rc1.Right, rc1.Bottom
+        DrawTextA dc, "R", 1, rc1, DT_CENTERED
     End Select
 End Sub
 
@@ -98,6 +111,18 @@ Public Function CreateBlankCell() As CellDesc
     CreateBlankCell = rv
 End Function
 
+Public Function CreatePin() As CellDesc
+    Dim rv As CellDesc
+    
+    rv = CreateBlankCell()
+    ReDim rv.Pin(1 To 1) As PinDesc
+    rv.Pin(1).x = 2
+    rv.Pin(1).y = 1
+    
+    rv.Type = ctPin
+    
+    CreateVoltmeter = rv
+End Function
 
 Public Function CreateVoltmeter() As CellDesc
     Dim rv As CellDesc
