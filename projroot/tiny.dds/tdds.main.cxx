@@ -8,72 +8,108 @@
 
 I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
 
-#define SAMPLE_RATE 8000 // 8 ksps
-
-const uint8_t sinewave[256] PROGMEM =
-{
-	0x80,0x83,0x86,0x89,0x8c,0x8f,0x92,0x95,0x98,0x9c,0x9f,0xa2,0xa5,0xa8,0xab,0xae,
-	0xb0,0xb3,0xb6,0xb9,0xbc,0xbf,0xc1,0xc4,0xc7,0xc9,0xcc,0xce,0xd1,0xd3,0xd5,0xd8,
-	0xda,0xdc,0xde,0xe0,0xe2,0xe4,0xe6,0xe8,0xea,0xec,0xed,0xef,0xf0,0xf2,0xf3,0xf5,
-	0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfc,0xfd,0xfe,0xfe,0xff,0xff,0xff,0xff,0xff,
-	0xff,0xff,0xff,0xff,0xff,0xff,0xfe,0xfe,0xfd,0xfc,0xfc,0xfb,0xfa,0xf9,0xf8,0xf7,
-	0xf6,0xf5,0xf3,0xf2,0xf0,0xef,0xed,0xec,0xea,0xe8,0xe6,0xe4,0xe2,0xe0,0xde,0xdc,
-	0xda,0xd8,0xd5,0xd3,0xd1,0xce,0xcc,0xc9,0xc7,0xc4,0xc1,0xbf,0xbc,0xb9,0xb6,0xb3,
-	0xb0,0xae,0xab,0xa8,0xa5,0xa2,0x9f,0x9c,0x98,0x95,0x92,0x8f,0x8c,0x89,0x86,0x83,
-	0x80,0x7c,0x79,0x76,0x73,0x70,0x6d,0x6a,0x67,0x63,0x60,0x5d,0x5a,0x57,0x54,0x51,
-	0x4f,0x4c,0x49,0x46,0x43,0x40,0x3e,0x3b,0x38,0x36,0x33,0x31,0x2e,0x2c,0x2a,0x27,
-	0x25,0x23,0x21,0x1f,0x1d,0x1b,0x19,0x17,0x15,0x13,0x12,0x10,0x0f,0x0d,0x0c,0x0a,
-	0x09,0x08,0x07,0x06,0x05,0x04,0x03,0x03,0x02,0x01,0x01,0x00,0x00,0x00,0x00,0x00,
-	0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x01,0x02,0x03,0x03,0x04,0x05,0x06,0x07,0x08,
-	0x09,0x0a,0x0c,0x0d,0x0f,0x10,0x12,0x13,0x15,0x17,0x19,0x1b,0x1d,0x1f,0x21,0x23,
-	0x25,0x27,0x2a,0x2c,0x2e,0x31,0x33,0x36,0x38,0x3b,0x3e,0x40,0x43,0x46,0x49,0x4c,
-	0x4f,0x51,0x54,0x57,0x5a,0x5d,0x60,0x63,0x67,0x6a,0x6d,0x70,0x73,0x76,0x79,0x7c
+// table of 256 sine values / one sine period / stored in flash memory
+PROGMEM prog_uchar sine256[256] = {
+127, 130, 133, 136, 139, 143, 146, 149, 152, 155, 158, 161, 164, 167, 170,
+173, 176, 178, 181, 184, 187, 190, 192, 195, 198, 200, 203, 205, 208,
+210, 212, 215, 217, 219, 221, 223, 225, 227, 229, 231, 233, 234, 236,
+238, 239, 240, 242, 243, 244, 245, 247, 248, 249, 249, 250, 251, 252,
+252, 253, 253, 253, 254, 254, 254, 254, 254, 254, 254, 253, 253, 253,
+252, 252, 251, 250, 249, 249, 248, 247, 245, 244, 243, 242, 240, 239,
+238, 236, 234, 233, 231, 229, 227, 225, 223, 221, 219, 217, 215, 212,
+210, 208, 205, 203, 200, 198, 195, 192, 190, 187, 184, 181, 178, 176,
+173, 170, 167, 164, 161, 158, 155, 152, 149, 146, 143, 139, 136, 133,
+130, 127, 124, 121, 118, 115, 111, 108, 105, 102, 99, 96, 93, 90, 87,
+84, 81, 78, 76, 73, 70, 67, 64, 62, 59, 56, 54, 51, 49, 46, 44, 42, 39,
+37, 35, 33, 31, 29, 27, 25, 23, 21, 20, 18, 16, 15, 14, 12, 11, 10, 9,
+7, 6, 5, 5, 4, 3, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3,
+4, 5, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 18, 20, 21, 23, 25, 27, 29,
+31, 33, 35, 37, 39, 42, 44, 46, 49, 51, 54, 56, 59, 62, 64, 67, 70, 73,
+76, 78, 81, 84, 87, 90, 93, 96, 99, 102, 105, 108, 111, 115, 118, 121,
+124
 };
 
-uint8_t i = 0;
-int outputPin = 6; // (PCINT22/OC0A/AIN0)PD6, Arduino Digital Pin 6
-ISR(TIMER1_COMPA_vect)
+#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+
+int ledPin = 13;                 // LED pin 7
+int testPin = 7;
+int t2Pin = 6;
+byte bb;
+
+double dfreq;
+// const double refclk=31372.549;  // =16MHz / 510
+const double refclk = 31376.6;      // measured
+
+// variables used inside interrupt service declared as voilatile
+volatile byte icnt;              // var inside interrupt
+volatile byte icnt1;             // var inside interrupt
+volatile byte c4ms;              // counter incremented all 4ms
+volatile unsigned long phaccu;   // pahse accumulator
+volatile unsigned long tword_m;  // dds tuning word m
+
+//******************************************************************
+// Timer2 Interrupt Service at 31372,550 KHz = 32uSec
+// this is the timebase REFCLOCK for the DDS generator
+// FOUT = (M (REFCLK)) / (2 exp 32)
+// runtime : 8 microseconds ( inclusive push and pop)
+ISR(TIMER2_OVF_vect)
 {
-	//OCR0A = pgm_read_byte(&sinewave[i]);
-	analogWrite(outputPin, pgm_read_byte(&sinewave[i]));
-	i++;
+
+	sbi(PORTD, 7);    // Test / set PORTD,7 high to observe timing with a oscope
+
+	phaccu = phaccu + tword_m; // soft DDS, phase accu with 32 bits
+	icnt = phaccu >> 24; // use upper 8 bits for phase accu as frequency information
+						 // read value fron ROM sine table and send to PWM DAC
+	OCR2A = pgm_read_byte_near(sine256 + icnt);
+
+	if (icnt1++ == 125)
+	{  // increment variable c4ms all 4 milliseconds
+		c4ms++;
+		icnt1 = 0;
+	}
+
+	cbi(PORTD, 7);            // reset PORTD,7
 }
 
-void startPlayback()
+//******************************************************************
+// timer2 setup
+// set prscaler to 1, PWM mode to phase correct PWM,  16000000/510 = 31372.55 Hz clock
+void setup_timer2()
 {
-	pinMode(outputPin, OUTPUT);
-	// Set Timer 0 Fast PWM Mode (Section 14.7.3)
-	// WGM = 0b011 = 3 (Table 14-8)
-	// TOP = 0xFF, update OCR0A register at BOTTOM
-	TCCR0A |= _BV(WGM01) | _BV(WGM00);
-	TCCR0B &= ~_BV(WGM02);
-	// Do non-inverting PWM on pin OC0A, arduino digital pin 6
-	// COM0A = 0b10, clear OC0A pin on compare match,
-	// set 0C0A pin at BOTTOM (Table 14-3)
-	TCCR0A = (TCCR0A | _BV(COM0A1)) & ~_BV(COM0A0);
-	// COM0B = 0b00, OC0B disconnected (Table 14-6)
-	TCCR0A &= ~(_BV(COM0B1) | _BV(COM0B0));
-	// No prescaler, CS = 0b001 (Table 14-9)
-	TCCR0B = (TCCR0B & ~(_BV(CS02) | _BV(CS01))) | _BV(CS00);
-	// Set initial pulse width to the first sample.
-	OCR0A = pgm_read_byte(&sinewave[0]);
-	// Set up Timer 1 to send a sample every interrupt.
-	cli(); // disable interrupts
-	// Set CTC mode (Section 15.9.2 Clear Timer on Compare Match)
-	// WGM = 0b0100, TOP = OCR1A, Update 0CR1A Immediate (Table 15-4)
-	// Have to set OCR1A *after*, otherwise it gets reset to 0!
-	TCCR1B = (TCCR1B & ~_BV(WGM13)) | _BV(WGM12);
-	TCCR1A = TCCR1A & ~(_BV(WGM11) | _BV(WGM10));
-	// No prescaler, CS = 0b001 (Table 15-5)
-	TCCR1B = (TCCR1B & ~(_BV(CS12) | _BV(CS11))) | _BV(CS10);
-	// Set the compare register (OCR1A).
-	// OCR1A is a 16-bit register, so we have to do this with
-	// interrupts disabled to be safe.
-	OCR1A = F_CPU / SAMPLE_RATE; // 16e6 / 8000 = 2000
-	// Enable interrupt when TCNT1 == OCR1A (p.136)
-	TIMSK1 |= _BV(OCIE1A);
-	i = 0;
-	sei(); // enable interrupts
+	// Timer2 Clock Prescaler to : 1
+	sbi(TCCR2B, CS20);
+	cbi(TCCR2B, CS21);
+	cbi(TCCR2B, CS22);
+
+	// Timer2 PWM Mode set to Phase Correct PWM
+	cbi(TCCR2A, COM2A0);// clear Compare Match
+	sbi(TCCR2A, COM2A1);
+
+	sbi(TCCR2A, WGM20);  // Mode 1  / Phase Correct PWM
+	cbi(TCCR2A, WGM21);
+	cbi(TCCR2B, WGM22);
+}
+
+void setup()
+{
+	pinMode(ledPin, OUTPUT);      // sets the digital pin as output
+	//Serial.begin(115200);        // connect to the serial port
+	//Serial.println("DDS Test");
+
+	pinMode(6, OUTPUT);      // sets the digital pin as output
+	pinMode(7, OUTPUT);      // sets the digital pin as output
+	pinMode(11, OUTPUT);     // pin11= PWM  output / frequency output
+
+	setup_timer2();
+
+	// disable interrupts to avoid timing distortion
+	cbi(TIMSK0, TOIE0);// disable Timer0 !!! delay() is now not available
+	sbi(TIMSK2, TOIE2);              // enable Timer2 Interrupt
+
+	dfreq = 1000.0;                    // initial output frequency = 1000.o Hz
+	tword_m = pow(2, 32) * dfreq / refclk;  // calulate DDS new tuning word
+
 }
 
 extern "C" void Main()
@@ -89,14 +125,29 @@ extern "C" void Main()
 
 	analogWrite(A0, 0);
 
-	sleep2s();
+	//sleep2s();
+	//lcd.clear();
 
-	lcd.clear();
-	//lcd.print(pgm_read_byte(&sinewave_data[0]), 16);
+	setup();
 
-	startPlayback();
+	while (1)
+	{
+		if (c4ms > 250)
+		{                 // timer / wait fou a full second
+			c4ms = 0;
+			dfreq = 1000; // analogRead(0);             // read Poti on analog pin 0 to adjust output frequency from 0..1023 Hz
 
-	while (true)
-		;
+			cbi(TIMSK2, TOIE2);              // disble Timer2 Interrupt
+			tword_m = pow(2, 32) * dfreq / refclk; // calulate DDS new tuning word
+			sbi(TIMSK2, TOIE2);              // enable Timer2 Interrupt
+
+			//Serial.print(dfreq);
+			//Serial.print("  ");
+			//Serial.println(tword_m);
+		}
+
+		sbi(PORTD, 6); // Test / set PORTD,7 high to observe timing with a scope
+		cbi(PORTD, 6); // Test /reset PORTD,7 high to observe timing with a scope
+	}
 }
 
