@@ -132,7 +132,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
     SREG = oldSREG;
 }
 
-#if 0
+#if 1
 int digitalRead(uint8_t pin)
 {
     uint8_t timer = digitalPinToTimer(pin);
