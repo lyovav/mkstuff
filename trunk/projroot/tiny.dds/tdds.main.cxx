@@ -6,8 +6,7 @@
 
 static void saw(uint8_t& y)
 {
-	PORTD = y;
-	++y;
+	PORTD = y++;
 }
 
 static void sine(uint8_t& y)
@@ -32,17 +31,16 @@ static void sine(uint8_t& y)
 		0x4f,0x51,0x54,0x57,0x5a,0x5d,0x60,0x63,0x67,0x6a,0x6d,0x70,0x73,0x76,0x79,0x7c
 	};
 
-	PORTD = pgm_read_byte(table + y);
-	++y;
+	PORTD = pgm_read_byte(table + y++);
 }
 
 
 extern "C" void Main()
 {
 	DDRD = 0xff;
-
 	uint8_t y = 0xff;
 
+	/*
 	enum
 	{
 		SAW = 0,
@@ -70,6 +68,23 @@ extern "C" void Main()
 			if (figure >= FIGURES_COUNT)
 				figure = 0;
 		}
+	}
+	*/
+
+	int ms = 0;
+	int ms_adder = 1;
+
+	while (1)
+	{
+		for (int i=0; i<256; i++)
+		{
+			sine(y);
+			sleepms(ms);
+		}
+
+		ms += ms_adder;
+		if ((ms > 150) || (ms < 0))
+			ms_adder *= -1;
 	}
 }
 
