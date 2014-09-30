@@ -44,32 +44,34 @@ namespace // make it C++ static
 		M_Last = M_Count - 1
 	};
 
+	struct ModeDesc
+	{
+		char const* name;
+		char const* chars;
+	};
+
+	static const ModeDesc _modes_info[] =
+	{
+	/* M_Classic */		{ "debug      ", "-**-" },
+	/* M_Resistance */	{ "resistance ", "-[]-" },
+	/* M_Capacitance */	{ "capacitance", "-||-" },
+	/* M_Diodes */		{ "diodez     ", "->|-" },
+	/* M_Tranzistors */	{ "tranzistors", "-()-" },
+	/* M_Induction */	{ "induction  ", "-^^-" },
+	};
+
 	char const* mode_chars(int8_t mode)
 	{
-		switch (mode)
-		{
-		case M_Classic:		return "-\?\?-";
-		case M_Resistance:	return "-[]-";
-		case M_Capacitance:	return "-||-";
-		case M_Diodes:		return "->|-";
-		case M_Tranzistors:	return "-()-";
-		case M_Induction:	return "-^^-";
-		}
+		if (mode < M_Count)
+			return _modes_info[mode].chars;
 
 		return "-?-";
 	}
 
 	char const* mode_name(int8_t mode)
 	{
-		switch (mode)
-		{
-		case M_Classic:		return "classic";
-		case M_Resistance:	return "resistn";
-		case M_Capacitance:	return "capasit";
-		case M_Diodes:		return "diodez ";
-		case M_Tranzistors:	return "tranzts";
-		case M_Induction:	return "indtuct";
-		}
+		if (mode < M_Count)
+			return _modes_info[mode].name;
 
 		return "unknown";
 	}
@@ -87,6 +89,10 @@ namespace // make it C++ static
 	}
 }
 
+void start(uint8_t mode);
+void stop(uint8_t mode);
+bool is_testbtn_pressed();
+
 extern "C" void Main()
 {
 	mScreen.begin();
@@ -97,11 +103,15 @@ extern "C" void Main()
 	mScreen.print("TransistorTester");
 	mScreen.setCursor(0, 1);
 	mScreen.print(" v1.1  MNi 2014 ");
+
+	DDRC = 0b00000000; 							// read mode for port C, PC0-PC6
+	DDRD &= ~(1 << 7);							// button pin on read mode
+	PORTD = (1 << PD7); 						// enable internal pullup for reset pin
+
+	sei();
+
 	sleep1s();
 	mScreen.clear();
-
-	DDRC = 0b00000000; 	// read mode for port C, PC0-PC6
-	PORTD = (1 << PD7); // enable internal pullup for reset pin
 
 	// init ADC
 	_SFR_BYTE(ADCSRA) |= _BV(ADPS2);
@@ -111,25 +121,49 @@ extern "C" void Main()
 
 	for (;;)
 	{
-		char line[2][18] = {{0}, {0}};
-
-		//mScreen.clear();
-
 		int pos = read_adc(3);
 		int mode = pos / (_ADC_MAX_VALUE / M_Count);
 
 		if (mode > M_Last)
-				mode = M_Last;
+			mode = M_Last;
 
-		snprintf(line[0], 17, "%s %s", mode_name(mode), mode_chars(mode));
-		snprintf(line[1], 17, "ready to testing");
+		mScreen.setCursor(0, 0);
+		mScreen.print(mode_name(mode));
+		mScreen.print(" ");
+		mScreen.print(mode_chars(mode));
+		mScreen.setCursor(0, 1);
+		mScreen.print("press  test  btn");
 
-		for (uint8_t i=0; i<2; i++)
-		{
-			mScreen.setCursor(0, i);
-			mScreen.print(line[i]);
-		}
+		if (is_testbtn_pressed())
+			start(mode);
 
 		sleep300ms();
 	}
+}
+
+bool is_testbtn_pressed()
+{
+	bool bpress = (0 == (PIND & (1 << 7)));
+	if (bpress)
+	{
+		while (0 == (PIND & (1 << 7)))
+			sleep1ms();
+
+		return true;
+	}
+
+	return false;
+}
+
+void stop(uint8_t mode)
+{
+	while (!is_testbtn_pressed())
+		sleep1ms();
+}
+
+void start(uint8_t mode)
+{
+	mScreen.clear();
+
+	stop(mode);
 }
