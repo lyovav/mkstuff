@@ -20,6 +20,7 @@
 
 //begin of transistortester program
 int main(void) {
+  char F_CPU_buf[32] = {0};
   uint8_t ii;
   unsigned int max_time;
 #ifdef SEARCH_PARASITIC
@@ -195,7 +196,15 @@ start:
   // Battery check is selected
   ReadADC(TPBAT);	//Dummy-Readout
   ptrans.uBE = W5msReadADC(TPBAT); 	//with 5V reference
-  lcd_MEM_string(Bat_str);		//output: "Bat. "
+  //lcd_MEM_string(Bat_str);		//output: "Bat. "
+
+  lcd_MEM2_string(VERSION_str);
+  lcd_space();
+  itoa(F_CPU / 1000000, F_CPU_buf, 10);
+  lcd_string(F_CPU_buf);
+  lcd_data('M');
+  lcd_space();
+
  #ifdef BAT_OUT
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
@@ -240,7 +249,8 @@ start:
      //Vcc < 7,3V; show Warning 
      if(ptrans.uBE < POOR_LEVEL) {	
         //Vcc <6,3V; no proper operation is possible
-        lcd_MEM_string(BatEmpty);	//Battery empty!
+        //lcd_MEM_string(BatEmpty);	//Battery empty!
+    	 lcd_data('-');
         wait_about2s();
         PORTD = 0;			//switch power off
         return 0;

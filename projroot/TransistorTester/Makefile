@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328p
+PARTNO = m328
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -164,7 +164,7 @@ CFLAGS += -DESR_ZERO=20
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
 # A capacitor with 1nF can be used with the option NO_AREF_CAP set.
-CFLAGS += -DNO_AREF_CAP
+#CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
 OP_MHZ = 16
