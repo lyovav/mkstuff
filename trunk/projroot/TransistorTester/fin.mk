@@ -43,7 +43,7 @@ $(ObjD)/GetFrequency.o: ./GetFrequency.c $(MKFILES)
 $(ObjD)/CheckRotaryEncoder.o: ./CheckRotaryEncoder.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $< -o $@
 
-$(ObjD)/main.o: ./main.c $(MKFILES)
+$(ObjD)/main.o: ./main.c $(MKFILES) Transistortester.h
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $< -o $@
 
 $(ObjD)/ChargePin10ms.o: ./ChargePin10ms.c $(MKFILES)
