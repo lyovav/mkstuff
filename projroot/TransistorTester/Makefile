@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328
+PARTNO = m328p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -117,11 +117,11 @@ CFLAGS += -DWITH_SELFTEST
 CFLAGS += -DAUTO_CAL
 
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
-#CFLAGS += -DFREQUENCY_50HZ
+CFLAGS += -DFREQUENCY_50HZ
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
-CFLAGS += -DWITH_AUTO_REF
+#CFLAGS += -DWITH_AUTO_REF
 # REF_C_KORR corrects the reference Voltage for capacity measurement (<40uF) and has mV units.
 # Greater values gives lower capacity results.
 CFLAGS += -DREF_C_KORR=12
@@ -164,7 +164,7 @@ CFLAGS += -DESR_ZERO=20
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
 # A capacitor with 1nF can be used with the option NO_AREF_CAP set.
-#CFLAGS += -DNO_AREF_CAP
+CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
 OP_MHZ = 16
@@ -176,7 +176,7 @@ OP_MHZ = 16
 
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
-#CFLAGS += -DUSE_EEPROM
+CFLAGS += -DUSE_EEPROM
 
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
@@ -220,7 +220,7 @@ CFLAGS += -DBAT_CHECK
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
-CFLAGS += -DBAT_OUT=50
+CFLAGS += -DBAT_OUT=100
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=5400 .
