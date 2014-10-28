@@ -267,7 +267,7 @@ HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
-ObjD =  ./$(PARTNO).$(OP_MHZ)MHz.$(PROJECT)
+ObjD =  ./objd.$(PARTNO).$(OP_MHZ)M
 
 ## Objects that must be built in order to link
 OBJECTS = $(ObjD)/lcd_hw_4_bit.o $(ObjD)/lcd-routines.o $(ObjD)/i2lcd.o $(ObjD)/PinLayout.o $(ObjD)/RvalOut.o $(ObjD)/UfAusgabe.o $(ObjD)/DisplayValue.o

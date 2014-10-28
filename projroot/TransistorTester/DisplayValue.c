@@ -1,52 +1,29 @@
-
-
 #include <string.h>
-
-
-
 #include "Transistortester.h"
 
 
-
-
-
 /* ************************************************************************
-
  *   display of values and units
-
  * ************************************************************************ */
 
 
 
 /*
-
  *  display value and unit
-
  *  - max. 4 (7) digits excluding "." and unit
-
  *
-
  *  requires:
-
  *  - value
-
  *  - exponent of factor related to base unit (value * 10^x)
-
  *    e.g: p = 10^-12 -> -12
-
  *  - unit character (0 = none)
-
  *  digits = 2 to 4 
  *  for option WITH_MENU digits can also be 5, 6 and 7
-
  */
 
 void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsigned char digits)
-
 {
-
 //  char OutBuffer[15];
-
 #ifdef WITH_MENU
   unsigned long     Limit;
 #else
@@ -54,21 +31,13 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 #endif
 
   unsigned char     Prefix;		/* prefix character */
-
   uint8_t           Offset;		/* exponent of offset to next 10^3 step */
-
   uint8_t           Index;		/* index ID */
-
   uint8_t           Length;		/* string length */
 
 
-
-
-
   Limit = 100;				/* scale value down to 2 digits */
-
   if (digits == 3) Limit = 1000;	/* scale value down to 3 digits */
-
   if (digits == 4) Limit = 10000;	/* scale value down to 4 digits */
 #ifdef WITH_MENU
   if (digits == 5) Limit = 100000;	/* scale value down to 5 digits */
@@ -77,45 +46,26 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 #endif
 
   while (Value >= Limit)
-
   {
-
     Value += 5;				/* for automatic rounding */
-
     Value = Value / 10;			/* scale down by 10^1 */
-
     Exponent++;				/* increase exponent by 1 */
-
   }
 
-
-
-
-
   /*
-
    *  determine prefix
-
    */
 
   Length = Exponent + 12;
 
   if ((int8_t)Length <  0) Length = 0;		/* Limit to minimum prefix */
-
   if (Length > 18) Length = 18;		/* Limit to maximum prefix */
-
   Index = Length / 3;
-
   Offset = Length % 3;
-
   if (Offset > 0)
-
     {
-
       Index++;				/* adjust index for exponent offset, take next prefix */
-
       Offset = 3 - Offset;		/* reverse value (1 or 2) */
-
     }
 
   /* convert value into string */

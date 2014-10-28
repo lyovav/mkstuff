@@ -60,7 +60,6 @@ $(ObjD)/ShowData.o: ./ShowData.c $(MKFILES)
 
 ##Link
 $(TARGET): $(OBJECTS)
-	mkdir -p $(ObjD)
 	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)
 
 %.hex: $(TARGET)
@@ -88,7 +87,7 @@ steril:
 
 ## Other dependencies
 -include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
-
+-include $(shell mkdir $(ObjD) 2>/dev/null)
 
 # device programming
 # make fuses  call if you don't have installed a crystal
