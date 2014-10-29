@@ -363,6 +363,17 @@ namespace Generic
 
        /*!
         @function
+        @abstract   Position the LCD2004 cursor.
+        @discussion Sets the position of the LCD cursor. Set the location at which
+        subsequent text written to the LCD will be displayed.
+
+        @param      col[in] LCD column
+        @param      row[in] LCD row - line.
+        */
+       void setCursor20x4(uint8_t col, uint8_t row) const;
+
+       /*!
+        @function
         @abstract   Switch-on the LCD backlight.
         @discussion Switch-on the LCD backlight.
         The setBacklightPin has to be called before setting the backlight for

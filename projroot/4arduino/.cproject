@@ -67,7 +67,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="lcd/LiquidCrystal.cpp|lcd/LiquidCrystal_SR3W.cpp|lcd/LiquidCrystal_SR2W.cpp|lcd/LiquidCrystal_SR.cpp|lcd/FastIO.cpp|arduino/WString.cpp|arduino/wiring_shift.c|arduino/WInterrupts.c|arduino/USBCore.cpp|arduino/Tone.cpp|arduino/Stream.cpp|arduino/SoftwareSerial.cpp|arduino/main.cpp|arduino/LiquidCrystal.cpp|arduino/IPAddress.cpp|arduino/HID.cpp|arduino/HardwareSerial.cpp|arduino/CRTMisc.cxx|arduino/CDC.cpp|arduino/WiFi|lcd-1.0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="lcd/LiquidCrystal.cpp|lcd/LiquidCrystal_SR3W.cpp|lcd/LiquidCrystal_SR2W.cpp|lcd/LiquidCrystal_SR.cpp|lcd/FastIO.cpp|arduino/WString.cpp|arduino/wiring_shift.c|arduino/USBCore.cpp|arduino/Tone.cpp|arduino/Stream.cpp|arduino/SoftwareSerial.cpp|arduino/main.cpp|arduino/LiquidCrystal.cpp|arduino/IPAddress.cpp|arduino/HID.cpp|arduino/HardwareSerial.cpp|arduino/CRTMisc.cxx|arduino/CDC.cpp|arduino/WiFi|lcd-1.0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
