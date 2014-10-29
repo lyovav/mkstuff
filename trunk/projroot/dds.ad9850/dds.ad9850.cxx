@@ -2,15 +2,12 @@
 #include <LiquidCrystal_I2C.h>
 #include <Arduino.h>
 #include <afx/sleep.h>
+#include "AD9850.hxx"
 
 enum miscConsts
 {
 	btnSelectModePin = 2,
 	rotaryValuePin = A0,
-	W_CLK = 8,   // Pin 8 - connect to AD9850 module word load clock pin (CLK)
-	FQ_UD = 9,   // Pin 9 - connect to freq update pin (FQ)
-	DATA = 10,   // Pin 10 - connect to serial data load pin (DATA)
-	RESET = 11,  // Pin 11 - connect to reset pin (RST)
 };
 
 enum ddsModes
@@ -25,6 +22,7 @@ enum ddsModes
 
 static I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
 static int ddsMode = ddsModeSilence;
+static dds::AD9850 ad9850(8, 9, 10, 11);
 
 static void incMode()
 {
@@ -47,40 +45,43 @@ static bool isButtonPressed(int pin)
 	return false;
 }
 
-#define pulseHigh(pin) do { digitalWrite(pin, HIGH); digitalWrite(pin, LOW); } while (0)
-
-int_fast32_t rx=7200000; // Starting frequency of VFO
-int_fast32_t rx2=1; // variable to hold the updated frequency
-int_fast32_t increment = 10; // starting VFO update increment in HZ.
-int buttonstate = 0;
-int  hertzPosition = 5;
-byte ones, tens, hundreds, thousands, tenthousands, hundredthousands, millions ;  //Placeholders
-int_fast32_t timepassed = millis(); // int to hold the arduino miilis since startup
-int memstatus = 1;  // value to notify if memory is current or old. 0=old, 1=current.
-int ForceFreq = 1;  // Change this to 0 after you upload and run a working sketch to activate the EEPROM memory.  YOU MUST PUT THIS BACK TO 0 AND UPLOAD THE SKETCH AGAIN AFTER STARTING FREQUENCY IS SET!
-
-// transfers a byte, a bit at a time, LSB first to the 9850 via serial DATA line
-static void tfr_byte(byte data)
+static void showX(int row, int_fast32_t x, char const* postfix)
 {
-	for (int i=0; i<8; i++, data>>=1)
-	{
-		digitalWrite(DATA, data & 0x01);
-		pulseHigh(W_CLK);
-		// after each bit sent, CLK is pulsed high
-	}
+	byte millions = int(x/1000000);
+	byte hundredthousands = ((x/100000)%10);
+	byte tenthousands = ((x/10000)%10);
+	byte thousands = ((x/1000)%10);
+	byte hundreds = ((x/100)%10);
+	byte tens = ((x/10)%10);
+	byte ones = ((x/1)%10);
+
+	lcd.setCursor(0, row);
+    lcd.print("                ");
+
+	if (millions > 9)
+		lcd.setCursor(1, row);
+	else
+		lcd.setCursor(2, row);
+
+	lcd.print(millions);
+	lcd.print(".");
+	lcd.print(hundredthousands);
+	lcd.print(tenthousands);
+	lcd.print(thousands);
+	lcd.print(".");
+	lcd.print(hundreds);
+	lcd.print(tens);
+	lcd.print(ones);
+	lcd.print(postfix);
 }
 
-// frequency calc from datasheet page 8 = <sys clock> * <frequency tuning word>/2^32
-static void sendFrequency(double frequency)
+static void updateFreq(int res, int_fast32_t& theFreq, int_fast32_t divisor)
 {
-  uint32_t freq = frequency * 4294967295lu / 125000000lu;
-  // note 125 MHz clock on 9850.  You can make 'slight' tuning variations here by adjusting the clock frequency.
+	double k = res / 1023.;
+	double tempFreq = (39999999. / (double)divisor) * k;
+	theFreq = (int_fast32_t)tempFreq;
 
-  for (int b=0; b<4; b++, freq>>=8)
-	  tfr_byte(freq & 0xFF);
-
-  tfr_byte(0x000);   // Final control byte, all 0 for 9850 chip
-  pulseHigh(FQ_UD);  // Done!  Should see output
+	ad9850.setfreq(theFreq);
 }
 
 extern "C" void Main()
@@ -89,14 +90,6 @@ extern "C" void Main()
 
 	pinMode(btnSelectModePin, INPUT);
 	pinMode(rotaryValuePin, INPUT);
-	pinMode(FQ_UD, OUTPUT);
-	pinMode(W_CLK, OUTPUT);
-	pinMode(DATA, OUTPUT);
-	pinMode(RESET, OUTPUT);
-
-	pulseHigh(RESET);
-	pulseHigh(W_CLK);
-	pulseHigh(FQ_UD);  // this pulse enables serial mode on the AD9850 - Datasheet page 12.
 
 	lcd.begin();
 
@@ -108,7 +101,9 @@ extern "C" void Main()
 
 	sleep1000ms();
 
-	sendFrequency(39999999.);
+	int_fast32_t theFreq = 0;
+	int_fast32_t divisor = 1;
+	int divi = 0;
 
 	int pres = -1;
 	while (1)
@@ -116,33 +111,34 @@ extern "C" void Main()
 		bool outValues = false;
 		int res = analogRead(rotaryValuePin);
 
+		if (isButtonPressed(btnSelectModePin))
+		{
+			static const int_fast32_t divs[] = { 1, 10, 100, 1000, 10000, 100000, 1000000 };
+
+			++divi;
+			if (divi > (int)((sizeof(divs) / sizeof(divs[0])) - 1))
+				divi = 0;
+
+			divisor = divs[divi];
+			updateFreq(res, theFreq, divisor);
+
+			outValues = true;
+		}
+
 		if (pres != res)
 		{
 			pres = res;
 			outValues = true;
-		}
 
-		if (isButtonPressed(btnSelectModePin))
-		{
-			incMode();
-			outValues = true;
+			updateFreq(res, theFreq, divisor);
 		}
 
 		if (outValues)
 		{
-			char line[2][64] = {{0}, {0}};
+			showX(0, theFreq, " Mhz  ");
+			showX(1, divisor, " Div  ");
 
-			snprintf(line[0], 16, "M %d", ddsMode);
-			snprintf(line[1], 16, "R %d", res);
-
-			lcd.clear();
-			for (int i=0; i<2; i++)
-			{
-				lcd.setCursor(0, i);
-				lcd.print(line[i]);
-			}
-
-			sleep200ms();
+			//sleep400ms();
 		}
 	}
 }
