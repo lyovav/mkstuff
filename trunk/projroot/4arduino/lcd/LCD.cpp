@@ -167,6 +167,16 @@ namespace Generic
        }
     }
 
+    void LCD::setCursor20x4(uint8_t col, uint8_t row) const
+    {
+       const uint8_t offset[] = { 0x00, 0x40, 0x10, 0x50 };
+
+       if ( row >= _numlines )
+          row = _numlines-1;
+
+       command(LCD_SETDDRAMADDR | ((offset[row] + col) & 0x0f));
+    }
+
     // Write to CGRAM of new characters
     void LCD::createChar(uint8_t location, uint8_t const* charmap) const
     {
