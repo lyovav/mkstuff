@@ -10,6 +10,8 @@ enum miscConsts
 	rotaryValuePin = A0,
 };
 
+static const double FREQ_MAX = 99999999.;
+
 static I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
 static dds::AD9850 ad9850(8, 9, 10, 11);
 
@@ -37,19 +39,11 @@ static void incMode()
 
 static bool isButtonPressed(int pin)
 {
-	static int prev = -1;
 	int val = digitalRead(pin);
-
-	if (prev != val)
-	{
-		prev = val;
-		return HIGH == val;
-	}
-
-	return false;
+	return HIGH == val;
 }
 
-static void showX(int row, int_fast32_t x, char const* postfix)
+static void showX(int row, int_fast32_t x)
 {
 	byte millions = int(x/1000000);
 	byte hundredthousands = ((x/100000)%10);
@@ -63,9 +57,9 @@ static void showX(int row, int_fast32_t x, char const* postfix)
     lcd.print("                ");
 
 	if (millions > 9)
-		lcd.setCursor(1, row);
+		lcd.setCursor(1 + 2, row);
 	else
-		lcd.setCursor(2, row);
+		lcd.setCursor(2 + 2, row);
 
 	lcd.print(millions);
 	lcd.print(".");
@@ -76,13 +70,12 @@ static void showX(int row, int_fast32_t x, char const* postfix)
 	lcd.print(hundreds);
 	lcd.print(tens);
 	lcd.print(ones);
-	lcd.print(postfix);
 }
 
 static void updateFreq(int res, int_fast32_t& theFreq, int_fast32_t divisor)
 {
 	double k = res / 1023.;
-	double tempFreq = (39999999. / (double)divisor) * k;
+	double tempFreq = (FREQ_MAX / (double)divisor) * k;
 	theFreq = (int_fast32_t)tempFreq;
 
 	ad9850.setfreq(theFreq);
@@ -136,6 +129,9 @@ extern "C" void Main()
 
 		if (isButtonPressed(btnSelectModePin))
 		{
+			while (isButtonPressed(btnSelectModePin))
+				sleep10us();
+
 			divisor = incDivisor(idiv);
 			updateFreq(res, theFreq, divisor);
 		}
@@ -148,8 +144,8 @@ extern "C" void Main()
 
 		if ((millis() - ms) > 500lu)
 		{
-			showX(0, theFreq, " Mhz  ");
-			showX(1, divisor, " Div  ");
+			showX(0, theFreq);
+			showX(1, divisor);
 
 			ms = millis();
 		}
