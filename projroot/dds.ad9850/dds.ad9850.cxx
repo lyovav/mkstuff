@@ -22,7 +22,9 @@ namespace dds
     bool isButtonPressed(int pin)
     {
         int rv = digitalRead(pin);
+
         while (HIGH == digitalRead(pin)) ;
+
         return HIGH == rv;
     }
 
@@ -33,7 +35,7 @@ namespace dds
         lcd.print("                ");
 
         char temp[17] = {0};
-        Strings::_ConvertFromn<T, char>(x, 10, temp, 16, false, 9, false);
+        Strings::ConvertFrom<T, char>(x, 10, temp, 16, false);
 
         lcd.setCursor(col, row);
         lcd.print(temp);
@@ -83,7 +85,6 @@ extern "C" void Main()
     lcd.print("     v1.0       ");
 
     sleep1000ms();
-    lcd.clear();
 
     int_fast32_t theFreq = 0;
 
