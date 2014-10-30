@@ -10,6 +10,11 @@ enum miscConsts
 	rotaryValuePin = A0,
 };
 
+static I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
+static dds::AD9850 ad9850(8, 9, 10, 11);
+
+/*
+
 enum ddsModes
 {
 	ddsModeSilence = -1,
@@ -20,9 +25,7 @@ enum ddsModes
 	ddsModeMax
 };
 
-static I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
 static int ddsMode = ddsModeSilence;
-static dds::AD9850 ad9850(8, 9, 10, 11);
 
 static void incMode()
 {
@@ -30,6 +33,7 @@ static void incMode()
 	if (ddsMode > (ddsModeMax - 1))
 		ddsMode = 0;
 }
+*/
 
 static bool isButtonPressed(int pin)
 {
@@ -84,6 +88,21 @@ static void updateFreq(int res, int_fast32_t& theFreq, int_fast32_t divisor)
 	ad9850.setfreq(theFreq);
 }
 
+static int_fast32_t incDivisor(int& n)
+{
+	static const int_fast32_t divs[] = { 1000000, 100000, 10000, 1000, 100, 10, 1 };
+	static const int dsize = (int)(sizeof(divs) / sizeof(divs[0]));
+
+	++n;
+	if (n > (dsize - 1))
+		n = 0;
+
+	if (n < 0)
+		n = (dsize - 1);
+
+	return divs[n];
+}
+
 extern "C" void Main()
 {
 	init();
@@ -102,43 +121,37 @@ extern "C" void Main()
 	sleep1000ms();
 
 	int_fast32_t theFreq = 0;
-	int_fast32_t divisor = 1;
-	int divi = 0;
+
+	int idiv = -1;
+	int_fast32_t divisor = incDivisor(idiv);
+
+	sei();
 
 	int pres = -1;
+	unsigned long ms = millis();
+
 	while (1)
 	{
-		bool outValues = false;
 		int res = analogRead(rotaryValuePin);
 
 		if (isButtonPressed(btnSelectModePin))
 		{
-			static const int_fast32_t divs[] = { 1, 10, 100, 1000, 10000, 100000, 1000000 };
-
-			++divi;
-			if (divi > (int)((sizeof(divs) / sizeof(divs[0])) - 1))
-				divi = 0;
-
-			divisor = divs[divi];
+			divisor = incDivisor(idiv);
 			updateFreq(res, theFreq, divisor);
-
-			outValues = true;
 		}
 
 		if (pres != res)
 		{
 			pres = res;
-			outValues = true;
-
 			updateFreq(res, theFreq, divisor);
 		}
 
-		if (outValues)
+		if ((millis() - ms) > 500lu)
 		{
 			showX(0, theFreq, " Mhz  ");
 			showX(1, divisor, " Div  ");
 
-			//sleep400ms();
+			ms = millis();
 		}
 	}
 }
