@@ -46,7 +46,7 @@ bool IPAddress::operator==(const uint8_t* addr)
     return memcmp(addr, _address, sizeof(_address)) == 0;
 }
 
-size_t IPAddress::printTo(Print& p) const
+size_t IPAddress::printTo(Print const& p) const
 {
     size_t n = 0;
     for (int i =0; i < 3; i++)
