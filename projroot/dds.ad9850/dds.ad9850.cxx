@@ -6,7 +6,7 @@
 #include <afx/strings.xftoa.h>
 #include "AD9850.hxx"
 
-namespace
+namespace dds
 {
     enum
     {
@@ -48,24 +48,27 @@ namespace
         ad9850.setfreq(theFreq);
     }
 
-    int_fast32_t incDivisor(int& n)
+    int_fast32_t shiftX(int& n, int inc)
     {
-        static const int_fast32_t divs[] = { 1000000, 100000, 10000, 1000, 100, 10, 1 };
-        static const int dsize = (int) (sizeof(divs) / sizeof(divs[0]));
+        static const int_fast32_t vals[] = { 1000000, 100000, 10000, 1000, 100, 10, 1 };
+        static const int dsize = (int) (sizeof(vals) / sizeof(vals[0]));
 
-        ++n;
+        n += inc
+                        ;
         if (n > (dsize - 1))
             n = 0;
 
         if (n < 0)
             n = (dsize - 1);
 
-        return divs[n];
+        return vals[n];
     }
 }
 
 extern "C" void Main()
 {
+    using namespace dds;
+
     init();
 
     pinMode(btnChangeDivisor, INPUT);
@@ -80,11 +83,12 @@ extern "C" void Main()
     lcd.print("     v1.0       ");
 
     sleep1000ms();
+    lcd.clear();
 
     int_fast32_t theFreq = 0;
 
     int idiv = -1;
-    int_fast32_t divisor = incDivisor(idiv);
+    int_fast32_t divisor = shiftX(idiv, 1);
 
     sei();
 
@@ -97,7 +101,7 @@ extern "C" void Main()
 
         if (isButtonPressed(btnChangeDivisor))
         {
-            divisor = incDivisor(idiv);
+            divisor = shiftX(idiv, 1);
             updateFreqency(res, theFreq, divisor);
         }
 
