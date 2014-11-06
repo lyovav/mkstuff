@@ -570,7 +570,7 @@ W = angled&lt;p&gt;
 <plain>
 </plain>
 <instances>
-<instance part="IC1" gate="IC" x="7.62" y="7.62" rot="R180"/>
+<instance part="IC1" gate="IC" x="0" y="0" rot="R180"/>
 <instance part="LCD1" gate="G$1" x="63.5" y="50.8" rot="R90"/>
 <instance part="SV1" gate="G$1" x="40.64" y="-40.64"/>
 <instance part="SV2" gate="1" x="71.12" y="-38.1" rot="R90"/>
