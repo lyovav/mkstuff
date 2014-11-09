@@ -86,7 +86,8 @@ void loop()
 {
   static int i = 0;
   
-  analogWrite(DAC1, waveformsTable[0][i]); // sine
+  analogWrite(DAC0, waveformsTable[0][i]); // sine
+  analogWrite(DAC1, waveformsTable[3][i]); // square
 
   ++i;
   if(i >= maxSamplesNum)
