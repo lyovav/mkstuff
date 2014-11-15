@@ -25,7 +25,7 @@ namespace dds
     class AD9850
     {
     public:
-        AD9850(uint8_t w_clk, uint8_t fq_ud, uint8_t d7, uint8_t rst);
+        AD9850(uint8_t w_clk, uint8_t fq_ud, uint8_t d7, uint8_t rst = (uint8_t)-1);
 
         // set frequency in Hz
         void setfreq(double f);
