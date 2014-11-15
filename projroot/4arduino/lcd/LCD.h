@@ -41,7 +41,7 @@
 
 #include <inttypes.h>
 #include <Print.h>
-#include <afx/sleep.h>
+#include <stdint.h>
 
 /*!
  @defined 
@@ -511,18 +511,6 @@ namespace Generic
        LCD& operator = (LCD const&);
     };
 
-    inline void LCD::clear() const
-    {
-       command(LCD_CLEARDISPLAY);
-       sleepms(HOME_CLEAR_EXEC);
-    }
-
-    inline void LCD::home() const
-    {
-       command(LCD_RETURNHOME);             // set cursor position to zero
-       sleepms(HOME_CLEAR_EXEC);
-    }
-
     // Turn the display on/off
     inline void LCD::noDisplay() const
     {
@@ -618,6 +606,15 @@ namespace Generic
     inline void LCD::on(void) const { display(); backlight(); }
     inline void LCD::off(void) const { noBacklight(); noDisplay(); }
     inline void LCD::command(uint8_t value) const { send(value, COMMAND); }
+
+    inline void prints(Generic::LCD const& lcd, uint8_t row, char const* text)
+    {
+    	lcd.setCursor(0, row);
+    	((Print*)&lcd)->write(text);
+    	// FIXME: Generic::LCD::write(uint8_t) override Print::write in this case
+    }
+
+    void printl(Generic::LCD const& lcd, uint8_t row, char const* format, ...);
 }
 
 #endif /* _LCD_Generic_H_ */

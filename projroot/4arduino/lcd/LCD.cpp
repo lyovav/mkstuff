@@ -38,6 +38,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
+#include <stdarg.h>
+#include <Arduino.h>
 
 namespace Generic
 {
@@ -90,7 +92,7 @@ namespace Generic
        // before sending commands. Arduino can turn on way before 4.5V so we'll wait
        // 50
        // ---------------------------------------------------------------------------
-       sleepms(50000);
+    	delayMicroseconds(50000);
 
        //put the LCD into 4 bit or 8 bit mode
        // -------------------------------------
@@ -101,15 +103,15 @@ namespace Generic
 
           // we start in 8bit mode, try to set 4 bit mode
           send(0x03, FOUR_BITS);
-          sleepms(4500);
+          delayMicroseconds(4500);
 
           // second try
           send(0x03, FOUR_BITS);
-          sleepms(4500);
+          delayMicroseconds(4500);
 
           // third go!
           send(0x03, FOUR_BITS);
-          sleepms(150);
+          delayMicroseconds(150);
 
           // finally, set to 4-bit interface
           send(0x02, FOUR_BITS);
@@ -121,11 +123,11 @@ namespace Generic
 
           // Send function set command sequence
           command(LCD_FUNCTIONSET | _displayfunction);
-          sleepms(4500);
+          delayMicroseconds(4500);
 
           // second try
           command(LCD_FUNCTIONSET | _displayfunction);
-          sleepms(150);
+          delayMicroseconds(150);
 
           // third go
           command(LCD_FUNCTIONSET | _displayfunction);
@@ -183,12 +185,12 @@ namespace Generic
        location &= 0x7;
 
        command(LCD_SETCGRAMADDR | (location << 3));
-       sleepms(30);
+       delayMicroseconds(30);
 
        for (int i=0; i<8; i++)
        {
           write(charmap[i]);
-          sleepms(40);
+          delayMicroseconds(40);
        }
     }
 
@@ -201,5 +203,30 @@ namespace Generic
     size_t LCD::write(uint8_t value) const
     {
     	return send(value, DATA);
+    }
+
+    void LCD::clear() const
+    {
+       command(LCD_CLEARDISPLAY);
+       delayMicroseconds(HOME_CLEAR_EXEC);
+    }
+
+    void LCD::home() const
+    {
+       command(LCD_RETURNHOME);             // set cursor position to zero
+       delayMicroseconds(HOME_CLEAR_EXEC);
+    }
+
+    void printl(Generic::LCD const& lcd, uint8_t row, char const* format, ...)
+    {
+    	va_list ap;
+    	va_start(ap, format);
+
+    	char buffer[129] = {0};
+    	vsnprintf(buffer, 128, format, ap);
+
+    	prints(lcd, row, buffer);
+
+    	va_end(ap);
     }
 }

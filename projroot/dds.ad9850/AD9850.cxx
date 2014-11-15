@@ -8,9 +8,9 @@ namespace dds
     #define pulse(pin) do { digitalWrite(pin, HIGH); digitalWrite(pin, LOW); } while (0)
 
     AD9850::AD9850(uint8_t w_clk, uint8_t fq_ud, uint8_t d7, uint8_t rst)
-                    : W_CLK_(w_clk)
-                                    , FQ_UD_(fq_ud)
-                                    , D7_(d7)
+		: W_CLK_(w_clk)
+		, FQ_UD_(fq_ud)
+		, D7_(d7)
     {
         frequency_ = 0;
         phase_ = 0;
@@ -19,7 +19,7 @@ namespace dds
         pinMode(D7_, OUTPUT);
         pinMode(rst, OUTPUT);
 
-        pulse(rst);
+        //pulse(rst);
         pulse(W_CLK_);
         pulse(FQ_UD_);
     }

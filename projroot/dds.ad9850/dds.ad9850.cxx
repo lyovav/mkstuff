@@ -10,14 +10,14 @@ namespace dds
 {
     enum
     {
-        btnChangeDivisor = 2,
+        btnChangeDivisor = 8,
         rotaryValuePin = A0,
     };
 
-    const double FREQ_MAX = 99999999.;
+    const double FREQ_MAX = 39999999.;
 
     I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
-    dds::AD9850 ad9850(8, 9, 10, 11);
+    dds::AD9850 ad9850(3, 2, 4);
 
     bool isButtonPressed(int pin)
     {
@@ -31,8 +31,8 @@ namespace dds
     template <typename T>
     void displayValue(T x, int col, int row)
     {
-        lcd.setCursor(0, row);
-        lcd.print("                ");
+        //lcd.setCursor(0, row);
+        //lcd.print("                ");
 
         char temp[17] = {0};
         Strings::ConvertFrom<T, char>(x, 10, temp, 16, false);
@@ -72,52 +72,60 @@ extern "C" void Main()
     using namespace dds;
 
     init();
+	sei();
 
-    pinMode(btnChangeDivisor, INPUT);
-    pinMode(rotaryValuePin, INPUT);
+    //pinMode(btnChangeDivisor, INPUT);
+    //pinMode(rotaryValuePin, INPUT);
 
     lcd.begin();
 
-    /*         0123456789012345 */
-    lcd.setCursor(0, 0);
-    lcd.print(" [WCD] mini-DDS ");
-    lcd.setCursor(0, 1);
-    lcd.print("     v1.0       ");
-
-    sleep1000ms();
+	prints(lcd, 0, " [WCD] mini-DDS ");
+	prints(lcd, 1, " M.Nikonov 2014 ");
+	delay(300);
+	printl(lcd, 0, "F_CPU  %9lu", F_CPU);
+	prints(lcd, 1, "                ");
 
     int_fast32_t theFreq = 0;
 
-    int idiv = -1;
+    int idiv = 5;
     int_fast32_t divisor = shiftX(idiv, 1);
 
-    sei();
-
-    int pres = -1;
+    //int pres = -1;
     unsigned long ms = millis();
+    bool refresh = true;
+
 
     while (1)
     {
-        int res = analogRead(rotaryValuePin);
+        int res = 1023; //analogRead(rotaryValuePin);
 
-        if (isButtonPressed(btnChangeDivisor))
+        //if (isButtonPressed(btnChangeDivisor))
+        //{
+            //divisor = shiftX(idiv, 1);
+            //updateFreqency(res, theFreq, divisor);
+        //}
+
+        //if (pres != res)
         {
-            divisor = shiftX(idiv, 1);
+            //pres = res;
             updateFreqency(res, theFreq, divisor);
+            //refresh = true;
         }
 
-        if (pres != res)
+        if (refresh)
         {
-            pres = res;
-            updateFreqency(res, theFreq, divisor);
-        }
+        	lcd.clear();
 
-        if ((millis() - ms) > 1000LU)
-        {
             displayValue(theFreq, 2, 0);
             displayValue(divisor, 2, 1);
 
-            ms = millis();
+            refresh = false;
+        }
+
+        if ((millis() - ms) > 500LU)
+        {
+        	ms = millis();
+        	refresh = true;
         }
     }
 }
