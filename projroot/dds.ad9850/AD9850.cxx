@@ -11,15 +11,19 @@ namespace dds
 		: W_CLK_(w_clk)
 		, FQ_UD_(fq_ud)
 		, D7_(d7)
+        , frequency_(0)
+        , phase_(0)
     {
-        frequency_ = 0;
-        phase_ = 0;
         pinMode(W_CLK_, OUTPUT);
         pinMode(FQ_UD_, OUTPUT);
         pinMode(D7_, OUTPUT);
-        pinMode(rst, OUTPUT);
 
-        //pulse(rst);
+        if (((uint8_t)-1) != rst)
+        {
+            pinMode(rst, OUTPUT);
+            pulse(rst);
+        }
+
         pulse(W_CLK_);
         pulse(FQ_UD_);
     }

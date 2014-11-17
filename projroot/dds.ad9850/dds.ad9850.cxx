@@ -5,127 +5,109 @@
 #include <afx/strings.xtoa.h>
 #include <afx/strings.xftoa.h>
 #include "AD9850.hxx"
+#include "rotary.hxx"
 
-namespace dds
+static int_fast32_t get_multiplier(int& cursor)
 {
-    enum
-    {
-        btnChangeDivisor = 8,
-        rotaryValuePin = A0,
-    };
+    static const int_fast32_t vals[] = { 1L, 10L, 100L, 1000L, 10000L, 100000L, 1000000L, 10000000L, 100000000L };
+    static const int dsize = (int) (sizeof(vals) / sizeof(vals[0]));
 
-    const double FREQ_MAX = 39999999.;
+    if (cursor > (dsize - 1))
+        cursor = (dsize - 1);
 
-    I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
-    dds::AD9850 ad9850(3, 2, 4);
+    if (cursor < 0)
+        cursor = 0;
 
-    bool isButtonPressed(int pin)
-    {
-        int rv = digitalRead(pin);
-
-        while (HIGH == digitalRead(pin)) ;
-
-        return HIGH == rv;
-    }
-
-    template <typename T>
-    void displayValue(T x, int col, int row)
-    {
-        //lcd.setCursor(0, row);
-        //lcd.print("                ");
-
-        char temp[17] = {0};
-        Strings::ConvertFrom<T, char>(x, 10, temp, 16, false);
-
-        lcd.setCursor(col, row);
-        lcd.print(temp);
-    }
-
-    void updateFreqency(int res, int_fast32_t& theFreq, int_fast32_t divisor)
-    {
-        double k = res / 1023.;
-        double tempFreq = (FREQ_MAX / (double) divisor) * k;
-
-        theFreq = (int_fast32_t) tempFreq;
-        ad9850.setfreq(theFreq);
-    }
-
-    int_fast32_t shiftX(int& n, int inc)
-    {
-        static const int_fast32_t vals[] = { 1000000, 100000, 10000, 1000, 100, 10, 1 };
-        static const int dsize = (int) (sizeof(vals) / sizeof(vals[0]));
-
-        n += inc
-                        ;
-        if (n > (dsize - 1))
-            n = 0;
-
-        if (n < 0)
-            n = (dsize - 1);
-
-        return vals[n];
-    }
+    return vals[cursor];
 }
+
 
 extern "C" void Main()
 {
-    using namespace dds;
+    static const uint8_t btnCursor = A3;
+    static const int_fast32_t freqLimitValue = 999999999L;
+
+    I2C::LCD lcd(16, 2, 0x20, 2, 1, 0, 4, 5, 6, 7, 3, Generic::POSITIVE);
+    dds::AD9850 ad9850(3, 2, 4, 5);
 
     init();
-	sei();
-
-    //pinMode(btnChangeDivisor, INPUT);
-    //pinMode(rotaryValuePin, INPUT);
-
     lcd.begin();
 
 	prints(lcd, 0, " [WCD] mini-DDS ");
 	prints(lcd, 1, " M.Nikonov 2014 ");
 	delay(300);
-	printl(lcd, 0, "F_CPU  %9lu", F_CPU);
-	prints(lcd, 1, "                ");
 
-    int_fast32_t theFreq = 0;
+    sei();
+    rotary::init();
+    lcd.clear();
+    lcd.cursor();
 
-    int idiv = 5;
-    int_fast32_t divisor = shiftX(idiv, 1);
+    pinMode(btnCursor, INPUT);
+    digitalWrite(btnCursor, HIGH);
 
-    //int pres = -1;
-    unsigned long ms = millis();
+    unsigned char enc = 0;
     bool refresh = true;
-
+    int_fast32_t freq = 1000;
+    int cursor = 2;
 
     while (1)
     {
-        int res = 1023; //analogRead(rotaryValuePin);
+        int encPressed = analogRead(btnCursor);
+        unsigned char encChanged = rotary::get_value();
 
-        //if (isButtonPressed(btnChangeDivisor))
-        //{
-            //divisor = shiftX(idiv, 1);
-            //updateFreqency(res, theFreq, divisor);
-        //}
-
-        //if (pres != res)
+        if (encChanged)
         {
-            //pres = res;
-            updateFreqency(res, theFreq, divisor);
-            //refresh = true;
+            enc = encChanged;
+
+            if (encPressed < 511)
+            {
+                if (DIR_CCW == enc)
+                    --cursor;
+                else if (DIR_CW == enc)
+                    ++cursor;
+
+                get_multiplier(cursor);
+            }
+            else
+            {
+                int_fast32_t ml = get_multiplier(cursor);
+
+                if (DIR_CCW == enc)
+                {
+                    freq -= ml;
+                    if (freq < 0)
+                        freq = 0;
+
+                }
+                else if (DIR_CW == enc)
+                {
+                    freq += ml;
+                    if (freq > freqLimitValue)
+                        freq = freqLimitValue;
+                }
+            }
+
+            refresh = true;
         }
 
         if (refresh)
         {
-        	lcd.clear();
+            ad9850.setfreq(freq);
 
-            displayValue(theFreq, 2, 0);
-            displayValue(divisor, 2, 1);
+            int megs = freq / 1000000L;
+            int kils = (freq - (megs * 1000000L)) / 1000L;
+            int hnds = (freq - (megs * 1000000L) - (kils * 1000L));
+
+        	printl(lcd, 0, " %03d %03d %03d Hz ", megs, kils, hnds);
+
+            unsigned cpos = 11 - cursor;
+
+            if (cursor > 2) --cpos;
+            if (cursor > 5) --cpos;
+
+        	lcd.setCursor(cpos, 0);
 
             refresh = false;
-        }
-
-        if ((millis() - ms) > 500LU)
-        {
-        	ms = millis();
-        	refresh = true;
         }
     }
 }
