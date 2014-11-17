@@ -35,7 +35,7 @@ extern "C" void Main()
 
 	prints(lcd, 0, " [WCD] mini-DDS ");
 	prints(lcd, 1, " M.Nikonov 2014 ");
-	delay(300);
+	delay(700);
 
     sei();
     rotary::init();
@@ -47,8 +47,8 @@ extern "C" void Main()
 
     unsigned char enc = 0;
     bool refresh = true;
-    int_fast32_t freq = 1000;
-    int cursor = 2;
+    int_fast32_t freq = 1;
+    int cursor = 0;
 
     while (1)
     {
