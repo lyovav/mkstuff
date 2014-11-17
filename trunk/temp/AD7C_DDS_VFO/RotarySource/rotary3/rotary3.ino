@@ -12,8 +12,8 @@
 // Half-step mode?
 #define HALF_STEP
 // Arduino pins the encoder is attached to. Attach the center to ground.
-#define ROTARY_PIN1 2
-#define ROTARY_PIN2 3
+#define ROTARY_PIN1 7
+#define ROTARY_PIN2 8
 // define to enable weak pullups.
 #define ENABLE_PULLUPS
 
