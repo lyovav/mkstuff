@@ -88,6 +88,7 @@ extern "C" void Main()
             }
 
             refresh = true;
+            delay(50);
         }
 
         if (refresh)
