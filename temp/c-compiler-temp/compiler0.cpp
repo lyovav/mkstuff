@@ -9,7 +9,7 @@
 
 namespace comp { namespace code_gen
 {
-    static const std::string entrypointfn_name = "begin";
+    static const std::string entrypointfn_name = "start";
 
     void function::op(int a)
     {
@@ -501,7 +501,7 @@ namespace comp { namespace code_gen
         {
             std::ostringstream err;
             err << "Entry point `" << entrypointfn_name.c_str() << "` not found";
-            throw std::runtime_error(err.str().c_str());
+            throw std::logic_error(err.str());
         }
 
         code[1] = p->get_address()-1; // jump to this (main function) address

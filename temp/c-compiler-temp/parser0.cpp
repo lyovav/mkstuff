@@ -113,8 +113,11 @@ namespace comp
         template <typename>
         struct result { typedef void type; };
 
-        error_handler(It first, It last)
-            : first(first), last(last) 
+        error_handler(It f, It l)
+            : linenum(1)
+            , first(f)
+            , last(l) 
+            , iters()
         {}
 
         template <typename Message, typename What>
@@ -122,21 +125,27 @@ namespace comp
         {
             int line;
             It line_start = get_pos(err_pos, line);
+
+            std::ostringstream err;
+
             if (err_pos != last)
             {
-                std::cout << message << what << " line " << line << ':' << std::endl;
-                std::cout << get_line(line_start) << std::endl;
+                err << message << what << " line " << line << ':' << std::endl;
+                err << get_line(line_start) << std::endl;
 
                 for (; line_start != err_pos; ++line_start)
-                    std::cout << ' ';
+                    err << ' ';
 
-                std::cout << '^' << std::endl;
+                err << '^' << std::endl;
             }
             else
             {
-                std::cout << "Unexpected end of file. ";
-                std::cout << message << what << " line " << line << std::endl;
+                err << "Unexpected end of file. ";
+                err << message << what << " line " << line << std::endl;
             }
+
+            linenum = line;
+            throw std::logic_error(err.str());
         }
 
         It get_pos(It err_pos, int& line) const
@@ -177,6 +186,7 @@ namespace comp
             return std::string(err_pos, i);
         }
 
+        mutable unsigned linenum;
         It first;
         It last;
         std::vector<It> iters;
@@ -637,7 +647,7 @@ int main(int argc, char const* argv[])
         }
         catch (std::exception const& ex)
         {
-            std::cerr << ex.what() << std::endl;
+            std::cerr << input_filename.c_str() << "(" << eh.linenum << "): " << ex.what() << std::endl;
         }
     }
     catch (std::exception const& ex)
