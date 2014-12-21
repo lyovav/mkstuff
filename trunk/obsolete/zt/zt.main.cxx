@@ -27,6 +27,8 @@ static unsigned read_adc(uint8_t pin)
 	unsigned hr = ADCH;
 
 	return (hr << 8) | lr;
+
+// fsdgdsgdfsgsdfgdfg
 }
 
 namespace // make it C++ static
