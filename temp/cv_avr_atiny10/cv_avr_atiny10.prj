@@ -8,9 +8,9 @@ C=
 D=04.01.2015
 Files=1
 F1=main.c
-OpenedFiles=1
+OpenedFiles=3
 OF1=main.c
-Active1=1
+Active1=0
 DebugOutputListFilesDirectory=Debug\List
 DebugOutputObjectFilesDirectory=Debug
 DebugOutputExecutableFilesDirectory=Debug\Exe
@@ -19,7 +19,7 @@ OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=1
+AllowDisplayFunctionCallTree=0
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
@@ -27,8 +27,18 @@ Active0=0
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
-TimeStamp1=1176771672
+TimeStamp1=1176775728
 PageIndex1=1
+OF2=lcd.c
+Active2=0
+EditorPanel2=0
+TimeStamp2=1176775589
+PageIndex2=2
+OF3=lcd.h
+Active3=1
+EditorPanel3=0
+TimeStamp3=1176775573
+PageIndex3=3
 [CompilerDebug]
 Chip=ATtiny10
 CPUClock=8000000
@@ -127,8 +137,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1176771675
-Build=2
+COFFileTimeStamp=1176775515
+Build=5
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -230,7 +240,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=2
+Build=5
 [DefinedSymbols]
 Count=0
 [StartUp]
@@ -310,13 +320,6 @@ PreserveEEPROM=0
 VerifyProgramming=1
 ProgrammingCounter=0
 RunUserProg=0
-[HeadersList]
-Files=1
-F1=D:\+++\temp\cv_avr_atiny10\main.c
-[Header1]
-Files=2
-F1=D:\--\cvavr-3.12\inc\tiny10.h
-F2=D:\--\cvavr-3.12\inc\tiny10_bits.h
 [BuildInfoCompiler]
 L1=Build configuration: Debug
 L2=Chip: ATtiny10
@@ -330,9 +333,9 @@ L9=8 bit enums: Yes
 L10=Enhanced function parameters passing: Yes
 L11='auto' variables watch in AVR Studio: No
 L12=
-L13=Build: 1
-L14=437 line(s) compiled
-L15=No errors
+L13=Build: 5
+L14=426 line(s) compiled
+L15=3 error(s)
 L16=No warnings
 L17=
 L18=Bit variables size: 0 byte(s)
@@ -348,36 +351,41 @@ L27=Hardware Stack size: 24 byte(s)
 L28=
 L29=Heap size: 0 byte(s)
 L30=
-L31=Program size: 64 words (128 bytes), 12,5% of FLASH
+L31=Program size: 63 words (126 bytes), 12,3% of FLASH
 L32=0 words (0 bytes), 0,0% reduced by Code Compression
-Lines=32
+Lines=30
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
 L3=
-L4=D:\+++\temp\cv_avr_atiny10\Debug\List\cv_avr_atiny10.asm(933): No EEPROM data, deleting D:\+++\temp\cv_avr_atiny10\Debug\Exe\cv_avr_atiny10.eep
+L4=D:\+++\temp\cv_avr_atiny10\Debug\List\cv_avr_atiny10.asm(903): No EEPROM data, deleting D:\+++\temp\cv_avr_atiny10\Debug\Exe\cv_avr_atiny10.eep
 L5=
 L6=ATtiny10 memory use summary [bytes]:
 L7=Segment   Begin    End      Code   Data   Used    Size   Use%  Warn
 L8=--------------------------------------------------------------------
-L9=[.cseg] 0x000000 0x000080    128      0    128    1024  12.5%
+L9=[.cseg] 0x000000 0x00007e    126      0    126    1024  12.3%
 L10=[.dseg] 0x000040 0x000060      0      0      0      32   0.0%
 L11=[.eseg] 0x000000 0x000000      0      0      0       0      -
 L12=
-Lines=12
+Lines=0
 [Bookmarks0]
 Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1176771693
+TimeStamp=1176775740
 [BookmarksFoldedCode]
-Files=1
+Files=6
 F1=main.c
+F2=D:\--\cvavr-3.12\inc\tiny10_bits.h
+F3=D:\--\cvavr-3.12\inc\tiny10.h
+F4=Debug\List\cv_avr_atiny10.asm
+F5=lcd.h
+F6=lcd.c
 [Bookmarks1]
-TimeStamp=1176771672
-Row=12
-Column=65
+TimeStamp=1176775728
+Row=19
+Column=85
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -390,5 +398,103 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
+[Bookmarks2]
+TimeStamp=997226556
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=51
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode2]
+Blocks=0
+[Bookmarks3]
+TimeStamp=1094027267
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode3]
+Blocks=0
+[Bookmarks4]
+TimeStamp=1176775054
+Row=902
+Column=0
+ScrollPosX=0
+ScrollPosY=797
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode4]
+Blocks=0
+[HeadersList]
+Files=1
+F1=D:\+++\temp\cv_avr_atiny10\main.c
+[Header1]
+Files=3
+F1=D:\--\cvavr-3.12\inc\tiny10.h
+F2=D:\--\cvavr-3.12\inc\tiny10_bits.h
+F3=lcd.h
 [FoldedCode1]
+Blocks=0
+[Bookmarks5]
+TimeStamp=1176775573
+Row=11
+Column=27
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode5]
+Blocks=0
+[Bookmarks6]
+TimeStamp=1176775589
+Row=7
+Column=11
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode6]
 Blocks=0
