@@ -4,7 +4,6 @@
 #include <avr/io.h>
 #include <avr/common.h>
 #include <avr/eeprom.h>
-#include <avr/utils/delay.h>
 
 .section .text
 
