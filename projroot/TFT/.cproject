@@ -25,7 +25,9 @@
 								<option id="de.innot.avreclipse.assembler.option.xflags.957459177" name="(-Xassembler) options" superClass="de.innot.avreclipse.assembler.option.xflags" valueType="stringList">
 									<listOptionValue builtIn="false" value="F_CPU=16000000"/>
 								</option>
-								<option id="de.innot.avreclipse.asm.option.include.paths.1676573620" name="#include paths for preprocessor(-I)" superClass="de.innot.avreclipse.asm.option.include.paths"/>
+								<option id="de.innot.avreclipse.asm.option.include.paths.1676573620" name="#include paths for preprocessor(-I)" superClass="de.innot.avreclipse.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-libraries}&quot;"/>
+								</option>
 								<inputType id="de.innot.avreclipse.tool.assembler.input.1204533806" superClass="de.innot.avreclipse.tool.assembler.input"/>
 							</tool>
 							<tool command="avr-gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="de.innot.avreclipse.tool.compiler.winavr.lib.release.1896912668" name="AVR Compiler" superClass="de.innot.avreclipse.tool.compiler.winavr.lib.release">
@@ -33,6 +35,9 @@
 								<option id="de.innot.avreclipse.compiler.option.optimize.480121725" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.1172497216" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SPI}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-libraries}&quot;"/>
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1535025014" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
@@ -45,6 +50,9 @@
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.1570157116" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.1082998591" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SPI}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/arduino-libraries}&quot;"/>
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1929729012" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=300"/>
@@ -60,7 +68,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="arduino/IPAddress.cpp|lcd/LiquidCrystal.cpp|lcd/LiquidCrystal_SR3W.cpp|lcd/LiquidCrystal_SR2W.cpp|lcd/LiquidCrystal_SR.cpp|lcd/FastIO.cpp|arduino/WiFi|lcd-1.0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="example_eeprom_write.cxx|example_eeprom_read.cxx|example_eeprom_clear.cxx|arduino/IPAddress.cpp|lcd/LiquidCrystal.cpp|lcd/LiquidCrystal_SR3W.cpp|lcd/LiquidCrystal_SR2W.cpp|lcd/LiquidCrystal_SR.cpp|lcd/FastIO.cpp|arduino/WiFi|lcd-1.0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
