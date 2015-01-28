@@ -18,14 +18,14 @@
 #if _USE_1BIT_LCD_MODE
 
 /* TODO: change LCD ports */
-#define _LCD_RS                     PORTD
-#define _LCD_E                      PORTD
-#define _LCD_D0                     PORTD
+#define _LCD_RS                     PORTB
+#define _LCD_E                      PORTB
+#define _LCD_D0                     PORTB
 
 /* TODO: change LCD ports */
 #define _LCD_RS_PIN                 0
-#define _LCD_E_PIN                  1
-#define _LCD_D0_PIN                 2
+#define _LCD_E_PIN                  3
+#define _LCD_D0_PIN                 4
 
 #else                               /* !_USE_1BIT_LCD_MODE */
 
