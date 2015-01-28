@@ -1,0 +1,1125 @@
+Archive member included because of file (symbol)
+
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                              ./objd.m328p.16M/ReadADC.o (__mulsi3)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+                              ./objd.m328p.16M/DisplayValue.o (__udivmodqi4)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+                              ./objd.m328p.16M/RefVoltage.o (__udivmodhi4)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+                              ./objd.m328p.16M/function_menu.o (__divmodhi4)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                              ./objd.m328p.16M/DisplayValue.o (__udivmodsi4)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
+                              ./objd.m328p.16M/main.o (__divmodsi4)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                              ./objd.m328p.16M/DisplayValue.o (__prologue_saves__)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                              ./objd.m328p.16M/DisplayValue.o (__epilogue_restores__)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                              d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o (exit)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                              ./objd.m328p.16M/DisplayValue.o (__do_clear_bss)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+                              ./objd.m328p.16M/GetFrequency.o (__muldi3)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+                              ./objd.m328p.16M/GetFrequency.o (__udivdi3)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+                              d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o) (__clz_tab)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                              d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o) (__do_copy_data)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(itoa.o)
+                              ./objd.m328p.16M/main.o (itoa)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa.o)
+                              ./objd.m328p.16M/DisplayValue.o (ultoa)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(utoa.o)
+                              ./objd.m328p.16M/i2lcd.o (utoa)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+                              ./objd.m328p.16M/lcd-routines.o (__eerd_byte_m328p)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+                              ./objd.m328p.16M/ShowData.o (__eerd_word_m328p)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+                              ./objd.m328p.16M/main.o (__eewr_byte_m328p)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+                              ./objd.m328p.16M/main.o (__eewr_word_m328p)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strrev.o)
+                              d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(itoa.o) (strrev)
+d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+                              d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o) (__eerd_blraw_m328p)
+
+Allocating common symbols
+Common symbol       size              file
+
+diode_sequence      0x1               ./objd.m328p.16M/main.o
+ext_freq            0x4               ./objd.m328p.16M/main.o
+display_time        0x2               ./objd.m328p.16M/main.o
+resis680mi          0x2               ./objd.m328p.16M/main.o
+ref_mv_offs         0x2               ./objd.m328p.16M/main.o
+NumOfDiodes         0x1               ./objd.m328p.16M/main.o
+PartMode            0x1               ./objd.m328p.16M/main.o
+PartFound           0x1               ./objd.m328p.16M/main.o
+resis680pl          0x2               ./objd.m328p.16M/main.o
+tmpval              0x1               ./objd.m328p.16M/main.o
+inductor_lpre       0x1               ./objd.m328p.16M/DisplayValue.o
+mess_count          0x1               ./objd.m328p.16M/main.o
+outval              0xa               ./objd.m328p.16M/main.o
+resis               0x18              ./objd.m328p.16M/main.o
+ADCconfig           0x6               ./objd.m328p.16M/main.o
+pin_rpl             0x2               ./objd.m328p.16M/main.o
+ref_mv              0x2               ./objd.m328p.16M/main.o
+OutBuffer           0xa               ./objd.m328p.16M/main.o
+tmpval2             0x1               ./objd.m328p.16M/main.o
+UnCalibrated        0x1               ./objd.m328p.16M/main.o
+pin_rmi             0x2               ./objd.m328p.16M/main.o
+WithReference       0x1               ./objd.m328p.16M/main.o
+_trans              0x2               ./objd.m328p.16M/main.o
+ntrans              0xe               ./objd.m328p.16M/main.o
+empty_count         0x1               ./objd.m328p.16M/main.o
+pin_combination     0x1               ./objd.m328p.16M/main.o
+ovcnt16             0x2               ./objd.m328p.16M/main.o
+cell_mv             0x6               ./objd.m328p.16M/DisplayValue.o
+ptrans              0xe               ./objd.m328p.16M/main.o
+pinchange_max       0x2               ./objd.m328p.16M/main.o
+pinchange_count     0x2               ./objd.m328p.16M/main.o
+adc_internal_reference
+                    0x2               ./objd.m328p.16M/main.o
+ResistorsFound      0x1               ./objd.m328p.16M/main.o
+unfinished          0x1               ./objd.m328p.16M/main.o
+RHmultip            0x2               ./objd.m328p.16M/main.o
+cap                 0x14              ./objd.m328p.16M/main.o
+load_diff           0x2               ./objd.m328p.16M/main.o
+diodes              0x18              ./objd.m328p.16M/main.o
+inductor_lx         0x4               ./objd.m328p.16M/DisplayValue.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+LOAD ./objd.m328p.16M/lcd_hw_4_bit.o
+LOAD ./objd.m328p.16M/lcd-routines.o
+LOAD ./objd.m328p.16M/i2lcd.o
+LOAD ./objd.m328p.16M/PinLayout.o
+LOAD ./objd.m328p.16M/RvalOut.o
+LOAD ./objd.m328p.16M/UfAusgabe.o
+LOAD ./objd.m328p.16M/DisplayValue.o
+LOAD ./objd.m328p.16M/swuart.o
+LOAD ./objd.m328p.16M/wait1000ms.o
+LOAD ./objd.m328p.16M/sleep_5ms.o
+LOAD ./objd.m328p.16M/ReadADC.o
+LOAD ./objd.m328p.16M/wait_for_key_ms.o
+LOAD ./objd.m328p.16M/RefVoltage.o
+LOAD ./objd.m328p.16M/get_log.o
+LOAD ./objd.m328p.16M/main.o
+LOAD ./objd.m328p.16M/CheckPins.o
+LOAD ./objd.m328p.16M/ChargePin10ms.o
+LOAD ./objd.m328p.16M/EntladePins.o
+LOAD ./objd.m328p.16M/ReadCapacity.o
+LOAD ./objd.m328p.16M/GetRLmultip.o
+LOAD ./objd.m328p.16M/Calibrate_UR.o
+LOAD ./objd.m328p.16M/ReadInductance.o
+LOAD ./objd.m328p.16M/GetESR.o
+LOAD ./objd.m328p.16M/GetVloss.o
+LOAD ./objd.m328p.16M/GetFrequency.o
+LOAD ./objd.m328p.16M/function_menu.o
+LOAD ./objd.m328p.16M/message_key_released.o
+LOAD ./objd.m328p.16M/ReadBigCap.o
+LOAD ./objd.m328p.16M/CheckRotaryEncoder.o
+LOAD ./objd.m328p.16M/CalibrationCap.o
+LOAD ./objd.m328p.16M/ShowData.o
+LOAD ./objd.m328p.16M/EE_check_init.o
+LOAD d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
+LOAD d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a
+LOAD d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x66aa
+ *(.vectors)
+ .vectors       0x00000000       0x68 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+ .progmem.data  0x00000068      0x18a ./objd.m328p.16M/main.o
+                0x000001ef                PinADCtab
+                0x000000d8                HelpCalibration_str
+                0x00000068                LogTab
+                0x000001e9                PinRLtab
+                0x000000c6                RHtab
+                0x000001ec                PinRHtab
+                0x000001f2                . = ALIGN (0x2)
+                0x000001f2                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000001f2        0x0 linker stubs
+ *(.trampolines*)
+                0x000001f2                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000001f2                __ctors_start = .
+ *(.ctors)
+                0x000001f2                __ctors_end = .
+                0x000001f2                __dtors_start = .
+ *(.dtors)
+                0x000001f2                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000001f2        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+                0x000001f2                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000001f2        0xc d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000001fe       0x10 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x000001fe                __do_clear_bss
+ .init4         0x0000020e       0x16 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x0000020e                __do_copy_data
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000224        0x8 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+ *(.init9)
+ *(.text)
+ .text          0x0000022c        0x4 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+                0x0000022c                __vector_22
+                0x0000022c                __vector_1
+                0x0000022c                __vector_24
+                0x0000022c                __bad_interrupt
+                0x0000022c                __vector_6
+                0x0000022c                __vector_3
+                0x0000022c                __vector_23
+                0x0000022c                __vector_25
+                0x0000022c                __vector_17
+                0x0000022c                __vector_19
+                0x0000022c                __vector_4
+                0x0000022c                __vector_9
+                0x0000022c                __vector_2
+                0x0000022c                __vector_15
+                0x0000022c                __vector_8
+                0x0000022c                __vector_14
+                0x0000022c                __vector_18
+                0x0000022c                __vector_20
+ .text          0x00000230       0x5c ./objd.m328p.16M/lcd_hw_4_bit.o
+                0x00000230                _lcd_hw_write
+ .text          0x0000028c      0x110 ./objd.m328p.16M/lcd-routines.o
+                0x00000388                lcd_line2
+                0x0000038e                lcd_line3
+                0x00000290                lcd_data
+                0x00000348                lcd_fix_customchar
+                0x00000394                lcd_line4
+                0x000002a8                lcd_clear
+                0x0000028c                lcd_space
+                0x0000028e                lcd_testpin
+                0x00000328                lcd_fix_string
+                0x00000302                lcd_string
+                0x0000039a                lcd_powersave
+                0x000002b6                lcd_init
+                0x00000374                lcd_clear_line
+                0x00000382                lcd_line1
+                0x00000298                lcd_command
+ .text          0x0000039c       0x26 ./objd.m328p.16M/i2lcd.o
+                0x000003b2                u2lcd
+                0x0000039c                i2lcd
+ .text          0x000003c2       0x4e ./objd.m328p.16M/PinLayout.o
+                0x000003c2                PinLayout
+ .text          0x00000410       0x4c ./objd.m328p.16M/RvalOut.o
+                0x00000410                RvalOut
+ .text          0x0000045c       0xb0 ./objd.m328p.16M/UfAusgabe.o
+                0x000004b0                SerienDiodenAusgabe
+                0x0000045c                mVAusgabe
+                0x00000484                UfAusgabe
+ .text          0x0000050c      0x19c ./objd.m328p.16M/DisplayValue.o
+                0x0000050c                DisplayValue
+ .text          0x000006a8        0x2 ./objd.m328p.16M/swuart.o
+                0x000006a8                uart_putc
+ .text          0x000006aa       0x4c ./objd.m328p.16M/wait1000ms.o
+                0x000006c0                wait50ms
+                0x000006b8                wait300ms
+                0x000006ca                wait5ms
+                0x000006b6                wait400ms
+                0x000006b2                wait1000ms
+                0x000006d4                wait500us
+                0x000006c2                wait40ms
+                0x000006e4                wait20us
+                0x000006d8                wait300us
+                0x000006f2                wait500ns
+                0x000006dc                wait100us
+                0x000006ba                wait200ms
+                0x000006ae                wait3s
+                0x000006d2                wait1ms
+                0x000006e2                wait30us
+                0x000006da                wait200us
+                0x000006ea                wait4us
+                0x000006c6                wait20ms
+                0x000006bc                wait100ms
+                0x000006e8                wait5us
+                0x000006ec                wait3us
+                0x000006ce                wait3ms
+                0x000006cc                wait4ms
+                0x000006ee                wait2us
+                0x000006b0                wait2s
+                0x000006c4                wait30ms
+                0x000006aa                wait5s
+                0x000006d0                wait2ms
+                0x000006de                wait50us
+                0x000006f0                wait1us
+                0x000006c8                wait10ms
+                0x000006d6                wait400us
+                0x000006e0                wait40us
+                0x000006b2                wait1s
+                0x000006ac                wait4s
+                0x000006e6                wait10us
+                0x000006b4                wait500ms
+ .text          0x000006f6       0x54 ./objd.m328p.16M/sleep_5ms.o
+                0x000006f6                sleep_5ms
+ .text          0x0000074a       0xd4 ./objd.m328p.16M/ReadADC.o
+                0x0000075a                W5msReadADC
+                0x00000752                W10msReadADC
+                0x0000074a                W20msReadADC
+                0x00000762                ReadADC
+ .text          0x0000081e       0x88 ./objd.m328p.16M/wait_for_key_ms.o
+                0x0000081e                wait_for_key_ms
+                0x00000890                wait_for_key_5s_line2
+ .text          0x000008a6       0xb0 ./objd.m328p.16M/RefVoltage.o
+                0x000008a6                RefVoltage
+ .text          0x00000956       0x3e ./objd.m328p.16M/get_log.o
+                0x00000956                get_log
+ .text          0x00000994     0x15a2 ./objd.m328p.16M/main.o
+                0x00000ad0                AutoCheck
+                0x00000a30                ShortedProbes
+                0x00000aa6                AllProbesShorted
+                0x00000994                __vector_7
+                0x00001336                main
+                0x00000998                GetIr
+                0x00000996                __vector_21
+                0x00000a0c                mark_as_uncalibrated
+ .text          0x00001f36      0xf9c ./objd.m328p.16M/CheckPins.o
+                0x00001f36                CheckPins
+ .text          0x00002ed2       0x36 ./objd.m328p.16M/ChargePin10ms.o
+                0x00002ed2                ChargePin10ms
+ .text          0x00002f08      0x12a ./objd.m328p.16M/EntladePins.o
+                0x00002f08                EntladePins
+ .text          0x00003032      0x688 ./objd.m328p.16M/ReadCapacity.o
+                0x00003032                Scale_C_with_vcc
+                0x000030a6                __vector_13
+                0x00003136                ReadCapacity
+                0x000030f2                __vector_10
+ .text          0x000036ba       0x7e ./objd.m328p.16M/GetRLmultip.o
+                0x000036ba                GetRLmultip
+ .text          0x00003738      0x1d4 ./objd.m328p.16M/Calibrate_UR.o
+                0x00003738                Calibrate_UR
+ .text          0x0000390c      0x4b4 ./objd.m328p.16M/ReadInductance.o
+                0x0000390c                ReadInductance
+ .text          0x00003dc0      0x3c6 ./objd.m328p.16M/GetESR.o
+                0x00003dc0                GetESR
+ .text          0x00004186      0x162 ./objd.m328p.16M/GetVloss.o
+                0x00004186                GetVloss
+ .text          0x000042e8      0x45e ./objd.m328p.16M/GetFrequency.o
+                0x00004336                __vector_12
+                0x00004352                __vector_11
+                0x0000436e                __vector_5
+                0x000042e8                __vector_16
+                0x000043ca                GetFrequency
+ .text          0x00004746      0x69a ./objd.m328p.16M/function_menu.o
+                0x00004c68                show_C_ESR
+                0x00004b14                make_frequency
+                0x00004748                do_10bit_PWM
+                0x00004d36                function_menu
+                0x00004746                show_vext
+                0x0000487c                switch_frequency
+                0x00004c00                message2line
+ .text          0x00004de0       0x2c ./objd.m328p.16M/message_key_released.o
+                0x00004de0                message_key_released
+ .text          0x00004e0c      0x260 ./objd.m328p.16M/ReadBigCap.o
+                0x00004e0c                ReadBigCap
+ .text          0x0000506c      0x2c2 ./objd.m328p.16M/CheckRotaryEncoder.o
+                0x0000506c                CheckRotaryEncoder
+ .text          0x0000532e        0x0 ./objd.m328p.16M/CalibrationCap.o
+ .text          0x0000532e      0x1d0 ./objd.m328p.16M/ShowData.o
+                0x0000532e                ShowData
+ .text          0x000054fe        0x2 ./objd.m328p.16M/EE_check_init.o
+                0x000054fe                EE_check_init
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text          0x00005500        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text          0x00005500      0x1f6 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+                0x00005500                __muldi3
+ .text          0x000056f6      0xcea d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+                0x000056f6                __udivdi3
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .text          0x000063e0        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+                0x000063e0                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x000063e0       0x3e d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                0x000063e0                __mulsi3
+ .text.libgcc   0x0000641e       0x18 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+                0x0000641e                __udivmodqi4
+ .text.libgcc   0x00006436       0x28 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+                0x00006436                __udivmodhi4
+ .text.libgcc   0x0000645e       0x26 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+                0x0000645e                __divmodhi4
+                0x0000645e                _div
+ .text.libgcc   0x00006484       0x44 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                0x00006484                __udivmodsi4
+ .text.libgcc   0x000064c8       0x36 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
+                0x000064c8                __divmodsi4
+ .text.libgcc   0x000064fe       0x38 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x000064fe                __prologue_saves__
+ .text.libgcc   0x00006536       0x36 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x00006536                __epilogue_restores__
+ .text.libgcc   0x0000656c        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x0000656c        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000656c        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.avr-libc
+                0x0000656c       0x42 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(itoa.o)
+                0x0000656c                itoa
+ .text.avr-libc
+                0x000065ae       0x4a d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa.o)
+                0x000065ae                ultoa
+ .text.avr-libc
+                0x000065f8       0x2c d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(utoa.o)
+                0x000065f8                utoa
+ .text.avr-libc
+                0x00006624       0x10 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+                0x00006624                __eerd_byte_m328p
+ .text.avr-libc
+                0x00006634        0xc d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+                0x00006634                __eerd_word_m328p
+ .text.avr-libc
+                0x00006640       0x1c d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+                0x00006640                __eewr_byte_m328p
+                0x00006642                __eewr_r18_m328p
+ .text.avr-libc
+                0x0000665c        0xa d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+                0x0000665c                __eewr_word_m328p
+ .text.avr-libc
+                0x00006666       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strrev.o)
+                0x00006666                strrev
+ .text.avr-libc
+                0x00006686       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+                0x00006686                __eerd_block_m328p
+                0x0000668a                __eerd_blraw_m328p
+                0x000066a6                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x000066a6        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x000066a6                exit
+                0x000066a6                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x000066a6        0x4 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ *(.fini0)
+                0x000066aa                _etext = .
+
+.data           0x00800100      0x100 load address 0x000066aa
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/lcd_hw_4_bit.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/lcd-routines.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/i2lcd.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/PinLayout.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/RvalOut.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/UfAusgabe.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/DisplayValue.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/swuart.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/wait1000ms.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/sleep_5ms.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/ReadADC.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/wait_for_key_ms.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/RefVoltage.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/get_log.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/main.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/CheckPins.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/ChargePin10ms.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/EntladePins.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/ReadCapacity.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/GetRLmultip.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/Calibrate_UR.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/ReadInductance.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/GetESR.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/GetVloss.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/GetFrequency.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/function_menu.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/message_key_released.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/ReadBigCap.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/CalibrationCap.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/ShowData.o
+ .data          0x00800100        0x0 ./objd.m328p.16M/EE_check_init.o
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .data          0x00800100        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+ .data          0x00800100      0x100 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+                0x00800100                __clz_tab
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .data          0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800200                . = ALIGN (0x2)
+                0x00800200                _edata = .
+                0x00800200                PROVIDE (__data_end, .)
+
+.bss            0x00800200       0xb2
+                0x00800200                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm328p.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/lcd_hw_4_bit.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/lcd-routines.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/i2lcd.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/PinLayout.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/RvalOut.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/UfAusgabe.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/DisplayValue.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/swuart.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/wait1000ms.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/sleep_5ms.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/ReadADC.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/wait_for_key_ms.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/RefVoltage.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/get_log.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/main.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/CheckPins.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/ChargePin10ms.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/EntladePins.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/ReadCapacity.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/GetRLmultip.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/Calibrate_UR.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/ReadInductance.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/GetESR.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/GetVloss.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/GetFrequency.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/function_menu.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/message_key_released.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/ReadBigCap.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/CalibrationCap.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/ShowData.o
+ .bss           0x00800200        0x0 ./objd.m328p.16M/EE_check_init.o
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodsi4.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(itoa.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(utoa.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strrev.o)
+ .bss           0x00800200        0x0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x00800200        0xb ./objd.m328p.16M/DisplayValue.o
+                0x00800200                inductor_lpre
+                0x00800201                cell_mv
+                0x00800207                inductor_lx
+ COMMON         0x0080020b       0xa7 ./objd.m328p.16M/main.o
+                0x0080020b                diode_sequence
+                0x0080020c                ext_freq
+                0x00800210                display_time
+                0x00800212                resis680mi
+                0x00800214                ref_mv_offs
+                0x00800216                NumOfDiodes
+                0x00800217                PartMode
+                0x00800218                PartFound
+                0x00800219                resis680pl
+                0x0080021b                tmpval
+                0x0080021c                mess_count
+                0x0080021d                outval
+                0x00800227                resis
+                0x0080023f                ADCconfig
+                0x00800245                pin_rpl
+                0x00800247                ref_mv
+                0x00800249                OutBuffer
+                0x00800253                tmpval2
+                0x00800254                UnCalibrated
+                0x00800255                pin_rmi
+                0x00800257                WithReference
+                0x00800258                _trans
+                0x0080025a                ntrans
+                0x00800268                empty_count
+                0x00800269                pin_combination
+                0x0080026a                ovcnt16
+                0x0080026c                ptrans
+                0x0080027a                pinchange_max
+                0x0080027c                pinchange_count
+                0x0080027e                adc_internal_reference
+                0x00800280                ResistorsFound
+                0x00800281                unfinished
+                0x00800282                RHmultip
+                0x00800284                cap
+                0x00800298                load_diff
+                0x0080029a                diodes
+                0x008002b2                PROVIDE (__bss_end, .)
+                0x000066aa                __data_load_start = LOADADDR (.data)
+                0x000067aa                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x008002b2        0x0
+                0x008002b2                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x008002b2                PROVIDE (__noinit_end, .)
+                0x008002b2                _end = .
+                0x008002b2                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000      0x2a7
+ *(.eeprom*)
+ .eeprom        0x00810000      0x2a7 ./objd.m328p.16M/main.o
+                0x008100bc                SELFTEST
+                0x008101af                ESR_str
+                0x008101f4                RH1L
+                0x0081014e                FULLCHECK_str
+                0x00810184                NPN_str
+                0x00810122                F_GEN_str
+                0x008101bd                Lis_str
+                0x008101ce                Dioden
+                0x008101aa                VCC_str
+                0x00810065                BatWeak
+                0x00810188                PNP_str
+                0x008100a7                OrBroken
+                0x0081012e                PWM_10bit_str
+                0x00810071                TestFailed2
+                0x0081020a                RHRH
+                0x008101a0                CapZeich
+                0x00810181                hfe_str
+                0x00810157                SHORT_PROBES_str
+                0x00810192                Uf_str
+                0x0081025c                CapIcon
+                0x00810222                RIHI
+                0x00810148                TURN_str
+                0x008100fb                FREQ_str
+                0x0081027c                PrefixTab
+                0x00810218                RHRL
+                0x00810229                RILO
+                0x00810234                T50HZ
+                0x008100f0                TESTER_str
+                0x00810240                C_ESR_str
+                0x008101a4                Cell_str
+                0x008101c0                Ir_str
+                0x00810292                REF_R_str
+                0x008101de                ICE0_str
+                0x0081017e                GateCap_str
+                0x0081024c                DiodeIcon1
+                0x00810230                C0_str
+                0x008101fc                RLRL
+                0x00810085                Thyristor
+                0x008102a3                EE_ESR_ZEROtab
+                0x0081029c                c_zero_tab
+                0x0081016e                mosfet_str
+                0x008101f8                RH1H
+                0x008101d3                Resistor_str
+                0x00810139                RotaryEncoder_str
+                0x00810299                RefDiff
+                0x0081006a                BatEmpty
+                0x008101ef                RHfakt
+                0x00810196                vt_str
+                0x0081026c                ResIcon2
+                0x0081018c                N123_str
+                0x0081010d                SHOW_str
+                0x008101ca                KatAn
+                0x0081007f                Triac
+                0x008100b3                TestTimedOut
+                0x00810105                VOLTAGE_str
+                0x0081019b                Vgs_str
+                0x0081028b                REF_C_str
+                0x00810264                ResIcon1
+                0x008100e5                SELECTION_str
+                0x008101e4                ICEs_str
+                0x00810283                MinCap_str
+                0x00810097                TestFailed1
+                0x0081008e                Unknown
+                0x008101b5                VLOSS_str
+                0x00810254                DiodeIcon2
+                0x0081023a                FatTP2_str
+                0x00810165                Bat_str
+                0x0081005a                TestRunning
+                0x0081029a                ref_offset
+                0x008100cc                RELPROBE
+                0x0081021e                R0_str
+                0x00810173                jfet_str
+                0x00810274                ResIcon3
+                0x00810178                igbt_str
+                0x008101c6                AnKat
+                0x008100dc                ATE
+                0x00810000                RLtab
+                0x008101ea                URefT
+                0x0081007a                Bauteil
+                0x00810117                OFF_str
+                0x0081016b                OK_str
+                0x008101d8                VERSION_str
+                0x008102a7                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x260
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 ./objd.m328p.16M/DisplayValue.o
+ .debug_aranges
+                0x00000020       0x20 ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_aranges
+                0x00000040       0x20 ./objd.m328p.16M/main.o
+ .debug_aranges
+                0x00000060       0x20 ./objd.m328p.16M/CheckPins.o
+ .debug_aranges
+                0x00000080       0x20 ./objd.m328p.16M/ChargePin10ms.o
+ .debug_aranges
+                0x000000a0       0x20 ./objd.m328p.16M/EntladePins.o
+ .debug_aranges
+                0x000000c0       0x20 ./objd.m328p.16M/ReadCapacity.o
+ .debug_aranges
+                0x000000e0       0x20 ./objd.m328p.16M/Calibrate_UR.o
+ .debug_aranges
+                0x00000100       0x20 ./objd.m328p.16M/ReadInductance.o
+ .debug_aranges
+                0x00000120       0x20 ./objd.m328p.16M/GetVloss.o
+ .debug_aranges
+                0x00000140       0x20 ./objd.m328p.16M/GetFrequency.o
+ .debug_aranges
+                0x00000160       0x20 ./objd.m328p.16M/function_menu.o
+ .debug_aranges
+                0x00000180       0x20 ./objd.m328p.16M/message_key_released.o
+ .debug_aranges
+                0x000001a0       0x20 ./objd.m328p.16M/ReadBigCap.o
+ .debug_aranges
+                0x000001c0       0x20 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_aranges
+                0x000001e0       0x20 ./objd.m328p.16M/ShowData.o
+ .debug_aranges
+                0x00000200       0x20 ./objd.m328p.16M/EE_check_init.o
+ .debug_aranges
+                0x00000220       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_aranges
+                0x00000240       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+
+.debug_pubnames
+                0x00000000      0xdfa
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0x51 ./objd.m328p.16M/DisplayValue.o
+ .debug_pubnames
+                0x00000051       0x6e ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_pubnames
+                0x000000bf      0x74e ./objd.m328p.16M/main.o
+ .debug_pubnames
+                0x0000080d       0x4e ./objd.m328p.16M/CheckPins.o
+ .debug_pubnames
+                0x0000085b       0x52 ./objd.m328p.16M/ChargePin10ms.o
+ .debug_pubnames
+                0x000008ad       0x50 ./objd.m328p.16M/EntladePins.o
+ .debug_pubnames
+                0x000008fd       0x86 ./objd.m328p.16M/ReadCapacity.o
+ .debug_pubnames
+                0x00000983       0x51 ./objd.m328p.16M/Calibrate_UR.o
+ .debug_pubnames
+                0x000009d4       0x53 ./objd.m328p.16M/ReadInductance.o
+ .debug_pubnames
+                0x00000a27       0x4d ./objd.m328p.16M/GetVloss.o
+ .debug_pubnames
+                0x00000a74       0x90 ./objd.m328p.16M/GetFrequency.o
+ .debug_pubnames
+                0x00000b04       0xb9 ./objd.m328p.16M/function_menu.o
+ .debug_pubnames
+                0x00000bbd       0x59 ./objd.m328p.16M/message_key_released.o
+ .debug_pubnames
+                0x00000c16       0x4f ./objd.m328p.16M/ReadBigCap.o
+ .debug_pubnames
+                0x00000c65       0x57 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_pubnames
+                0x00000cbc       0x40 ./objd.m328p.16M/CalibrationCap.o
+ .debug_pubnames
+                0x00000cfc       0x4d ./objd.m328p.16M/ShowData.o
+ .debug_pubnames
+                0x00000d49       0x52 ./objd.m328p.16M/EE_check_init.o
+ .debug_pubnames
+                0x00000d9b       0x1f d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_pubnames
+                0x00000dba       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+ .debug_pubnames
+                0x00000dda       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+
+.debug_info     0x00000000     0x45a7
+ *(.debug_info)
+ .debug_info    0x00000000      0x1a6 ./objd.m328p.16M/DisplayValue.o
+ .debug_info    0x000001a6      0x13e ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_info    0x000002e4     0x136f ./objd.m328p.16M/main.o
+ .debug_info    0x00001653      0x6f1 ./objd.m328p.16M/CheckPins.o
+ .debug_info    0x00001d44       0xfa ./objd.m328p.16M/ChargePin10ms.o
+ .debug_info    0x00001e3e      0x120 ./objd.m328p.16M/EntladePins.o
+ .debug_info    0x00001f5e      0x47f ./objd.m328p.16M/ReadCapacity.o
+ .debug_info    0x000023dd      0x1cb ./objd.m328p.16M/Calibrate_UR.o
+ .debug_info    0x000025a8      0x3bd ./objd.m328p.16M/ReadInductance.o
+ .debug_info    0x00002965      0x307 ./objd.m328p.16M/GetVloss.o
+ .debug_info    0x00002c6c      0x1f9 ./objd.m328p.16M/GetFrequency.o
+ .debug_info    0x00002e65      0x457 ./objd.m328p.16M/function_menu.o
+ .debug_info    0x000032bc      0x105 ./objd.m328p.16M/message_key_released.o
+ .debug_info    0x000033c1      0x2ca ./objd.m328p.16M/ReadBigCap.o
+ .debug_info    0x0000368b      0x1f5 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_info    0x00003880       0xb8 ./objd.m328p.16M/CalibrationCap.o
+ .debug_info    0x00003938      0x1d6 ./objd.m328p.16M/ShowData.o
+ .debug_info    0x00003b0e       0xcc ./objd.m328p.16M/EE_check_init.o
+ .debug_info    0x00003bda      0x206 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_info    0x00003de0      0x71e d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+ .debug_info    0x000044fe       0xa9 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000     0x14fa
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0xb5 ./objd.m328p.16M/DisplayValue.o
+ .debug_abbrev  0x000000b5       0xbe ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_abbrev  0x00000173      0x245 ./objd.m328p.16M/main.o
+ .debug_abbrev  0x000003b8      0x189 ./objd.m328p.16M/CheckPins.o
+ .debug_abbrev  0x00000541       0x89 ./objd.m328p.16M/ChargePin10ms.o
+ .debug_abbrev  0x000005ca       0xb6 ./objd.m328p.16M/EntladePins.o
+ .debug_abbrev  0x00000680      0x184 ./objd.m328p.16M/ReadCapacity.o
+ .debug_abbrev  0x00000804       0xc5 ./objd.m328p.16M/Calibrate_UR.o
+ .debug_abbrev  0x000008c9      0x12e ./objd.m328p.16M/ReadInductance.o
+ .debug_abbrev  0x000009f7      0x14c ./objd.m328p.16M/GetVloss.o
+ .debug_abbrev  0x00000b43      0x111 ./objd.m328p.16M/GetFrequency.o
+ .debug_abbrev  0x00000c54      0x18f ./objd.m328p.16M/function_menu.o
+ .debug_abbrev  0x00000de3       0xa8 ./objd.m328p.16M/message_key_released.o
+ .debug_abbrev  0x00000e8b      0x153 ./objd.m328p.16M/ReadBigCap.o
+ .debug_abbrev  0x00000fde       0xd1 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_abbrev  0x000010af       0x63 ./objd.m328p.16M/CalibrationCap.o
+ .debug_abbrev  0x00001112       0x95 ./objd.m328p.16M/ShowData.o
+ .debug_abbrev  0x000011a7       0x78 ./objd.m328p.16M/EE_check_init.o
+ .debug_abbrev  0x0000121f       0xf0 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_abbrev  0x0000130f      0x181 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+ .debug_abbrev  0x00001490       0x6a d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+
+.debug_line     0x00000000     0x4d68
+ *(.debug_line)
+ .debug_line    0x00000000      0x1dd ./objd.m328p.16M/DisplayValue.o
+ .debug_line    0x000001dd      0x17a ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_line    0x00000357     0x1503 ./objd.m328p.16M/main.o
+ .debug_line    0x0000185a      0xc7a ./objd.m328p.16M/CheckPins.o
+ .debug_line    0x000024d4       0xee ./objd.m328p.16M/ChargePin10ms.o
+ .debug_line    0x000025c2      0x1eb ./objd.m328p.16M/EntladePins.o
+ .debug_line    0x000027ad      0x530 ./objd.m328p.16M/ReadCapacity.o
+ .debug_line    0x00002cdd      0x225 ./objd.m328p.16M/Calibrate_UR.o
+ .debug_line    0x00002f02      0x3a4 ./objd.m328p.16M/ReadInductance.o
+ .debug_line    0x000032a6      0x209 ./objd.m328p.16M/GetVloss.o
+ .debug_line    0x000034af      0x3d6 ./objd.m328p.16M/GetFrequency.o
+ .debug_line    0x00003885      0x7fa ./objd.m328p.16M/function_menu.o
+ .debug_line    0x0000407f       0xed ./objd.m328p.16M/message_key_released.o
+ .debug_line    0x0000416c      0x275 ./objd.m328p.16M/ReadBigCap.o
+ .debug_line    0x000043e1      0x372 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_line    0x00004753       0x93 ./objd.m328p.16M/CalibrationCap.o
+ .debug_line    0x000047e6      0x1c9 ./objd.m328p.16M/ShowData.o
+ .debug_line    0x000049af       0xb6 ./objd.m328p.16M/EE_check_init.o
+ .debug_line    0x00004a65       0xaf d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_line    0x00004b14      0x1d8 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+ .debug_line    0x00004cec       0x7c d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+
+.debug_frame    0x00000000      0x3b0
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x20 ./objd.m328p.16M/DisplayValue.o
+ .debug_frame   0x00000020       0x30 ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_frame   0x00000050       0x90 ./objd.m328p.16M/main.o
+ .debug_frame   0x000000e0       0x20 ./objd.m328p.16M/CheckPins.o
+ .debug_frame   0x00000100       0x20 ./objd.m328p.16M/ChargePin10ms.o
+ .debug_frame   0x00000120       0x20 ./objd.m328p.16M/EntladePins.o
+ .debug_frame   0x00000140       0x50 ./objd.m328p.16M/ReadCapacity.o
+ .debug_frame   0x00000190       0x20 ./objd.m328p.16M/Calibrate_UR.o
+ .debug_frame   0x000001b0       0x20 ./objd.m328p.16M/ReadInductance.o
+ .debug_frame   0x000001d0       0x20 ./objd.m328p.16M/GetVloss.o
+ .debug_frame   0x000001f0       0x60 ./objd.m328p.16M/GetFrequency.o
+ .debug_frame   0x00000250       0x80 ./objd.m328p.16M/function_menu.o
+ .debug_frame   0x000002d0       0x20 ./objd.m328p.16M/message_key_released.o
+ .debug_frame   0x000002f0       0x20 ./objd.m328p.16M/ReadBigCap.o
+ .debug_frame   0x00000310       0x20 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_frame   0x00000330       0x20 ./objd.m328p.16M/ShowData.o
+ .debug_frame   0x00000350       0x20 ./objd.m328p.16M/EE_check_init.o
+ .debug_frame   0x00000370       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_frame   0x00000390       0x20 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+
+.debug_str      0x00000000      0xe14
+ *(.debug_str)
+ .debug_str     0x00000000       0xf0 ./objd.m328p.16M/DisplayValue.o
+                                0x136 (size before relaxing)
+ .debug_str     0x000000f0       0x5f ./objd.m328p.16M/wait_for_key_ms.o
+                                0x124 (size before relaxing)
+ .debug_str     0x0000014f      0x695 ./objd.m328p.16M/main.o
+                                0x7a8 (size before relaxing)
+ .debug_str     0x000007e4      0x10e ./objd.m328p.16M/CheckPins.o
+                                0x30c (size before relaxing)
+ .debug_str     0x000008f2       0x3a ./objd.m328p.16M/ChargePin10ms.o
+                                 0xff (size before relaxing)
+ .debug_str     0x0000092c       0x32 ./objd.m328p.16M/EntladePins.o
+                                0x107 (size before relaxing)
+ .debug_str     0x0000095e       0x8e ./objd.m328p.16M/ReadCapacity.o
+                                0x294 (size before relaxing)
+ .debug_str     0x000009ec       0x31 ./objd.m328p.16M/Calibrate_UR.o
+                                0x176 (size before relaxing)
+ .debug_str     0x00000a1d       0x86 ./objd.m328p.16M/ReadInductance.o
+                                0x228 (size before relaxing)
+ .debug_str     0x00000aa3       0x19 ./objd.m328p.16M/GetVloss.o
+                                0x1a0 (size before relaxing)
+ .debug_str     0x00000abc       0x6a ./objd.m328p.16M/GetFrequency.o
+                                0x16b (size before relaxing)
+ .debug_str     0x00000b26       0xcb ./objd.m328p.16M/function_menu.o
+                                0x275 (size before relaxing)
+ .debug_str     0x00000bf1       0x33 ./objd.m328p.16M/message_key_released.o
+                                 0xfe (size before relaxing)
+ .debug_str     0x00000c24       0x18 ./objd.m328p.16M/ReadBigCap.o
+                                0x19e (size before relaxing)
+ .debug_str     0x00000c3c       0x8e ./objd.m328p.16M/CheckRotaryEncoder.o
+                                0x174 (size before relaxing)
+ .debug_str     0x00000cca       0x11 ./objd.m328p.16M/CalibrationCap.o
+                                 0xce (size before relaxing)
+ .debug_str     0x00000cdb       0x14 ./objd.m328p.16M/ShowData.o
+                                0x157 (size before relaxing)
+ .debug_str     0x00000cef       0x1e ./objd.m328p.16M/EE_check_init.o
+                                 0xdb (size before relaxing)
+ .debug_str     0x00000d0d       0xb3 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+                                0x13f (size before relaxing)
+ .debug_str     0x00000dc0       0x54 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+                                0x18a (size before relaxing)
+ .debug_str     0x00000000       0xf4 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
+
+.debug_loc      0x00000000     0x29f2
+ *(.debug_loc)
+ .debug_loc     0x00000000      0x245 ./objd.m328p.16M/DisplayValue.o
+ .debug_loc     0x00000245       0xd0 ./objd.m328p.16M/wait_for_key_ms.o
+ .debug_loc     0x00000315      0x4ef ./objd.m328p.16M/main.o
+ .debug_loc     0x00000804      0x610 ./objd.m328p.16M/CheckPins.o
+ .debug_loc     0x00000e14       0x31 ./objd.m328p.16M/ChargePin10ms.o
+ .debug_loc     0x00000e45       0x3b ./objd.m328p.16M/EntladePins.o
+ .debug_loc     0x00000e80      0x143 ./objd.m328p.16M/ReadCapacity.o
+ .debug_loc     0x00000fc3       0xca ./objd.m328p.16M/Calibrate_UR.o
+ .debug_loc     0x0000108d      0x2d3 ./objd.m328p.16M/ReadInductance.o
+ .debug_loc     0x00001360       0x54 ./objd.m328p.16M/GetVloss.o
+ .debug_loc     0x000013b4       0x3e ./objd.m328p.16M/GetFrequency.o
+ .debug_loc     0x000013f2      0x3af ./objd.m328p.16M/function_menu.o
+ .debug_loc     0x000017a1       0x3b ./objd.m328p.16M/message_key_released.o
+ .debug_loc     0x000017dc       0x85 ./objd.m328p.16M/ReadBigCap.o
+ .debug_loc     0x00001861      0x251 ./objd.m328p.16M/CheckRotaryEncoder.o
+ .debug_loc     0x00001ab2       0xcc d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_muldi3.o)
+ .debug_loc     0x00001b7e      0xe74 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(TransistorTester.elf elf32-avr)
+LOAD linker stubs
+
+.debug_ranges   0x00000000       0x30
+ .debug_ranges  0x00000000       0x18 ./objd.m328p.16M/main.o
+ .debug_ranges  0x00000018       0x18 d:/progs/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivdi3.o)
