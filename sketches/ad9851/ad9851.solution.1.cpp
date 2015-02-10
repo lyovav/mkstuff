@@ -7,7 +7,7 @@
 
 #define DDS_CLOCK 180000000
 
-byte LOAD = 8; 
+byte LOAD = 11; 
 byte CLOCK = 9; 
 byte DATA = 10;
 byte LED = 13;
