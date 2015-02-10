@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define _AD9851_SOL1 0
+#define _AD9851_SOL1 1
 
 #if _AD9851_SOL1
 extern byte LOAD; 
@@ -23,17 +23,29 @@ void setup()
 #endif  
 }
 
+static volatile unsigned long freq = 1;
+static volatile bool refresh = true;
+
+void serialEvent()
+{
+  char buffer[128] = {0};
+  Serial.readBytesUntil('\r', buffer, sizeof(buffer)-1);
+  
+  freq = (volatile int_fast32_t)atol(buffer);
+  refresh = true;
+  
+  Serial.print("Set freq - ");
+  Serial.println(freq);
+}
+
 void loop()
 {
-  if (Serial.available())
-  {
-  }
-  
 #if _AD9851_SOL1
-  for (unsigned long freq = 10000000; freq < 10001000; freq++)
+  if (refresh)
   {
     sendFrequency(freq);
     delay(2);
+    refresh = false;
   }
 #endif
 }

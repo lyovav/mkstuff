@@ -7,8 +7,8 @@
 
 namespace rotary
 {
-    #define ROTARY_PIN1 7
-    #define ROTARY_PIN2 8
+    #define ROTARY_PIN1 52
+    #define ROTARY_PIN2 53
 
     #define DIR_CCW 0x10
     #define DIR_CW  0x20

@@ -6,7 +6,6 @@
 #include "AD9850.h"
 #include "rotary.h"
 
-/*
 static int_fast32_t get_multiplier(volatile int& cursor)
 {
     static const int_fast32_t vals[] = { 1L, 10L, 100L, 1000L, 10000L, 100000L, 1000000L, 10000000L, 100000000L };
@@ -20,13 +19,12 @@ static int_fast32_t get_multiplier(volatile int& cursor)
 
     return vals[cursor];
 }
-*/
 
 static const uint8_t btnCursor = A3;
 static const int_fast32_t freqLimitValue = 999999999L;
 
-LiquidCrystal lcd(6, 7, 8, 9, 10, 11, 12);
-dds::AD9850 ad9850(3, 2, 4, 5);
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7, 8);
+dds::AD9850 ad9850(9, 10, 11, 12);
 
 void prints(uint8_t row, char const* text)
 {
@@ -59,12 +57,12 @@ void setup()
   show_logo();
   delay(1500);
   
-  //rotary::init();
+  rotary::init();
   lcd.clear();
   lcd.cursor();
 
-  //pinMode(btnCursor, INPUT);
-  //digitalWrite(btnCursor, HIGH);
+  pinMode(btnCursor, INPUT);
+  digitalWrite(btnCursor, HIGH);
 }
 
 volatile unsigned char enc = 0;
@@ -89,7 +87,6 @@ void serialEvent()
 
 void loop()
 {
-  /*
     int encPressed = analogRead(btnCursor);
     unsigned char encChanged = rotary::get_value();
 
@@ -128,7 +125,6 @@ void loop()
         refresh = true;
         delay(50);
     }
-    */
 
     if (refresh)
     {
